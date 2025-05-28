@@ -187,12 +187,10 @@ var
 
 reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
-let engine = initThorEngine(threads = 1)
-
-let canvas = newGlCanvas()
-#                               ##  a specific framebuffer object (FBO) or the main surface.
+let engine = initThorEngine(threads = 4)
 let fbo = createFbo()
-canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
+
+#                               ##  a specific framebuffer object (FBO) or the main surface.
 
 while runGame:
   while pollEvent(evt):
@@ -206,6 +204,8 @@ while runGame:
         let newHeight = windowEvent.data2
         reshape(newWidth, newHeight)
 
+  let canvas = newGlCanvas()
+  canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
   testBasicFunctionality(canvas)
 
   # render()

@@ -72,7 +72,7 @@ proc getBuffer*(canvas: SwCanvas): seq[uint32] =
 proc newGlCanvas*(): GlCanvas =
   ## Create a new OpenGL canvas
   result = GlCanvas()
-  result.handle = tvg_gl_canvas_create()
+  result.handle = tvg_glcanvas_create()
   if result.handle == nil:
     raise newException(ThorVGError, "Failed to create OpenGL canvas")
 
