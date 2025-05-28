@@ -6,6 +6,8 @@
 import std/[math, strutils]
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
+import sdl2
+
 const
   WIDTH = 800'u32
   HEIGHT = 800'u32
@@ -27,7 +29,7 @@ proc contents() =
     shape1.close()
 
   # Scene
-  block:
+  when false:
     # Set a scene
     let scene = newScene()
 
@@ -131,6 +133,14 @@ proc main() =
   
   echo "ThorVG Example (Software)"
   
+  discard sdl2.init(INIT_EVERYTHING)
+
+  let window = createWindow("ThorVG Example (Software)", 100, 100, WIDTH, HEIGHT, SDL_WINDOW_SHOWN)
+  let surface = getWindowSurface(window)
+
+  # //create the canvas
+
+
   # Create the canvas
   canvas = newSwCanvas()
   canvas.setTarget(WIDTH, HEIGHT, TVG_COLORSPACE_ARGB8888)
@@ -139,7 +149,8 @@ proc main() =
   contents()
   
   # Display the first frame
-  canvas.render()
+  canvas.draw(false)
+  canvas.sync()
   
   echo "Rendered first frame"
   
