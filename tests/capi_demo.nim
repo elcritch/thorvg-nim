@@ -11,7 +11,7 @@ import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 import sdl2
 
-discard sdl2.init(INIT_VIDEO)
+discard sdl2.init(INIT_EVERYTHING)
 
 const
   WIDTH = 800'u32
@@ -151,7 +151,7 @@ proc main() =
   # Display the first frame
   canvas.draw(false)
   canvas.sync()
-  
+
   let res = updateSurface(window)
   echo "updateSurface: ", res
 
@@ -159,7 +159,7 @@ proc main() =
   
   # Simulate main loop (simplified version without SDL)
   var elapsed = 0'u32
-  let maxFrames = 100 # Simulate 100 frames
+  let maxFrames = 1000 # Simulate 100 frames
   
   for frame in 0..<maxFrames:
     # Update the animation
