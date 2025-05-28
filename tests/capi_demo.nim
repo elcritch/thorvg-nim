@@ -20,11 +20,11 @@ proc contents() =
   # Linear gradient shape with a linear gradient stroke
   block:
     # Set a shape
-    let shape1 = tvgShapeNew()
-    checkResult(tvgShapeMoveTo(shape1, 25.0, 25.0))
-    checkResult(tvgShapeLineTo(shape1, 375.0, 25.0))
-    checkResult(tvgShapeCubicTo(shape1, 500.0, 100.0, -500.0, 200.0, 375.0, 375.0))
-    checkResult(tvgShapeClose(shape1))
+    let shape1 = newShape()
+    shape1.moveTo(25.0, 25.0)
+    shape1.lineTo(375.0, 25.0)
+    shape1.cubicTo(500.0, 100.0, -500.0, 200.0, 375.0, 375.0)
+    shape1.close()
 
   # Scene
   block:
