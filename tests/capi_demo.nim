@@ -8,6 +8,8 @@ import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 import sdl2
 
+discard sdl2.init(INIT_EVERYTHING)
+
 const
   WIDTH = 800'u32
   HEIGHT = 800'u32
@@ -149,6 +151,8 @@ proc main() =
   canvas.draw(false)
   canvas.sync()
   
+  discard updateSurface(window)
+
   echo "Rendered first frame"
   
   # Simulate main loop (simplified version without SDL)
@@ -165,7 +169,9 @@ proc main() =
     #   checkResult(tvgAnimationSetFrame(animation, frameNo))
     
     # Draw the canvas
-    # canvas.render()
+    canvas.draw(false)
+    canvas.sync()
+    discard updateSurface(window)
     
     # Simulate time progression
     elapsed += 16 # ~60 FPS
