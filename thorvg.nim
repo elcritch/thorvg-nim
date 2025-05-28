@@ -8,7 +8,7 @@ import dynlib, os, strutils, math
 const hdr = "<thorvg_capi.h>"
 when defined(macosx):
   {.passC: "-I/opt/homebrew/include".}
-  {.passL: "-L/opt/homebrew/lib -R/opt/homebrew/lib".}
+  {.passL: "-Wl,-rpath,/opt/homebrew/lib -L/opt/homebrew/lib".}
 elif defined(windows):
   {.passC: "-I/usr/local/include".}
 else:
