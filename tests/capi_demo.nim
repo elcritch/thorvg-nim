@@ -28,7 +28,7 @@ proc contents() =
   # Scene
   block:
     # Set a scene
-    let scene = tvgSceneNew()
+    let scene = newScene()
 
     # Set circles
     let sceneShape1 = newShape()

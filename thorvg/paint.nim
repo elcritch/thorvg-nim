@@ -30,6 +30,13 @@ proc newPaint*(handle: ptr Tvg_Paint): Paint =
   result = Paint(handle: handle)
   # discard tvg_paint_ref(handle)
 
+proc newScene*(): Paint =
+  ## Create a new Scene
+  let handle = tvg_scene_new()
+  if handle == nil:
+    raise newException(ThorVGError, "Failed to create scene")
+  result = Paint(handle: handle)
+
 proc push*(scene: Paint, paint: Paint) =
   ## Push the paint to the scene
   checkResult(tvg_scene_push(scene.handle, paint.handle))
