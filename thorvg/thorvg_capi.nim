@@ -1,3 +1,5 @@
+##  #pragma c2nim nep1
+
 
 when defined(macosx):
   {.passC: "-I/opt/homebrew/include".}
@@ -15,22 +17,22 @@ else:
   const thorvgLibName = "libthorvg.so"
 type
 
-  TvgCanvas* {.bycopy.} = object
+  Tvg_Canvas* {.bycopy.} = object
 
 
-  TvgPaint* {.bycopy.} = object
+  Tvg_Paint* {.bycopy.} = object
 
 
-  TvgGradient* {.bycopy.} = object
+  Tvg_Gradient* {.bycopy.} = object
 
 
-  TvgSaver* {.bycopy.} = object
+  Tvg_Saver* {.bycopy.} = object
 
 
-  TvgAnimation* {.bycopy.} = object
+  Tvg_Animation* {.bycopy.} = object
 
 
-  TvgAccessor* {.bycopy.} = object
+  Tvg_Accessor* {.bycopy.} = object
 
 
 ## !
@@ -52,13 +54,13 @@ type
 
 type
 
-  TvgResult* {.size: sizeof(cint).} = enum ##
-                                            ##  @brief Enumeration specifying the result from the APIs.
-                                            ##
-                                            ##  All ThorVG APIs could potentially return one of the values in the list.
-                                            ##  Please note that some APIs may additionally specify the reasons that trigger their return values.
-                                            ##
-                                            ##
+  Tvg_Result* {.size: sizeof(cint).} = enum ##
+                                             ##  @brief Enumeration specifying the result from the APIs.
+                                             ##
+                                             ##  All ThorVG APIs could potentially return one of the values in the list.
+                                             ##  Please note that some APIs may additionally specify the reasons that trigger their return values.
+                                             ##
+                                             ##
     TVG_RESULT_SUCCESS = 0, ## < The value returned in case of a correct request execution.
     TVG_RESULT_INVALID_ARGUMENT, ## < The value returned in the event of a problem with the arguments given to the API - e.g. empty paths or null pointers.
     TVG_RESULT_INSUFFICIENT_CONDITION, ## < The value returned in case the request cannot be processed - e.g. asking for properties of an object, which does not exist.
@@ -70,9 +72,9 @@ type
 
 type
 
-  TvgColorspace* {.size: sizeof(cint).} = enum ##
-                                                ##  @brief Enumeration specifying the methods of combining the 8-bit color channels into 32-bit color.
-                                                ##
+  Tvg_Colorspace* {.size: sizeof(cint).} = enum ##
+                                                 ##  @brief Enumeration specifying the methods of combining the 8-bit color channels into 32-bit color.
+                                                 ##
     TVG_COLORSPACE_ABGR8888 = 0, ## < The channels are joined in the order: alpha, blue, green, red. Colors are alpha-premultiplied.
     TVG_COLORSPACE_ARGB8888, ## < The channels are joined in the order: alpha, red, green, blue. Colors are alpha-premultiplied.
     TVG_COLORSPACE_ABGR8888S, ## < The channels are joined in the order: alpha, blue, green, red. Colors are un-alpha-premultiplied. (since 0.13)
@@ -82,11 +84,11 @@ type
 
 type
 
-  TvgMaskMethod* {.size: sizeof(cint).} = enum ##
-                                                ##  @brief Enumeration indicating the method used in the masking of two objects - the target and the source.
-                                                ##
-                                                ##  @ingroup ThorVGCapi_Paint
-                                                ##
+  Tvg_Mask_Method* {.size: sizeof(cint).} = enum ##
+                                                  ##  @brief Enumeration indicating the method used in the masking of two objects - the target and the source.
+                                                  ##
+                                                  ##  @ingroup ThorVGCapi_Paint
+                                                  ##
     TVG_MASK_METHOD_NONE = 0, ## < No masking is applied.
     TVG_MASK_METHOD_ALPHA,  ## < The pixels of the source and the target are alpha blended. As a result, only the part of the source, which intersects with the target is visible.
     TVG_MASK_METHOD_INVERSE_ALPHA, ## < The pixels of the source and the complement to the target's pixels are alpha blended. As a result, only the part of the source which is not covered by the target is visible.
@@ -102,13 +104,14 @@ type
 
 type
 
-  TvgBlendMethod* {.size: sizeof(cint).} = enum ##
-                                                 ##  @brief Enumeration indicates the method used for blending paint. Please refer to the respective formulas for each method.
-                                                 ##
-                                                 ##  @ingroup ThorVGCapi_Paint
-                                                 ##
-                                                 ##  @since 0.15
-                                                 ##
+  Tvg_Blend_Method* {.size: sizeof(cint).} = enum ##
+                              ##
+                              ##  @brief Enumeration indicates the method used for blending paint. Please refer to the respective formulas for each method.
+                              ##
+                              ##  @ingroup ThorVGCapi_Paint
+                              ##
+                              ##  @since 0.15
+                              ##
     TVG_BLEND_METHOD_NORMAL = 0, ## < Perform the alpha blending(default). S if (Sa == 255), otherwise (Sa * S) + (255 - Sa) * D
     TVG_BLEND_METHOD_MULTIPLY, ## < Takes the RGB channel values from 0 to 255 of each pixel in the top layer and multiples them with the values for the corresponding pixel from the bottom layer. (S * D)
     TVG_BLEND_METHOD_SCREEN, ## < The values of the pixels in the two layers are inverted, multiplied, and then inverted again. (S + D) - (S * D)
@@ -131,10 +134,10 @@ type
 
 type
 
-  TvgIdentifier* {.size: sizeof(cint).} = enum ##
-                                                ##  @see Tvg_Type
-                                                ##  @deprecated
-                                                ##
+  Tvg_Identifier* {.size: sizeof(cint).} = enum ##
+                                                 ##  @see Tvg_Type
+                                                 ##  @deprecated
+                                                 ##
     TVG_IDENTIFIER_UNDEF = 0, ## < Undefined type.
     TVG_IDENTIFIER_SHAPE,   ## < A shape type paint.
     TVG_IDENTIFIER_SCENE,   ## < A scene type paint.
@@ -146,18 +149,18 @@ type
 
 type
 
-  TvgType* {.size: sizeof(cint).} = enum ##
-                                          ##  @brief Enumeration indicating the ThorVG object type value.
-                                          ##
-                                          ##  ThorVG's drawing objects can return object type values, allowing you to identify the specific type of each object.
-                                          ##
-                                          ##  @ingroup ThorVGCapi_Paint
-                                          ##
-                                          ##  @see tvg_paint_get_type()
-                                          ##  @see tvg_gradient_get_type()
-                                          ##
-                                          ##  @since 1.0
-                                          ##
+  Tvg_Type* {.size: sizeof(cint).} = enum ##
+                                           ##  @brief Enumeration indicating the ThorVG object type value.
+                                           ##
+                                           ##  ThorVG's drawing objects can return object type values, allowing you to identify the specific type of each object.
+                                           ##
+                                           ##  @ingroup ThorVGCapi_Paint
+                                           ##
+                                           ##  @see tvg_paint_get_type()
+                                           ##  @see tvg_gradient_get_type()
+                                           ##
+                                           ##  @since 1.0
+                                           ##
     TVG_TYPE_UNDEF = 0,     ## < Undefined type.
     TVG_TYPE_SHAPE,         ## < A shape type paint.
     TVG_TYPE_SCENE,         ## < A scene type paint.
@@ -169,13 +172,13 @@ type
 
 type
 
-  TvgPathCommand* = uint8 ##
-                          ##  @addtogroup ThorVGCapi_Shape
-                          ##  \{
-                          ##
-                          ##
-                          ##  @brief Enumeration specifying the values of the path commands accepted by ThorVG.
-                          ##
+  Tvg_Path_Command* = uint8 ##
+                            ##  @addtogroup ThorVGCapi_Shape
+                            ##  \{
+                            ##
+                            ##
+                            ##  @brief Enumeration specifying the values of the path commands accepted by ThorVG.
+                            ##
 
 const
   TVG_PATH_COMMAND_CLOSE* = 0 ## < Ends the current sub-path and connects it with its initial point - corresponds to Z command in the svg path commands.
@@ -185,9 +188,9 @@ const
 
 type
 
-  TvgStrokeCap* {.size: sizeof(cint).} = enum ##
-                                               ##  @brief Enumeration determining the ending type of a stroke in the open sub-paths.
-                                               ##
+  Tvg_Stroke_Cap* {.size: sizeof(cint).} = enum ##
+                                                 ##  @brief Enumeration determining the ending type of a stroke in the open sub-paths.
+                                                 ##
     TVG_STROKE_CAP_BUTT = 0, ## < The stroke ends exactly at each of the two endpoints of a sub-path. For zero length sub-paths no stroke is rendered.
     TVG_STROKE_CAP_ROUND,   ## < The stroke is extended in both endpoints of a sub-path by a half circle, with a radius equal to the half of a stroke width. For zero length sub-paths a full circle is rendered.
     TVG_STROKE_CAP_SQUARE    ## < The stroke is extended in both endpoints of a sub-path by a rectangle, with the width equal to the stroke width and the length equal to the half of the stroke width. For zero length sub-paths the square is rendered with the size of the stroke width.
@@ -195,9 +198,9 @@ type
 
 type
 
-  TvgStrokeJoin* {.size: sizeof(cint).} = enum ##
-                                                ##  @brief Enumeration specifying how to fill the area outside the gradient bounds.
-                                                ##
+  Tvg_Stroke_Join* {.size: sizeof(cint).} = enum ##
+                                                  ##  @brief Enumeration specifying how to fill the area outside the gradient bounds.
+                                                  ##
     TVG_STROKE_JOIN_MITER = 0, ## < The outer corner of the joined path segments is spiked. The spike is created by extension beyond the join point of the outer edges of the stroke until they intersect. In case the extension goes beyond the limit, the join style is converted to the Bevel style.
     TVG_STROKE_JOIN_ROUND,  ## < The outer corner of the joined path segments is rounded. The circular region is centered at the join point.
     TVG_STROKE_JOIN_BEVEL    ## < The outer corner of the joined path segments is bevelled at the join point. The triangular region of the corner is enclosed by a straight line between the outer corners of each stroke.
@@ -205,9 +208,9 @@ type
 
 type
 
-  TvgStrokeFill* {.size: sizeof(cint).} = enum ##
-                                                ##  @brief Enumeration specifying how to fill the area outside the gradient bounds.
-                                                ##
+  Tvg_Stroke_Fill* {.size: sizeof(cint).} = enum ##
+                                                  ##  @brief Enumeration specifying how to fill the area outside the gradient bounds.
+                                                  ##
     TVG_STROKE_FILL_PAD = 0, ## < The remaining area is filled with the closest stop color.
     TVG_STROKE_FILL_REFLECT, ## < The gradient pattern is reflected outside the gradient area until the expected region is filled.
     TVG_STROKE_FILL_REPEAT   ## < The gradient pattern is repeated continuously beyond the gradient area until the expected region is filled.
@@ -215,24 +218,24 @@ type
 
 type
 
-  TvgFillRule* {.size: sizeof(cint).} = enum ##
-                                              ##  @brief Enumeration specifying the algorithm used to establish which parts of the shape are treated as the inside of the shape.
-                                              ##
+  Tvg_Fill_Rule* {.size: sizeof(cint).} = enum ##
+                                                ##  @brief Enumeration specifying the algorithm used to establish which parts of the shape are treated as the inside of the shape.
+                                                ##
     TVG_FILL_RULE_NON_ZERO = 0, ## < A line from the point to a location outside the shape is drawn. The intersections of the line with the path segment of the shape are counted. Starting from zero, if the path segment of the shape crosses the line clockwise, one is added, otherwise one is subtracted. If the resulting sum is non zero, the point is inside the shape.
     TVG_FILL_RULE_EVEN_ODD   ## < A line from the point to a location outside the shape is drawn and its intersections with the path segments of the shape are counted. If the number of intersections is an odd number, the point is inside the shape.
 
 
 type
 
-  TvgColorStop* {.bycopy.} = object ##  \}
-                                     ##  end addtogroup ThorVGCapi_Shape
-                                     ## !
-                                     ##  @addtogroup ThorVGCapi_Gradient
-                                     ##  \{
-                                     ##
-                                     ## !
-                                     ##  @brief A data structure storing the information about the color and its relative position inside the gradient bounds.
-                                     ##
+  Tvg_Color_Stop* {.bycopy.} = object ##  \}
+                                       ##  end addtogroup ThorVGCapi_Shape
+                                       ## !
+                                       ##  @addtogroup ThorVGCapi_Gradient
+                                       ##  \{
+                                       ##
+                                       ## !
+                                       ##  @brief A data structure storing the information about the color and its relative position inside the gradient bounds.
+                                       ##
     offset*: cfloat          ## < The relative position of the color.
     r*: uint8                ## < The red color channel value in the range [0 ~ 255].
     g*: uint8                ## < The green color channel value in the range [0 ~ 255].
@@ -241,22 +244,22 @@ type
     ## < The alpha channel value in the range [0 ~ 255], where 0 is completely transparent and 255 is opaque.
 
 
-  TvgPoint* {.bycopy.} = object ##  \}
-                                 ##  end addtogroup ThorVGCapi_Gradient
-                                 ##
-                                 ##  @brief A data structure representing a point in two-dimensional space.
-                                 ##
+  Tvg_Point* {.bycopy.} = object ##  \}
+                                  ##  end addtogroup ThorVGCapi_Gradient
+                                  ##
+                                  ##  @brief A data structure representing a point in two-dimensional space.
+                                  ##
     x*: cfloat
     y*: cfloat
 
 
-  TvgMatrix* {.bycopy.} = object ##
-                                  ##  @brief A data structure representing a three-dimensional matrix.
-                                  ##
-                                  ##  The elements e11, e12, e21 and e22 represent the rotation matrix, including the scaling factor.
-                                  ##  The elements e13 and e23 determine the translation of the object along the x and y-axis, respectively.
-                                  ##  The elements e31 and e32 are set to 0, e33 is set to 1.
-                                  ##
+  Tvg_Matrix* {.bycopy.} = object ##
+                                   ##  @brief A data structure representing a three-dimensional matrix.
+                                   ##
+                                   ##  The elements e11, e12, e21 and e22 represent the rotation matrix, including the scaling factor.
+                                   ##  The elements e13 and e23 determine the translation of the object along the x and y-axis, respectively.
+                                   ##  The elements e31 and e32 are set to 0, e33 is set to 1.
+                                   ##
     e11*: cfloat
     e12*: cfloat
     e13*: cfloat
@@ -269,7 +272,7 @@ type
 
 
 
-proc tvgEngineInit*(threads: cuint): TvgResult {.importc: "tvg_engine_init",
+proc tvg_engine_init*(threads: cuint): Tvg_Result {.importc: "tvg_engine_init",
     dynlib: thorvgLibName.}
   ##
                            ##  @defgroup ThorVGCapi_Initializer Initializer
@@ -297,8 +300,8 @@ proc tvgEngineInit*(threads: cuint): TvgResult {.importc: "tvg_engine_init",
                            ##  @see tvg_engine_term()
                            ##
 
-proc tvgEngineTerm*(): TvgResult {.importc: "tvg_engine_term",
-                                   dynlib: thorvgLibName.}
+proc tvg_engine_term*(): Tvg_Result {.importc: "tvg_engine_term",
+                                      dynlib: thorvgLibName.}
   ##
                               ## !
                               ##  @brief Terminates the ThorVG engine.
@@ -312,8 +315,8 @@ proc tvgEngineTerm*(): TvgResult {.importc: "tvg_engine_term",
                               ##  @see tvg_engine_init()
                               ##
 
-proc tvgEngineVersion*(major: ptr uint32; minor: ptr uint32; micro: ptr uint32;
-                       version: cstringArray): TvgResult {.
+proc tvg_engine_version*(major: ptr uint32; minor: ptr uint32;
+                         micro: ptr uint32; version: cstringArray): Tvg_Result {.
     importc: "tvg_engine_version", dynlib: thorvgLibName.}
   ##
                               ##
@@ -330,7 +333,7 @@ proc tvgEngineVersion*(major: ptr uint32; minor: ptr uint32; micro: ptr uint32;
                               ##  @since 0.15
                               ##
 
-proc tvgSwcanvasCreate*(): ptr TvgCanvas {.importc: "tvg_swcanvas_create",
+proc tvg_swcanvas_create*(): ptr Tvg_Canvas {.importc: "tvg_swcanvas_create",
     dynlib: thorvgLibName.}
   ##  \}
                            ##  end defgroup ThorVGCapi_Initializer
@@ -361,9 +364,9 @@ proc tvgSwcanvasCreate*(): ptr TvgCanvas {.importc: "tvg_swcanvas_create",
                            ##  @return A new Tvg_Canvas object.
                            ##
 
-proc tvgSwcanvasSetTarget*(canvas: ptr TvgCanvas; buffer: ptr uint32;
-                           stride: uint32; w: uint32; h: uint32;
-                           cs: TvgColorspace): TvgResult {.
+proc tvg_swcanvas_set_target*(canvas: ptr Tvg_Canvas; buffer: ptr uint32;
+                              stride: uint32; w: uint32; h: uint32;
+                              cs: Tvg_Colorspace): Tvg_Result {.
     importc: "tvg_swcanvas_set_target", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -389,7 +392,7 @@ proc tvgSwcanvasSetTarget*(canvas: ptr TvgCanvas; buffer: ptr uint32;
                               ##  @see Tvg_Colorspace
                               ##
 
-proc tvgGlcanvasCreate*(): ptr TvgCanvas {.importc: "tvg_glcanvas_create",
+proc tvg_glcanvas_create*(): ptr Tvg_Canvas {.importc: "tvg_glcanvas_create",
     dynlib: thorvgLibName.}
   ##  \}
                            ##  end defgroup ThorVGCapi_SwCanvas
@@ -412,8 +415,9 @@ proc tvgGlcanvasCreate*(): ptr TvgCanvas {.importc: "tvg_glcanvas_create",
                            ##  @since 1.0.0
                            ##
 
-proc tvgGlcanvasSetTarget*(canvas: ptr TvgCanvas; context: pointer; id: int32;
-                           w: uint32; h: uint32; cs: TvgColorspace): TvgResult {.
+proc tvg_glcanvas_set_target*(canvas: ptr Tvg_Canvas; context: pointer;
+                              id: int32; w: uint32; h: uint32;
+                              cs: Tvg_Colorspace): Tvg_Result {.
     importc: "tvg_glcanvas_set_target", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -435,7 +439,7 @@ proc tvgGlcanvasSetTarget*(canvas: ptr TvgCanvas; context: pointer; id: int32;
                               ##  @note Experimental API
                               ##
 
-proc tvgWgcanvasCreate*(): ptr TvgCanvas {.importc: "tvg_wgcanvas_create",
+proc tvg_wgcanvas_create*(): ptr Tvg_Canvas {.importc: "tvg_wgcanvas_create",
     dynlib: thorvgLibName.}
   ##  \}
                            ##  end defgroup ThorVGCapi_GlCanvas
@@ -458,9 +462,9 @@ proc tvgWgcanvasCreate*(): ptr TvgCanvas {.importc: "tvg_wgcanvas_create",
                            ##  @since 1.0.0
                            ##
 
-proc tvgWgcanvasSetTarget*(canvas: ptr TvgCanvas; device: pointer;
-                           instance: pointer; target: pointer; w: uint32;
-                           h: uint32; cs: TvgColorspace; `type`: cint): TvgResult {.
+proc tvg_wgcanvas_set_target*(canvas: ptr Tvg_Canvas; device: pointer;
+                              instance: pointer; target: pointer; w: uint32;
+                              h: uint32; cs: Tvg_Colorspace; `type`: cint): Tvg_Result {.
     importc: "tvg_wgcanvas_set_target", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -481,7 +485,7 @@ proc tvgWgcanvasSetTarget*(canvas: ptr TvgCanvas; device: pointer;
                               ##  @note Experimental API
                               ##
 
-proc tvgCanvasDestroy*(canvas: ptr TvgCanvas): TvgResult {.
+proc tvg_canvas_destroy*(canvas: ptr Tvg_Canvas): Tvg_Result {.
     importc: "tvg_canvas_destroy", dynlib: thorvgLibName.}
   ##
                               ##  \}
@@ -498,7 +502,7 @@ proc tvgCanvasDestroy*(canvas: ptr TvgCanvas): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer to the Tvg_Canvas object is passed.
                               ##
 
-proc tvgCanvasPush*(canvas: ptr TvgCanvas; paint: ptr TvgPaint): TvgResult {.
+proc tvg_canvas_push*(canvas: ptr Tvg_Canvas; paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_canvas_push", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -519,8 +523,8 @@ proc tvgCanvasPush*(canvas: ptr TvgCanvas; paint: ptr TvgPaint): TvgResult {.
                               ##  @see tvg_canvas_remove()
                               ##
 
-proc tvgCanvasPushAt*(canvas: ptr TvgCanvas; target: ptr TvgPaint;
-                      at: ptr TvgPaint): TvgResult {.
+proc tvg_canvas_push_at*(canvas: ptr Tvg_Canvas; target: ptr Tvg_Paint;
+                         at: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_canvas_push_at", dynlib: thorvgLibName.}
   ##
                               ##
@@ -547,7 +551,7 @@ proc tvgCanvasPushAt*(canvas: ptr TvgCanvas; target: ptr TvgPaint;
                               ##  @since 1.0
                               ##
 
-proc tvgCanvasRemove*(canvas: ptr TvgCanvas; paint: ptr TvgPaint): TvgResult {.
+proc tvg_canvas_remove*(canvas: ptr Tvg_Canvas; paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_canvas_remove", dynlib: thorvgLibName.}
   ##
                               ##
@@ -566,7 +570,7 @@ proc tvgCanvasRemove*(canvas: ptr TvgCanvas; paint: ptr TvgPaint): TvgResult {.
                               ##  @since 1.0
                               ##
 
-proc tvgCanvasUpdate*(canvas: ptr TvgCanvas): TvgResult {.
+proc tvg_canvas_update*(canvas: ptr Tvg_Canvas): Tvg_Result {.
     importc: "tvg_canvas_update", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -582,7 +586,7 @@ proc tvgCanvasUpdate*(canvas: ptr TvgCanvas): TvgResult {.
                               ##  @see tvg_canvas_update_paint()
                               ##
 
-proc tvgCanvasUpdatePaint*(canvas: ptr TvgCanvas; paint: ptr TvgPaint): TvgResult {.
+proc tvg_canvas_update_paint*(canvas: ptr Tvg_Canvas; paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_canvas_update_paint", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -600,7 +604,7 @@ proc tvgCanvasUpdatePaint*(canvas: ptr TvgCanvas; paint: ptr TvgPaint): TvgResul
                               ##  @see tvg_canvas_update()
                               ##
 
-proc tvgCanvasDraw*(canvas: ptr TvgCanvas; clear: bool): TvgResult {.
+proc tvg_canvas_draw*(canvas: ptr Tvg_Canvas; clear: bool): Tvg_Result {.
     importc: "tvg_canvas_draw", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -621,7 +625,7 @@ proc tvgCanvasDraw*(canvas: ptr TvgCanvas; clear: bool): TvgResult {.
                               ##  @see tvg_canvas_sync()
                               ##
 
-proc tvgCanvasSync*(canvas: ptr TvgCanvas): TvgResult {.
+proc tvg_canvas_sync*(canvas: ptr Tvg_Canvas): Tvg_Result {.
     importc: "tvg_canvas_sync", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -638,8 +642,8 @@ proc tvgCanvasSync*(canvas: ptr TvgCanvas): TvgResult {.
                               ##  @see tvg_canvas_draw()
                               ##
 
-proc tvgCanvasSetViewport*(canvas: ptr TvgCanvas; x: int32; y: int32; w: int32;
-                           h: int32): TvgResult {.
+proc tvg_canvas_set_viewport*(canvas: ptr Tvg_Canvas; x: int32; y: int32;
+                              w: int32; h: int32): Tvg_Result {.
     importc: "tvg_canvas_set_viewport", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -663,31 +667,32 @@ proc tvgCanvasSetViewport*(canvas: ptr TvgCanvas; x: int32; y: int32; w: int32;
                               ##  @since 0.15
                               ##
 
-proc tvgPaintDel*(paint: ptr TvgPaint): TvgResult {.importc: "tvg_paint_del",
-    dynlib: thorvgLibName.}
-  ##  \}
-                           ##  end defgroup ThorVGCapi_Canvas
-                           ##
-                           ##  @defgroup ThorVGCapi_Paint Paint
-                           ##  @brief A module for managing graphical elements. It enables duplication, transformation and composition.
-                           ##
-                           ##  \{
-                           ##
-                           ## *********************************************************************
-                           ##  Paint API
-                           ## *********************************************************************
-                           ## !
-                           ##  @brief Releases the given Tvg_Paint object.
-                           ##
-                           ##  @param[in] paint The Tvg_Paint object to be released.
-                           ##
-                           ##  @return Tvg_Result enumeration.
-                           ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
-                           ##
-                           ##  @see tvg_canvas_remove()
-                           ##
+proc tvg_paint_del*(paint: ptr Tvg_Paint): Tvg_Result {.
+    importc: "tvg_paint_del", dynlib: thorvgLibName.}
+  ##
+                              ##  \}
+                              ##  end defgroup ThorVGCapi_Canvas
+                              ##
+                              ##  @defgroup ThorVGCapi_Paint Paint
+                              ##  @brief A module for managing graphical elements. It enables duplication, transformation and composition.
+                              ##
+                              ##  \{
+                              ##
+                              ## *********************************************************************
+                              ##  Paint API
+                              ## *********************************************************************
+                              ## !
+                              ##  @brief Releases the given Tvg_Paint object.
+                              ##
+                              ##  @param[in] paint The Tvg_Paint object to be released.
+                              ##
+                              ##  @return Tvg_Result enumeration.
+                              ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
+                              ##
+                              ##  @see tvg_canvas_remove()
+                              ##
 
-proc tvgPaintRef*(paint: ptr TvgPaint): uint8 {.importc: "tvg_paint_ref",
+proc tvg_paint_ref*(paint: ptr Tvg_Paint): uint8 {.importc: "tvg_paint_ref",
     dynlib: thorvgLibName.}
   ##
                            ##  @brief Increment the reference count for the Tvg_Paint object.
@@ -706,7 +711,7 @@ proc tvgPaintRef*(paint: ptr TvgPaint): uint8 {.importc: "tvg_paint_ref",
                            ##  @since 1.0
                            ##
 
-proc tvgPaintUnref*(paint: ptr TvgPaint; free: bool): uint8 {.
+proc tvg_paint_unref*(paint: ptr Tvg_Paint; free: bool): uint8 {.
     importc: "tvg_paint_unref", dynlib: thorvgLibName.}
   ##
                               ##
@@ -726,24 +731,25 @@ proc tvgPaintUnref*(paint: ptr TvgPaint; free: bool): uint8 {.
                               ##  @since 1.0
                               ##
 
-proc tvgPaintGetRef*(paint: ptr TvgPaint): uint8 {.importc: "tvg_paint_get_ref",
-    dynlib: thorvgLibName.}
+proc tvg_paint_get_ref*(paint: ptr Tvg_Paint): uint8 {.
+    importc: "tvg_paint_get_ref", dynlib: thorvgLibName.}
   ##
-                           ##  @brief Retrieve the current reference count of the Tvg_Paint object.
-                           ##
-                           ##  This method provides the current reference count, allowing the user to check the shared ownership state of the Tvg_Paint object.
-                           ##
-                           ##  @param[in] paint The Tvg_Paint object to return the reference count.
-                           ##
-                           ##  @return The current reference count of the Tvg_Paint object.
-                           ##
-                           ##  @see tvg_paint_ref()
-                           ##  @see tvg_paint_unref()
-                           ##
-                           ##  @since 1.0
-                           ##
+                              ##
+                              ##  @brief Retrieve the current reference count of the Tvg_Paint object.
+                              ##
+                              ##  This method provides the current reference count, allowing the user to check the shared ownership state of the Tvg_Paint object.
+                              ##
+                              ##  @param[in] paint The Tvg_Paint object to return the reference count.
+                              ##
+                              ##  @return The current reference count of the Tvg_Paint object.
+                              ##
+                              ##  @see tvg_paint_ref()
+                              ##  @see tvg_paint_unref()
+                              ##
+                              ##  @since 1.0
+                              ##
 
-proc tvgPaintScale*(paint: ptr TvgPaint; factor: cfloat): TvgResult {.
+proc tvg_paint_scale*(paint: ptr Tvg_Paint; factor: cfloat): Tvg_Result {.
     importc: "tvg_paint_scale", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -759,7 +765,7 @@ proc tvgPaintScale*(paint: ptr TvgPaint; factor: cfloat): TvgResult {.
                               ##  @see tvg_paint_set_transform()
                               ##
 
-proc tvgPaintRotate*(paint: ptr TvgPaint; degree: cfloat): TvgResult {.
+proc tvg_paint_rotate*(paint: ptr Tvg_Paint; degree: cfloat): Tvg_Result {.
     importc: "tvg_paint_rotate", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -778,7 +784,7 @@ proc tvgPaintRotate*(paint: ptr TvgPaint; degree: cfloat): TvgResult {.
                               ##  @see tvg_paint_set_transform()
                               ##
 
-proc tvgPaintTranslate*(paint: ptr TvgPaint; x: cfloat; y: cfloat): TvgResult {.
+proc tvg_paint_translate*(paint: ptr Tvg_Paint; x: cfloat; y: cfloat): Tvg_Result {.
     importc: "tvg_paint_translate", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -798,7 +804,7 @@ proc tvgPaintTranslate*(paint: ptr TvgPaint; x: cfloat; y: cfloat): TvgResult {.
                               ##  @see tvg_paint_set_transform()
                               ##
 
-proc tvgPaintSetTransform*(paint: ptr TvgPaint; m: ptr TvgMatrix): TvgResult {.
+proc tvg_paint_set_transform*(paint: ptr Tvg_Paint; m: ptr Tvg_Matrix): Tvg_Result {.
     importc: "tvg_paint_set_transform", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -813,7 +819,7 @@ proc tvgPaintSetTransform*(paint: ptr TvgPaint; m: ptr TvgMatrix): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
                               ##
 
-proc tvgPaintGetTransform*(paint: ptr TvgPaint; m: ptr TvgMatrix): TvgResult {.
+proc tvg_paint_get_transform*(paint: ptr Tvg_Paint; m: ptr Tvg_Matrix): Tvg_Result {.
     importc: "tvg_paint_get_transform", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -828,7 +834,7 @@ proc tvgPaintGetTransform*(paint: ptr TvgPaint; m: ptr TvgMatrix): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
                               ##
 
-proc tvgPaintSetOpacity*(paint: ptr TvgPaint; opacity: uint8): TvgResult {.
+proc tvg_paint_set_opacity*(paint: ptr Tvg_Paint; opacity: uint8): Tvg_Result {.
     importc: "tvg_paint_set_opacity", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -843,7 +849,7 @@ proc tvgPaintSetOpacity*(paint: ptr TvgPaint; opacity: uint8): TvgResult {.
                               ##  @note Setting the opacity with this API may require multiple renderings using a composition. It is recommended to avoid changing the opacity if possible.
                               ##
 
-proc tvgPaintGetOpacity*(paint: ptr TvgPaint; opacity: ptr uint8): TvgResult {.
+proc tvg_paint_get_opacity*(paint: ptr Tvg_Paint; opacity: ptr uint8): Tvg_Result {.
     importc: "tvg_paint_get_opacity", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -856,7 +862,7 @@ proc tvgPaintGetOpacity*(paint: ptr TvgPaint; opacity: ptr uint8): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT In case a @c nullptr is passed as the argument.
                               ##
 
-proc tvgPaintDuplicate*(paint: ptr TvgPaint): ptr TvgPaint {.
+proc tvg_paint_duplicate*(paint: ptr Tvg_Paint): ptr Tvg_Paint {.
     importc: "tvg_paint_duplicate", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -869,8 +875,8 @@ proc tvgPaintDuplicate*(paint: ptr TvgPaint): ptr TvgPaint {.
                               ##  @return A copied Tvg_Paint object if succeed, @c nullptr otherwise.
                               ##
 
-proc tvgPaintGetAabb*(paint: ptr TvgPaint; x: ptr cfloat; y: ptr cfloat;
-                      w: ptr cfloat; h: ptr cfloat): TvgResult {.
+proc tvg_paint_get_aabb*(paint: ptr Tvg_Paint; x: ptr cfloat; y: ptr cfloat;
+                         w: ptr cfloat; h: ptr cfloat): Tvg_Result {.
     importc: "tvg_paint_get_aabb", dynlib: thorvgLibName.}
   ##
                               ##
@@ -892,7 +898,7 @@ proc tvgPaintGetAabb*(paint: ptr TvgPaint; x: ptr cfloat; y: ptr cfloat;
                               ##  @see tvg_canvas_update_paint()
                               ##
 
-proc tvgPaintGetObb*(paint: ptr TvgPaint; pt4: ptr TvgPoint): TvgResult {.
+proc tvg_paint_get_obb*(paint: ptr Tvg_Paint; pt4: ptr Tvg_Point): Tvg_Result {.
     importc: "tvg_paint_get_obb", dynlib: thorvgLibName.}
   ##
                               ##
@@ -913,8 +919,8 @@ proc tvgPaintGetObb*(paint: ptr TvgPaint; pt4: ptr TvgPoint): TvgResult {.
                               ##  @since 1.0
                               ##
 
-proc tvgPaintSetMaskMethod*(paint: ptr TvgPaint; target: ptr TvgPaint;
-                            `method`: TvgMaskMethod): TvgResult {.
+proc tvg_paint_set_mask_method*(paint: ptr Tvg_Paint; target: ptr Tvg_Paint;
+                                `method`: Tvg_Mask_Method): Tvg_Result {.
     importc: "tvg_paint_set_mask_method", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -930,8 +936,8 @@ proc tvgPaintSetMaskMethod*(paint: ptr TvgPaint; target: ptr TvgPaint;
                               ##
                               ##
 
-proc tvgPaintGetMaskMethod*(paint: ptr TvgPaint; target: ptr ptr TvgPaint;
-                            `method`: ptr TvgMaskMethod): TvgResult {.
+proc tvg_paint_get_mask_method*(paint: ptr Tvg_Paint; target: ptr ptr Tvg_Paint;
+                                `method`: ptr Tvg_Mask_Method): Tvg_Result {.
     importc: "tvg_paint_get_mask_method", dynlib: thorvgLibName.}
   ##
                               ##
@@ -945,7 +951,7 @@ proc tvgPaintGetMaskMethod*(paint: ptr TvgPaint; target: ptr ptr TvgPaint;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
                               ##
 
-proc tvgPaintClip*(paint: ptr TvgPaint; clipper: ptr TvgPaint): TvgResult {.
+proc tvg_paint_clip*(paint: ptr Tvg_Paint; clipper: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_paint_clip", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -964,7 +970,7 @@ proc tvgPaintClip*(paint: ptr TvgPaint; clipper: ptr TvgPaint): TvgResult {.
                               ##  @since 1.0
                               ##
 
-proc tvgPaintGetParent*(paint: ptr TvgPaint): ptr TvgPaint {.
+proc tvg_paint_get_parent*(paint: ptr Tvg_Paint): ptr Tvg_Paint {.
     importc: "tvg_paint_get_parent", dynlib: thorvgLibName.}
   ##
                               ##
@@ -983,7 +989,7 @@ proc tvgPaintGetParent*(paint: ptr TvgPaint): ptr TvgPaint {.
                               ##  @since 1.0
                               ##
 
-proc tvgPaintGetType*(paint: ptr TvgPaint; `type`: ptr TvgType): TvgResult {.
+proc tvg_paint_get_type*(paint: ptr Tvg_Paint; `type`: ptr Tvg_Type): Tvg_Result {.
     importc: "tvg_paint_get_type", dynlib: thorvgLibName.}
   ##
                               ##
@@ -998,7 +1004,8 @@ proc tvgPaintGetType*(paint: ptr TvgPaint; `type`: ptr TvgType): TvgResult {.
                               ##  @since 1.0
                               ##
 
-proc tvgPaintSetBlendMethod*(paint: ptr TvgPaint; `method`: TvgBlendMethod): TvgResult {.
+proc tvg_paint_set_blend_method*(paint: ptr Tvg_Paint;
+                                 `method`: Tvg_Blend_Method): Tvg_Result {.
     importc: "tvg_paint_set_blend_method", dynlib: thorvgLibName.}
   ##
                               ##
@@ -1017,8 +1024,8 @@ proc tvgPaintSetBlendMethod*(paint: ptr TvgPaint; `method`: TvgBlendMethod): Tvg
                               ##  @since 0.15
                               ##
 
-proc tvgShapeNew*(): ptr TvgPaint {.importc: "tvg_shape_new",
-                                    dynlib: thorvgLibName.}
+proc tvg_shape_new*(): ptr Tvg_Paint {.importc: "tvg_shape_new",
+                                       dynlib: thorvgLibName.}
   ##
                               ##  \}
                               ##  end defgroup ThorVGCapi_Paint
@@ -1045,7 +1052,7 @@ proc tvgShapeNew*(): ptr TvgPaint {.importc: "tvg_shape_new",
                               ##  @return A new shape object.
                               ##
 
-proc tvgShapeReset*(paint: ptr TvgPaint): TvgResult {.
+proc tvg_shape_reset*(paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_shape_reset", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1061,7 +1068,7 @@ proc tvgShapeReset*(paint: ptr TvgPaint): TvgResult {.
                               ##  @note The memory, where the path data is stored, is not deallocated at this stage for caching effect.
                               ##
 
-proc tvgShapeMoveTo*(paint: ptr TvgPaint; x: cfloat; y: cfloat): TvgResult {.
+proc tvg_shape_move_to*(paint: ptr Tvg_Paint; x: cfloat; y: cfloat): Tvg_Result {.
     importc: "tvg_shape_move_to", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1077,7 +1084,7 @@ proc tvgShapeMoveTo*(paint: ptr TvgPaint; x: cfloat; y: cfloat): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeLineTo*(paint: ptr TvgPaint; x: cfloat; y: cfloat): TvgResult {.
+proc tvg_shape_line_to*(paint: ptr Tvg_Paint; x: cfloat; y: cfloat): Tvg_Result {.
     importc: "tvg_shape_line_to", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1095,8 +1102,8 @@ proc tvgShapeLineTo*(paint: ptr TvgPaint; x: cfloat; y: cfloat): TvgResult {.
                               ##  @note In case this is the first command in the path, it corresponds to the tvg_shape_move_to() call.
                               ##
 
-proc tvgShapeCubicTo*(paint: ptr TvgPaint; cx1: cfloat; cy1: cfloat;
-                      cx2: cfloat; cy2: cfloat; x: cfloat; y: cfloat): TvgResult {.
+proc tvg_shape_cubic_to*(paint: ptr Tvg_Paint; cx1: cfloat; cy1: cfloat;
+                         cx2: cfloat; cy2: cfloat; x: cfloat; y: cfloat): Tvg_Result {.
     importc: "tvg_shape_cubic_to", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1119,7 +1126,7 @@ proc tvgShapeCubicTo*(paint: ptr TvgPaint; cx1: cfloat; cy1: cfloat;
                               ##  @note In case this is the first command in the path, no data from the path are rendered.
                               ##
 
-proc tvgShapeClose*(paint: ptr TvgPaint): TvgResult {.
+proc tvg_shape_close*(paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_shape_close", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1135,8 +1142,9 @@ proc tvgShapeClose*(paint: ptr TvgPaint): TvgResult {.
                               ##  @note In case the sub-path does not contain any points, this function has no effect.
                               ##
 
-proc tvgShapeAppendRect*(paint: ptr TvgPaint; x: cfloat; y: cfloat; w: cfloat;
-                         h: cfloat; rx: cfloat; ry: cfloat; cw: bool): TvgResult {.
+proc tvg_shape_append_rect*(paint: ptr Tvg_Paint; x: cfloat; y: cfloat;
+                            w: cfloat; h: cfloat; rx: cfloat; ry: cfloat;
+                            cw: bool): Tvg_Result {.
     importc: "tvg_shape_append_rect", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1167,8 +1175,8 @@ proc tvgShapeAppendRect*(paint: ptr TvgPaint; x: cfloat; y: cfloat; w: cfloat;
                               ## & @note For @p rx and @p ry greater than or equal to the half of @p w and the half of @p h, respectively, the shape become an ellipse.
                               ##
 
-proc tvgShapeAppendCircle*(paint: ptr TvgPaint; cx: cfloat; cy: cfloat;
-                           rx: cfloat; ry: cfloat; cw: bool): TvgResult {.
+proc tvg_shape_append_circle*(paint: ptr Tvg_Paint; cx: cfloat; cy: cfloat;
+                              rx: cfloat; ry: cfloat; cw: bool): Tvg_Result {.
     importc: "tvg_shape_append_circle", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1191,8 +1199,8 @@ proc tvgShapeAppendCircle*(paint: ptr TvgPaint; cx: cfloat; cy: cfloat;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeAppendPath*(paint: ptr TvgPaint; cmds: ptr TvgPathCommand;
-                         cmdCnt: uint32; pts: ptr TvgPoint; ptsCnt: uint32): TvgResult {.
+proc tvg_shape_append_path*(paint: ptr Tvg_Paint; cmds: ptr Tvg_Path_Command;
+                            cmdCnt: uint32; pts: ptr Tvg_Point; ptsCnt: uint32): Tvg_Result {.
     importc: "tvg_shape_append_path", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1212,9 +1220,9 @@ proc tvgShapeAppendPath*(paint: ptr TvgPaint; cmds: ptr TvgPathCommand;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument or @p cmdCnt or @p ptsCnt equal to zero.
                               ##
 
-proc tvgShapeGetPath*(paint: ptr TvgPaint; cmds: ptr ptr TvgPathCommand;
-                      cmdsCnt: ptr uint32; pts: ptr ptr TvgPoint;
-                      ptsCnt: ptr uint32): TvgResult {.
+proc tvg_shape_get_path*(paint: ptr Tvg_Paint; cmds: ptr ptr Tvg_Path_Command;
+                         cmdsCnt: ptr uint32; pts: ptr ptr Tvg_Point;
+                         ptsCnt: ptr uint32): Tvg_Result {.
     importc: "tvg_shape_get_path", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1238,7 +1246,7 @@ proc tvgShapeGetPath*(paint: ptr TvgPaint; cmds: ptr ptr TvgPathCommand;
                               ##  @note If any of the arguments are @c nullptr, that value will be ignored.
                               ##
 
-proc tvgShapeSetStrokeWidth*(paint: ptr TvgPaint; width: cfloat): TvgResult {.
+proc tvg_shape_set_stroke_width*(paint: ptr Tvg_Paint; width: cfloat): Tvg_Result {.
     importc: "tvg_shape_set_stroke_width", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1251,7 +1259,7 @@ proc tvgShapeSetStrokeWidth*(paint: ptr TvgPaint; width: cfloat): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeGetStrokeWidth*(paint: ptr TvgPaint; width: ptr cfloat): TvgResult {.
+proc tvg_shape_get_stroke_width*(paint: ptr Tvg_Paint; width: ptr cfloat): Tvg_Result {.
     importc: "tvg_shape_get_stroke_width", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1264,8 +1272,8 @@ proc tvgShapeGetStrokeWidth*(paint: ptr TvgPaint; width: ptr cfloat): TvgResult 
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
                               ##
 
-proc tvgShapeSetStrokeColor*(paint: ptr TvgPaint; r: uint8; g: uint8; b: uint8;
-                             a: uint8): TvgResult {.
+proc tvg_shape_set_stroke_color*(paint: ptr Tvg_Paint; r: uint8; g: uint8;
+                                 b: uint8; a: uint8): Tvg_Result {.
     importc: "tvg_shape_set_stroke_color", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1283,8 +1291,8 @@ proc tvgShapeSetStrokeColor*(paint: ptr TvgPaint; r: uint8; g: uint8; b: uint8;
                               ##  @note Either a solid color or a gradient fill is applied, depending on what was set as last.
                               ##
 
-proc tvgShapeGetStrokeColor*(paint: ptr TvgPaint; r: ptr uint8; g: ptr uint8;
-                             b: ptr uint8; a: ptr uint8): TvgResult {.
+proc tvg_shape_get_stroke_color*(paint: ptr Tvg_Paint; r: ptr uint8;
+                                 g: ptr uint8; b: ptr uint8; a: ptr uint8): Tvg_Result {.
     importc: "tvg_shape_get_stroke_color", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1301,7 +1309,7 @@ proc tvgShapeGetStrokeColor*(paint: ptr TvgPaint; r: ptr uint8; g: ptr uint8;
                               ##  @retval TVG_RESULT_INSUFFICIENT_CONDITION No stroke was set.
                               ##
 
-proc tvgShapeSetStrokeGradient*(paint: ptr TvgPaint; grad: ptr TvgGradient): TvgResult {.
+proc tvg_shape_set_stroke_gradient*(paint: ptr Tvg_Paint; grad: ptr Tvg_Gradient): Tvg_Result {.
     importc: "tvg_shape_set_stroke_gradient", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1317,7 +1325,8 @@ proc tvgShapeSetStrokeGradient*(paint: ptr TvgPaint; grad: ptr TvgGradient): Tvg
                               ##  @note Either a solid color or a gradient fill is applied, depending on what was set as last.
                               ##
 
-proc tvgShapeGetStrokeGradient*(paint: ptr TvgPaint; grad: ptr ptr TvgGradient): TvgResult {.
+proc tvg_shape_get_stroke_gradient*(paint: ptr Tvg_Paint;
+                                    grad: ptr ptr Tvg_Gradient): Tvg_Result {.
     importc: "tvg_shape_get_stroke_gradient", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1332,8 +1341,8 @@ proc tvgShapeGetStrokeGradient*(paint: ptr TvgPaint; grad: ptr ptr TvgGradient):
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
                               ##
 
-proc tvgShapeSetStrokeDash*(paint: ptr TvgPaint; dashPattern: ptr cfloat;
-                            cnt: uint32; offset: cfloat): TvgResult {.
+proc tvg_shape_set_stroke_dash*(paint: ptr Tvg_Paint; dashPattern: ptr cfloat;
+                                cnt: uint32; offset: cfloat): Tvg_Result {.
     importc: "tvg_shape_set_stroke_dash", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1351,8 +1360,9 @@ proc tvgShapeSetStrokeDash*(paint: ptr TvgPaint; dashPattern: ptr cfloat;
                               ##  @since 1.0
                               ##
 
-proc tvgShapeGetStrokeDash*(paint: ptr TvgPaint; dashPattern: ptr ptr cfloat;
-                            cnt: ptr uint32; offset: ptr cfloat): TvgResult {.
+proc tvg_shape_get_stroke_dash*(paint: ptr Tvg_Paint;
+                                dashPattern: ptr ptr cfloat; cnt: ptr uint32;
+                                offset: ptr cfloat): Tvg_Result {.
     importc: "tvg_shape_get_stroke_dash", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1370,7 +1380,7 @@ proc tvgShapeGetStrokeDash*(paint: ptr TvgPaint; dashPattern: ptr ptr cfloat;
                               ##  @since 1.0
                               ##
 
-proc tvgShapeSetStrokeCap*(paint: ptr TvgPaint; cap: TvgStrokeCap): TvgResult {.
+proc tvg_shape_set_stroke_cap*(paint: ptr Tvg_Paint; cap: Tvg_Stroke_Cap): Tvg_Result {.
     importc: "tvg_shape_set_stroke_cap", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1385,7 +1395,7 @@ proc tvgShapeSetStrokeCap*(paint: ptr TvgPaint; cap: TvgStrokeCap): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeGetStrokeCap*(paint: ptr TvgPaint; cap: ptr TvgStrokeCap): TvgResult {.
+proc tvg_shape_get_stroke_cap*(paint: ptr Tvg_Paint; cap: ptr Tvg_Stroke_Cap): Tvg_Result {.
     importc: "tvg_shape_get_stroke_cap", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1398,7 +1408,7 @@ proc tvgShapeGetStrokeCap*(paint: ptr TvgPaint; cap: ptr TvgStrokeCap): TvgResul
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
                               ##
 
-proc tvgShapeSetStrokeJoin*(paint: ptr TvgPaint; join: TvgStrokeJoin): TvgResult {.
+proc tvg_shape_set_stroke_join*(paint: ptr Tvg_Paint; join: Tvg_Stroke_Join): Tvg_Result {.
     importc: "tvg_shape_set_stroke_join", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1411,7 +1421,7 @@ proc tvgShapeSetStrokeJoin*(paint: ptr TvgPaint; join: TvgStrokeJoin): TvgResult
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeGetStrokeJoin*(paint: ptr TvgPaint; join: ptr TvgStrokeJoin): TvgResult {.
+proc tvg_shape_get_stroke_join*(paint: ptr Tvg_Paint; join: ptr Tvg_Stroke_Join): Tvg_Result {.
     importc: "tvg_shape_get_stroke_join", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1424,7 +1434,7 @@ proc tvgShapeGetStrokeJoin*(paint: ptr TvgPaint; join: ptr TvgStrokeJoin): TvgRe
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
                               ##
 
-proc tvgShapeSetStrokeMiterlimit*(paint: ptr TvgPaint; miterlimit: cfloat): TvgResult {.
+proc tvg_shape_set_stroke_miterlimit*(paint: ptr Tvg_Paint; miterlimit: cfloat): Tvg_Result {.
     importc: "tvg_shape_set_stroke_miterlimit", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1439,7 +1449,8 @@ proc tvgShapeSetStrokeMiterlimit*(paint: ptr TvgPaint; miterlimit: cfloat): TvgR
                               ##  @since 0.11
                               ##
 
-proc tvgShapeGetStrokeMiterlimit*(paint: ptr TvgPaint; miterlimit: ptr cfloat): TvgResult {.
+proc tvg_shape_get_stroke_miterlimit*(paint: ptr Tvg_Paint;
+                                      miterlimit: ptr cfloat): Tvg_Result {.
     importc: "tvg_shape_get_stroke_miterlimit", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1454,8 +1465,8 @@ proc tvgShapeGetStrokeMiterlimit*(paint: ptr TvgPaint; miterlimit: ptr cfloat): 
                               ##  @since 0.11
                               ##
 
-proc tvgShapeSetTrimpath*(paint: ptr TvgPaint; begin: cfloat; `end`: cfloat;
-                          simultaneous: bool): TvgResult {.
+proc tvg_shape_set_trimpath*(paint: ptr Tvg_Paint; begin: cfloat; `end`: cfloat;
+                             simultaneous: bool): Tvg_Result {.
     importc: "tvg_shape_set_trimpath", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1475,8 +1486,8 @@ proc tvgShapeSetTrimpath*(paint: ptr TvgPaint; begin: cfloat; `end`: cfloat;
                               ##  @since 1.0
                               ##
 
-proc tvgShapeSetFillColor*(paint: ptr TvgPaint; r: uint8; g: uint8; b: uint8;
-                           a: uint8): TvgResult {.
+proc tvg_shape_set_fill_color*(paint: ptr Tvg_Paint; r: uint8; g: uint8;
+                               b: uint8; a: uint8): Tvg_Result {.
     importc: "tvg_shape_set_fill_color", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1497,8 +1508,8 @@ proc tvgShapeSetFillColor*(paint: ptr TvgPaint; r: uint8; g: uint8; b: uint8;
                               ##  @see tvg_shape_set_fill_rule()
                               ##
 
-proc tvgShapeGetFillColor*(paint: ptr TvgPaint; r: ptr uint8; g: ptr uint8;
-                           b: ptr uint8; a: ptr uint8): TvgResult {.
+proc tvg_shape_get_fill_color*(paint: ptr Tvg_Paint; r: ptr uint8; g: ptr uint8;
+                               b: ptr uint8; a: ptr uint8): Tvg_Result {.
     importc: "tvg_shape_get_fill_color", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1514,7 +1525,7 @@ proc tvgShapeGetFillColor*(paint: ptr TvgPaint; r: ptr uint8; g: ptr uint8;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeSetFillRule*(paint: ptr TvgPaint; rule: TvgFillRule): TvgResult {.
+proc tvg_shape_set_fill_rule*(paint: ptr Tvg_Paint; rule: Tvg_Fill_Rule): Tvg_Result {.
     importc: "tvg_shape_set_fill_rule", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1527,7 +1538,7 @@ proc tvgShapeSetFillRule*(paint: ptr TvgPaint; rule: TvgFillRule): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgShapeGetFillRule*(paint: ptr TvgPaint; rule: ptr TvgFillRule): TvgResult {.
+proc tvg_shape_get_fill_rule*(paint: ptr Tvg_Paint; rule: ptr Tvg_Fill_Rule): Tvg_Result {.
     importc: "tvg_shape_get_fill_rule", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1540,7 +1551,7 @@ proc tvgShapeGetFillRule*(paint: ptr TvgPaint; rule: ptr TvgFillRule): TvgResult
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
                               ##
 
-proc tvgShapeSetPaintOrder*(paint: ptr TvgPaint; strokeFirst: bool): TvgResult {.
+proc tvg_shape_set_paint_order*(paint: ptr Tvg_Paint; strokeFirst: bool): Tvg_Result {.
     importc: "tvg_shape_set_paint_order", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1555,7 +1566,7 @@ proc tvgShapeSetPaintOrder*(paint: ptr TvgPaint; strokeFirst: bool): TvgResult {
                               ##  @since 0.10
                               ##
 
-proc tvgShapeSetGradient*(paint: ptr TvgPaint; grad: ptr TvgGradient): TvgResult {.
+proc tvg_shape_set_gradient*(paint: ptr Tvg_Paint; grad: ptr Tvg_Gradient): Tvg_Result {.
     importc: "tvg_shape_set_gradient", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1574,7 +1585,7 @@ proc tvgShapeSetGradient*(paint: ptr TvgPaint; grad: ptr TvgGradient): TvgResult
                               ##  @see tvg_shape_set_fill_rule()
                               ##
 
-proc tvgShapeGetGradient*(paint: ptr TvgPaint; grad: ptr ptr TvgGradient): TvgResult {.
+proc tvg_shape_get_gradient*(paint: ptr Tvg_Paint; grad: ptr ptr Tvg_Gradient): Tvg_Result {.
     importc: "tvg_shape_get_gradient", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1589,7 +1600,7 @@ proc tvgShapeGetGradient*(paint: ptr TvgPaint; grad: ptr ptr TvgGradient): TvgRe
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid pointer passed as an argument.
                               ##
 
-proc tvgLinearGradientNew*(): ptr TvgGradient {.
+proc tvg_linear_gradient_new*(): ptr Tvg_Gradient {.
     importc: "tvg_linear_gradient_new", dynlib: thorvgLibName.}
   ##
                               ##  \}
@@ -1613,7 +1624,7 @@ proc tvgLinearGradientNew*(): ptr TvgGradient {.
                               ##  @return A new linear gradient object.
                               ##
 
-proc tvgRadialGradientNew*(): ptr TvgGradient {.
+proc tvg_radial_gradient_new*(): ptr Tvg_Gradient {.
     importc: "tvg_radial_gradient_new", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1622,8 +1633,8 @@ proc tvgRadialGradientNew*(): ptr TvgGradient {.
                               ##  @return A new radial gradient object.
                               ##
 
-proc tvgLinearGradientSet*(grad: ptr TvgGradient; x1: cfloat; y1: cfloat;
-                           x2: cfloat; y2: cfloat): TvgResult {.
+proc tvg_linear_gradient_set*(grad: ptr Tvg_Gradient; x1: cfloat; y1: cfloat;
+                              x2: cfloat; y2: cfloat): Tvg_Result {.
     importc: "tvg_linear_gradient_set", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1646,8 +1657,8 @@ proc tvgLinearGradientSet*(grad: ptr TvgGradient; x1: cfloat; y1: cfloat;
                               ##  @see tvg_gradient_set_color_stops()
                               ##
 
-proc tvgLinearGradientGet*(grad: ptr TvgGradient; x1: ptr cfloat;
-                           y1: ptr cfloat; x2: ptr cfloat; y2: ptr cfloat): TvgResult {.
+proc tvg_linear_gradient_get*(grad: ptr Tvg_Gradient; x1: ptr cfloat;
+                              y1: ptr cfloat; x2: ptr cfloat; y2: ptr cfloat): Tvg_Result {.
     importc: "tvg_linear_gradient_get", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1667,8 +1678,8 @@ proc tvgLinearGradientGet*(grad: ptr TvgGradient; x1: ptr cfloat;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
                               ##
 
-proc tvgRadialGradientSet*(grad: ptr TvgGradient; cx: cfloat; cy: cfloat;
-                           r: cfloat; fx: cfloat; fy: cfloat; fr: cfloat): TvgResult {.
+proc tvg_radial_gradient_set*(grad: ptr Tvg_Gradient; cx: cfloat; cy: cfloat;
+                              r: cfloat; fx: cfloat; fy: cfloat; fr: cfloat): Tvg_Result {.
     importc: "tvg_radial_gradient_set", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1699,9 +1710,9 @@ proc tvgRadialGradientSet*(grad: ptr TvgGradient; cx: cfloat; cy: cfloat;
                               ##  @see tvg_gradient_set_color_stops()
                               ##
 
-proc tvgRadialGradientGet*(grad: ptr TvgGradient; cx: ptr cfloat;
-                           cy: ptr cfloat; r: ptr cfloat; fx: ptr cfloat;
-                           fy: ptr cfloat; fr: ptr cfloat): TvgResult {.
+proc tvg_radial_gradient_get*(grad: ptr Tvg_Gradient; cx: ptr cfloat;
+                              cy: ptr cfloat; r: ptr cfloat; fx: ptr cfloat;
+                              fy: ptr cfloat; fr: ptr cfloat): Tvg_Result {.
     importc: "tvg_radial_gradient_get", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1721,8 +1732,8 @@ proc tvgRadialGradientGet*(grad: ptr TvgGradient; cx: ptr cfloat;
                               ##  @see tvg_radial_gradient_set()
                               ##
 
-proc tvgGradientSetColorStops*(grad: ptr TvgGradient;
-                               colorStop: ptr TvgColorStop; cnt: uint32): TvgResult {.
+proc tvg_gradient_set_color_stops*(grad: ptr Tvg_Gradient;
+                                   color_stop: ptr Tvg_Color_Stop; cnt: uint32): Tvg_Result {.
     importc: "tvg_gradient_set_color_stops", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1736,8 +1747,9 @@ proc tvgGradientSetColorStops*(grad: ptr TvgGradient;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
                               ##
 
-proc tvgGradientGetColorStops*(grad: ptr TvgGradient;
-                               colorStop: ptr ptr TvgColorStop; cnt: ptr uint32): TvgResult {.
+proc tvg_gradient_get_color_stops*(grad: ptr Tvg_Gradient;
+                                   color_stop: ptr ptr Tvg_Color_Stop;
+                                   cnt: ptr uint32): Tvg_Result {.
     importc: "tvg_gradient_get_color_stops", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1753,7 +1765,7 @@ proc tvgGradientGetColorStops*(grad: ptr TvgGradient;
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
                               ##
 
-proc tvgGradientSetSpread*(grad: ptr TvgGradient; spread: TvgStrokeFill): TvgResult {.
+proc tvg_gradient_set_spread*(grad: ptr Tvg_Gradient; spread: Tvg_Stroke_Fill): Tvg_Result {.
     importc: "tvg_gradient_set_spread", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1766,7 +1778,8 @@ proc tvgGradientSetSpread*(grad: ptr TvgGradient; spread: TvgStrokeFill): TvgRes
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
                               ##
 
-proc tvgGradientGetSpread*(grad: ptr TvgGradient; spread: ptr TvgStrokeFill): TvgResult {.
+proc tvg_gradient_get_spread*(grad: ptr Tvg_Gradient;
+                              spread: ptr Tvg_Stroke_Fill): Tvg_Result {.
     importc: "tvg_gradient_get_spread", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1779,7 +1792,7 @@ proc tvgGradientGetSpread*(grad: ptr TvgGradient; spread: ptr TvgStrokeFill): Tv
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
                               ##
 
-proc tvgGradientSetTransform*(grad: ptr TvgGradient; m: ptr TvgMatrix): TvgResult {.
+proc tvg_gradient_set_transform*(grad: ptr Tvg_Gradient; m: ptr Tvg_Matrix): Tvg_Result {.
     importc: "tvg_gradient_set_transform", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1794,7 +1807,7 @@ proc tvgGradientSetTransform*(grad: ptr TvgGradient; m: ptr TvgMatrix): TvgResul
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
                               ##
 
-proc tvgGradientGetTransform*(grad: ptr TvgGradient; m: ptr TvgMatrix): TvgResult {.
+proc tvg_gradient_get_transform*(grad: ptr Tvg_Gradient; m: ptr Tvg_Matrix): Tvg_Result {.
     importc: "tvg_gradient_get_transform", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1809,7 +1822,7 @@ proc tvgGradientGetTransform*(grad: ptr TvgGradient; m: ptr TvgMatrix): TvgResul
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr is passed as the argument.
                               ##
 
-proc tvgGradientGetType*(grad: ptr TvgGradient; `type`: ptr TvgType): TvgResult {.
+proc tvg_gradient_get_type*(grad: ptr Tvg_Gradient; `type`: ptr Tvg_Type): Tvg_Result {.
     importc: "tvg_gradient_get_type", dynlib: thorvgLibName.}
   ##
                               ##
@@ -1824,7 +1837,7 @@ proc tvgGradientGetType*(grad: ptr TvgGradient; `type`: ptr TvgType): TvgResult 
                               ##  @since 1.0
                               ##
 
-proc tvgGradientDuplicate*(grad: ptr TvgGradient): ptr TvgGradient {.
+proc tvg_gradient_duplicate*(grad: ptr Tvg_Gradient): ptr Tvg_Gradient {.
     importc: "tvg_gradient_duplicate", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1837,7 +1850,7 @@ proc tvgGradientDuplicate*(grad: ptr TvgGradient): ptr TvgGradient {.
                               ##  @return A copied Tvg_Gradient object if succeed, @c nullptr otherwise.
                               ##
 
-proc tvgGradientDel*(grad: ptr TvgGradient): TvgResult {.
+proc tvg_gradient_del*(grad: ptr Tvg_Gradient): Tvg_Result {.
     importc: "tvg_gradient_del", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1849,29 +1862,28 @@ proc tvgGradientDel*(grad: ptr TvgGradient): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Gradient pointer.
                               ##
 
-proc tvgPictureNew*(): ptr TvgPaint {.importc: "tvg_picture_new",
-                                      dynlib: thorvgLibName.}
-  ##
-                              ##  \}
-                              ##  end defgroup ThorVGCapi_Gradient
-                              ##
-                              ##  @defgroup ThorVGCapi_Picture Picture
-                              ##
-                              ##  @brief A module enabling to create and to load an image in one of the supported formats: svg, png, jpg, lottie and raw.
-                              ##
-                              ##
-                              ##  \{
-                              ##
-                              ## *********************************************************************
-                              ##  Picture API
-                              ## *********************************************************************
-                              ## !
-                              ##  @brief Creates a new picture object.
-                              ##
-                              ##  @return A new picture object.
-                              ##
+proc tvg_picture_new*(): ptr Tvg_Paint {.importc: "tvg_picture_new",
+    dynlib: thorvgLibName.}
+  ##  \}
+                           ##  end defgroup ThorVGCapi_Gradient
+                           ##
+                           ##  @defgroup ThorVGCapi_Picture Picture
+                           ##
+                           ##  @brief A module enabling to create and to load an image in one of the supported formats: svg, png, jpg, lottie and raw.
+                           ##
+                           ##
+                           ##  \{
+                           ##
+                           ## *********************************************************************
+                           ##  Picture API
+                           ## *********************************************************************
+                           ## !
+                           ##  @brief Creates a new picture object.
+                           ##
+                           ##  @return A new picture object.
+                           ##
 
-proc tvgPictureLoad*(paint: ptr TvgPaint; path: cstring): TvgResult {.
+proc tvg_picture_load*(paint: ptr Tvg_Paint; path: cstring): Tvg_Result {.
     importc: "tvg_picture_load", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1889,8 +1901,8 @@ proc tvgPictureLoad*(paint: ptr TvgPaint; path: cstring): TvgResult {.
                               ##  @retval TVG_RESULT_NOT_SUPPORTED A file with an unknown extension.
                               ##
 
-proc tvgPictureLoadRaw*(paint: ptr TvgPaint; data: ptr uint32; w: uint32;
-                        h: uint32; cs: TvgColorspace; copy: bool): TvgResult {.
+proc tvg_picture_load_raw*(paint: ptr Tvg_Paint; data: ptr uint32; w: uint32;
+                           h: uint32; cs: Tvg_Colorspace; copy: bool): Tvg_Result {.
     importc: "tvg_picture_load_raw", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1913,8 +1925,8 @@ proc tvgPictureLoadRaw*(paint: ptr TvgPaint; data: ptr uint32; w: uint32;
                               ##  @since 0.9
                               ##
 
-proc tvgPictureLoadData*(paint: ptr TvgPaint; data: cstring; size: uint32;
-                         mimetype: cstring; rpath: cstring; copy: bool): TvgResult {.
+proc tvg_picture_load_data*(paint: ptr Tvg_Paint; data: cstring; size: uint32;
+                            mimetype: cstring; rpath: cstring; copy: bool): Tvg_Result {.
     importc: "tvg_picture_load_data", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1938,7 +1950,7 @@ proc tvgPictureLoadData*(paint: ptr TvgPaint; data: cstring; size: uint32;
                               ##  @warning: It's the user responsibility to release the @p data memory if the @p copy is @c true.
                               ##
 
-proc tvgPictureSetSize*(paint: ptr TvgPaint; w: cfloat; h: cfloat): TvgResult {.
+proc tvg_picture_set_size*(paint: ptr Tvg_Paint; w: cfloat; h: cfloat): Tvg_Result {.
     importc: "tvg_picture_set_size", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1955,7 +1967,7 @@ proc tvgPictureSetSize*(paint: ptr TvgPaint; w: cfloat; h: cfloat): TvgResult {.
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgPictureGetSize*(paint: ptr TvgPaint; w: ptr cfloat; h: ptr cfloat): TvgResult {.
+proc tvg_picture_get_size*(paint: ptr Tvg_Paint; w: ptr cfloat; h: ptr cfloat): Tvg_Result {.
     importc: "tvg_picture_get_size", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1969,7 +1981,7 @@ proc tvgPictureGetSize*(paint: ptr TvgPaint; w: ptr cfloat; h: ptr cfloat): TvgR
                               ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Paint pointer.
                               ##
 
-proc tvgPictureGetPaint*(paint: ptr TvgPaint; id: uint32): ptr TvgPaint {.
+proc tvg_picture_get_paint*(paint: ptr Tvg_Paint; id: uint32): ptr Tvg_Paint {.
     importc: "tvg_picture_get_paint", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -1986,8 +1998,8 @@ proc tvgPictureGetPaint*(paint: ptr TvgPaint; id: uint32): ptr TvgPaint {.
                               ##  @note Experimental API
                               ##
 
-proc tvgSceneNew*(): ptr TvgPaint {.importc: "tvg_scene_new",
-                                    dynlib: thorvgLibName.}
+proc tvg_scene_new*(): ptr Tvg_Paint {.importc: "tvg_scene_new",
+                                       dynlib: thorvgLibName.}
   ##
                               ##  \}
                               ##  end defgroup ThorVGCapi_Picture
@@ -2011,7 +2023,7 @@ proc tvgSceneNew*(): ptr TvgPaint {.importc: "tvg_scene_new",
                               ##  @return A new scene object.
                               ##
 
-proc tvgScenePush*(scene: ptr TvgPaint; paint: ptr TvgPaint): TvgResult {.
+proc tvg_scene_push*(scene: ptr Tvg_Paint; paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_scene_push", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2028,7 +2040,8 @@ proc tvgScenePush*(scene: ptr TvgPaint; paint: ptr TvgPaint): TvgResult {.
                               ##  @see tvg_scene_push_at()
                               ##
 
-proc tvgScenePushAt*(scene: ptr TvgPaint; target: ptr TvgPaint; at: ptr TvgPaint): TvgResult {.
+proc tvg_scene_push_at*(scene: ptr Tvg_Paint; target: ptr Tvg_Paint;
+                        at: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_scene_push_at", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2049,7 +2062,7 @@ proc tvgScenePushAt*(scene: ptr TvgPaint; target: ptr TvgPaint; at: ptr TvgPaint
                               ##  @since 1.0
                               ##
 
-proc tvgSceneRemove*(scene: ptr TvgPaint; paint: ptr TvgPaint): TvgResult {.
+proc tvg_scene_remove*(scene: ptr Tvg_Paint; paint: ptr Tvg_Paint): Tvg_Result {.
     importc: "tvg_scene_remove", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2067,8 +2080,8 @@ proc tvgSceneRemove*(scene: ptr TvgPaint; paint: ptr TvgPaint): TvgResult {.
                               ##  @since 1.0
                               ##
 
-proc tvgTextNew*(): ptr TvgPaint {.importc: "tvg_text_new",
-                                   dynlib: thorvgLibName.}
+proc tvg_text_new*(): ptr Tvg_Paint {.importc: "tvg_text_new",
+                                      dynlib: thorvgLibName.}
   ##
                               ##  \}
                               ##  end defgroup ThorVGCapi_Scene
@@ -2091,29 +2104,30 @@ proc tvgTextNew*(): ptr TvgPaint {.importc: "tvg_text_new",
                               ##  @since 0.15
                               ##
 
-proc tvgTextSetFont*(paint: ptr TvgPaint; name: cstring; size: cfloat;
-                     style: cstring): TvgResult {.importc: "tvg_text_set_font",
-    dynlib: thorvgLibName.}
+proc tvg_text_set_font*(paint: ptr Tvg_Paint; name: cstring; size: cfloat;
+                        style: cstring): Tvg_Result {.
+    importc: "tvg_text_set_font", dynlib: thorvgLibName.}
   ##
-                           ##  @brief Sets the font properties for the text.
-                           ##
-                           ##  This function allows you to define the font characteristics used for text rendering.
-                           ##  It sets the font name, size and optionally the style.
-                           ##
-                           ##  @param[in] paint A Tvg_Paint pointer to the text object.
-                           ##  @param[in] name The name of the font. This should correspond to a font available in the canvas.
-                           ##  @param[in] size The size of the font in points.
-                           ##  @param[in] style The style of the font. If empty, the default style is used. Currently only 'italic' style is supported.
-                           ##
-                           ##  @return Tvg_Result enumeration.
-                           ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the @p paint argument.
-                           ##  @retval TVG_RESULT_INSUFFICIENT_CONDITION  The specified @p name cannot be found.
-                           ##
-                           ##  @note If the @p name is not specified, ThorVG will select any available font candidate.
-                           ##  @since 1.0
-                           ##
+                              ##
+                              ##  @brief Sets the font properties for the text.
+                              ##
+                              ##  This function allows you to define the font characteristics used for text rendering.
+                              ##  It sets the font name, size and optionally the style.
+                              ##
+                              ##  @param[in] paint A Tvg_Paint pointer to the text object.
+                              ##  @param[in] name The name of the font. This should correspond to a font available in the canvas.
+                              ##  @param[in] size The size of the font in points.
+                              ##  @param[in] style The style of the font. If empty, the default style is used. Currently only 'italic' style is supported.
+                              ##
+                              ##  @return Tvg_Result enumeration.
+                              ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the @p paint argument.
+                              ##  @retval TVG_RESULT_INSUFFICIENT_CONDITION  The specified @p name cannot be found.
+                              ##
+                              ##  @note If the @p name is not specified, ThorVG will select any available font candidate.
+                              ##  @since 1.0
+                              ##
 
-proc tvgTextSetText*(paint: ptr TvgPaint; text: cstring): TvgResult {.
+proc tvg_text_set_text*(paint: ptr Tvg_Paint; text: cstring): Tvg_Result {.
     importc: "tvg_text_set_text", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2131,7 +2145,7 @@ proc tvgTextSetText*(paint: ptr TvgPaint; text: cstring): TvgResult {.
                               ##  @since 1.0
                               ##
 
-proc tvgTextSetFillColor*(paint: ptr TvgPaint; r: uint8; g: uint8; b: uint8): TvgResult {.
+proc tvg_text_set_fill_color*(paint: ptr Tvg_Paint; r: uint8; g: uint8; b: uint8): Tvg_Result {.
     importc: "tvg_text_set_fill_color", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2151,7 +2165,7 @@ proc tvgTextSetFillColor*(paint: ptr TvgPaint; r: uint8; g: uint8; b: uint8): Tv
                               ##  @since 0.15
                               ##
 
-proc tvgTextSetGradient*(paint: ptr TvgPaint; gradient: ptr TvgGradient): TvgResult {.
+proc tvg_text_set_gradient*(paint: ptr Tvg_Paint; gradient: ptr Tvg_Gradient): Tvg_Result {.
     importc: "tvg_text_set_gradient", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2170,7 +2184,7 @@ proc tvgTextSetGradient*(paint: ptr TvgPaint; gradient: ptr TvgGradient): TvgRes
                               ##  @since 0.15
                               ##
 
-proc tvgFontLoad*(path: cstring): TvgResult {.importc: "tvg_font_load",
+proc tvg_font_load*(path: cstring): Tvg_Result {.importc: "tvg_font_load",
     dynlib: thorvgLibName.}
   ##
                            ##  @brief Loads a scalable font data from a file.
@@ -2190,8 +2204,8 @@ proc tvgFontLoad*(path: cstring): TvgResult {.importc: "tvg_font_load",
                            ##  @since 0.15
                            ##
 
-proc tvgFontLoadData*(name: cstring; data: cstring; size: uint32;
-                      mimetype: cstring; copy: bool): TvgResult {.
+proc tvg_font_load_data*(name: cstring; data: cstring; size: uint32;
+                         mimetype: cstring; copy: bool): Tvg_Result {.
     importc: "tvg_font_load_data", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2219,7 +2233,7 @@ proc tvgFontLoadData*(name: cstring; data: cstring; size: uint32;
                               ##  @since 0.15
                               ##
 
-proc tvgFontUnload*(path: cstring): TvgResult {.importc: "tvg_font_unload",
+proc tvg_font_unload*(path: cstring): Tvg_Result {.importc: "tvg_font_unload",
     dynlib: thorvgLibName.}
   ##
                            ##  @brief Unloads the specified scalable font data that was previously loaded.
@@ -2237,8 +2251,8 @@ proc tvgFontUnload*(path: cstring): TvgResult {.importc: "tvg_font_unload",
                            ##  @since 0.15
                            ##
 
-proc tvgSaverNew*(): ptr TvgSaver {.importc: "tvg_saver_new",
-                                    dynlib: thorvgLibName.}
+proc tvg_saver_new*(): ptr Tvg_Saver {.importc: "tvg_saver_new",
+                                       dynlib: thorvgLibName.}
   ##
                               ##  \}
                               ##  end defgroup ThorVGCapi_Text
@@ -2260,8 +2274,8 @@ proc tvgSaverNew*(): ptr TvgSaver {.importc: "tvg_saver_new",
                               ##  @return A new Tvg_Saver object.
                               ##
 
-proc tvgSaverSave*(saver: ptr TvgSaver; paint: ptr TvgPaint; path: cstring;
-                   quality: uint32): TvgResult {.importc: "tvg_saver_save",
+proc tvg_saver_save*(saver: ptr Tvg_Saver; paint: ptr Tvg_Paint; path: cstring;
+                     quality: uint32): Tvg_Result {.importc: "tvg_saver_save",
     dynlib: thorvgLibName.}
   ## !
                            ##  @brief Exports the given @p paint data to the given @p path
@@ -2285,37 +2299,39 @@ proc tvgSaverSave*(saver: ptr TvgSaver; paint: ptr TvgPaint; path: cstring;
                            ##  @see tvg_saver_sync()
                            ##
 
-proc tvgSaverSync*(saver: ptr TvgSaver): TvgResult {.importc: "tvg_saver_sync",
-    dynlib: thorvgLibName.}
-  ## !
-                           ##  @brief Guarantees that the saving task is finished.
-                           ##
-                           ##  The behavior of the Saver module works on a sync/async basis, depending on the threading setting of the Initializer.
-                           ##  Thus, if you wish to have a benefit of it, you must call tvg_saver_sync() after the tvg_saver_save() in the proper delayed time.
-                           ##  Otherwise, you can call tvg_saver_sync() immediately.
-                           ##
-                           ##  @param[in] saver The Tvg_Saver object connected with the saving task.
-                           ##
-                           ##  @return Tvg_Result enumeration.
-                           ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
-                           ##  @retval TVG_RESULT_INSUFFICIENT_CONDITION No saving task is running.
-                           ##
-                           ##  @note The asynchronous tasking is dependent on the Saver module implementation.
-                           ##  @see tvg_saver_save()
-                           ##
+proc tvg_saver_sync*(saver: ptr Tvg_Saver): Tvg_Result {.
+    importc: "tvg_saver_sync", dynlib: thorvgLibName.}
+  ##
+                              ## !
+                              ##  @brief Guarantees that the saving task is finished.
+                              ##
+                              ##  The behavior of the Saver module works on a sync/async basis, depending on the threading setting of the Initializer.
+                              ##  Thus, if you wish to have a benefit of it, you must call tvg_saver_sync() after the tvg_saver_save() in the proper delayed time.
+                              ##  Otherwise, you can call tvg_saver_sync() immediately.
+                              ##
+                              ##  @param[in] saver The Tvg_Saver object connected with the saving task.
+                              ##
+                              ##  @return Tvg_Result enumeration.
+                              ##  @retval TVG_RESULT_INVALID_ARGUMENT A @c nullptr passed as the argument.
+                              ##  @retval TVG_RESULT_INSUFFICIENT_CONDITION No saving task is running.
+                              ##
+                              ##  @note The asynchronous tasking is dependent on the Saver module implementation.
+                              ##  @see tvg_saver_save()
+                              ##
 
-proc tvgSaverDel*(saver: ptr TvgSaver): TvgResult {.importc: "tvg_saver_del",
-    dynlib: thorvgLibName.}
-  ## !
-                           ##  @brief Deletes the given Tvg_Saver object.
-                           ##
-                           ##  @param[in] saver The Tvg_Saver object to be deleted.
-                           ##
-                           ##  @return Tvg_Result enumeration.
-                           ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Saver pointer.
-                           ##
+proc tvg_saver_del*(saver: ptr Tvg_Saver): Tvg_Result {.
+    importc: "tvg_saver_del", dynlib: thorvgLibName.}
+  ##
+                              ## !
+                              ##  @brief Deletes the given Tvg_Saver object.
+                              ##
+                              ##  @param[in] saver The Tvg_Saver object to be deleted.
+                              ##
+                              ##  @return Tvg_Result enumeration.
+                              ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Saver pointer.
+                              ##
 
-proc tvgAnimationNew*(): ptr TvgAnimation {.importc: "tvg_animation_new",
+proc tvg_animation_new*(): ptr Tvg_Animation {.importc: "tvg_animation_new",
     dynlib: thorvgLibName.}
   ##  \}
                            ##  end defgroup ThorVGCapi_Saver
@@ -2338,7 +2354,7 @@ proc tvgAnimationNew*(): ptr TvgAnimation {.importc: "tvg_animation_new",
                            ##  @since 0.13
                            ##
 
-proc tvgAnimationSetFrame*(animation: ptr TvgAnimation; no: cfloat): TvgResult {.
+proc tvg_animation_set_frame*(animation: ptr Tvg_Animation; no: cfloat): Tvg_Result {.
     importc: "tvg_animation_set_frame", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2360,7 +2376,7 @@ proc tvgAnimationSetFrame*(animation: ptr TvgAnimation; no: cfloat): TvgResult {
                               ##  @since 0.13
                               ##
 
-proc tvgAnimationGetPicture*(animation: ptr TvgAnimation): ptr TvgPaint {.
+proc tvg_animation_get_picture*(animation: ptr Tvg_Animation): ptr Tvg_Paint {.
     importc: "tvg_animation_get_picture", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2379,7 +2395,7 @@ proc tvgAnimationGetPicture*(animation: ptr TvgAnimation): ptr TvgPaint {.
                               ##  @since 0.13
                               ##
 
-proc tvgAnimationGetFrame*(animation: ptr TvgAnimation; no: ptr cfloat): TvgResult {.
+proc tvg_animation_get_frame*(animation: ptr Tvg_Animation; no: ptr cfloat): Tvg_Result {.
     importc: "tvg_animation_get_frame", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2397,7 +2413,8 @@ proc tvgAnimationGetFrame*(animation: ptr TvgAnimation; no: ptr cfloat): TvgResu
                               ##  @since 0.13
                               ##
 
-proc tvgAnimationGetTotalFrame*(animation: ptr TvgAnimation; cnt: ptr cfloat): TvgResult {.
+proc tvg_animation_get_total_frame*(animation: ptr Tvg_Animation;
+                                    cnt: ptr cfloat): Tvg_Result {.
     importc: "tvg_animation_get_total_frame", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2415,7 +2432,8 @@ proc tvgAnimationGetTotalFrame*(animation: ptr TvgAnimation; cnt: ptr cfloat): T
                               ##  @since 0.13
                               ##
 
-proc tvgAnimationGetDuration*(animation: ptr TvgAnimation; duration: ptr cfloat): TvgResult {.
+proc tvg_animation_get_duration*(animation: ptr Tvg_Animation;
+                                 duration: ptr cfloat): Tvg_Result {.
     importc: "tvg_animation_get_duration", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2432,8 +2450,8 @@ proc tvgAnimationGetDuration*(animation: ptr TvgAnimation; duration: ptr cfloat)
                               ##  @since 0.13
                               ##
 
-proc tvgAnimationSetSegment*(animation: ptr TvgAnimation; begin: cfloat;
-                             `end`: cfloat): TvgResult {.
+proc tvg_animation_set_segment*(animation: ptr Tvg_Animation; begin: cfloat;
+                                `end`: cfloat): Tvg_Result {.
     importc: "tvg_animation_set_segment", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2461,8 +2479,8 @@ proc tvgAnimationSetSegment*(animation: ptr TvgAnimation; begin: cfloat;
                               ##  @since 1.0
                               ##
 
-proc tvgAnimationGetSegment*(animation: ptr TvgAnimation; begin: ptr cfloat;
-                             `end`: ptr cfloat): TvgResult {.
+proc tvg_animation_get_segment*(animation: ptr Tvg_Animation; begin: ptr cfloat;
+                                `end`: ptr cfloat): Tvg_Result {.
     importc: "tvg_animation_get_segment", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2479,7 +2497,7 @@ proc tvgAnimationGetSegment*(animation: ptr TvgAnimation; begin: ptr cfloat;
                               ##  @since 1.0
                               ##
 
-proc tvgAnimationDel*(animation: ptr TvgAnimation): TvgResult {.
+proc tvg_animation_del*(animation: ptr Tvg_Animation): Tvg_Result {.
     importc: "tvg_animation_del", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2493,7 +2511,7 @@ proc tvgAnimationDel*(animation: ptr TvgAnimation): TvgResult {.
                               ##  @since 0.13
                               ##
 
-proc tvgAccessorNew*(): ptr TvgAccessor {.importc: "tvg_accessor_new",
+proc tvg_accessor_new*(): ptr Tvg_Accessor {.importc: "tvg_accessor_new",
     dynlib: thorvgLibName.}
   ##  \}
                            ##  end defgroup ThorVGCapi_Animation
@@ -2515,7 +2533,7 @@ proc tvgAccessorNew*(): ptr TvgAccessor {.importc: "tvg_accessor_new",
                            ##  @note Experimental API
                            ##
 
-proc tvgAccessorDel*(accessor: ptr TvgAccessor): TvgResult {.
+proc tvg_accessor_del*(accessor: ptr Tvg_Accessor): Tvg_Result {.
     importc: "tvg_accessor_del", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2529,29 +2547,29 @@ proc tvgAccessorDel*(accessor: ptr TvgAccessor): TvgResult {.
                               ##  @note Experimental API
                               ##
 
-proc tvgAccessorSet*(accessor: ptr TvgAccessor; paint: ptr TvgPaint;
-                     `func`: proc (paint: ptr TvgPaint; data: pointer): bool;
-                     data: pointer): TvgResult {.importc: "tvg_accessor_set",
-    dynlib: thorvgLibName.}
-  ## !
-                           ##  @brief Sets the paint of the accessor then iterates through its descendents.
-                           ##
-                           ##  Iterates through all descendents of the scene passed through the paint argument
-                           ##  while calling func on each and passing the data pointer to this function. When
-                           ##  func returns false iteration stops and the function returns.
-                           ##
-                           ##  @param[in] accessor A Tvg_Accessor pointer to the accessor object.
-                           ##  @param[in] paint A Tvg_Paint pointer to the scene object.
-                           ##  @param[in] func A function pointer to the function that will be execute for each child.
-                           ##  @param[in] data A void pointer to data that will be passed to the func.
-                           ##
-                           ##  @return Tvg_Result enumeration.
-                           ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Accessor, Tvg_Paint, or function pointer.
-                           ##
-                           ##  @note Experimental API
-                           ##
+proc tvg_accessor_set*(accessor: ptr Tvg_Accessor; paint: ptr Tvg_Paint; `func`: proc (
+    paint: ptr Tvg_Paint; data: pointer): bool; data: pointer): Tvg_Result {.
+    importc: "tvg_accessor_set", dynlib: thorvgLibName.}
+  ##
+                              ## !
+                              ##  @brief Sets the paint of the accessor then iterates through its descendents.
+                              ##
+                              ##  Iterates through all descendents of the scene passed through the paint argument
+                              ##  while calling func on each and passing the data pointer to this function. When
+                              ##  func returns false iteration stops and the function returns.
+                              ##
+                              ##  @param[in] accessor A Tvg_Accessor pointer to the accessor object.
+                              ##  @param[in] paint A Tvg_Paint pointer to the scene object.
+                              ##  @param[in] func A function pointer to the function that will be execute for each child.
+                              ##  @param[in] data A void pointer to data that will be passed to the func.
+                              ##
+                              ##  @return Tvg_Result enumeration.
+                              ##  @retval TVG_RESULT_INVALID_ARGUMENT An invalid Tvg_Accessor, Tvg_Paint, or function pointer.
+                              ##
+                              ##  @note Experimental API
+                              ##
 
-proc tvgAccessorGenerateId*(name: cstring): uint32 {.
+proc tvg_accessor_generate_id*(name: cstring): uint32 {.
     importc: "tvg_accessor_generate_id", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2567,7 +2585,7 @@ proc tvgAccessorGenerateId*(name: cstring): uint32 {.
                               ##  @note Experimental API
                               ##
 
-proc tvgLottieAnimationNew*(): ptr TvgAnimation {.
+proc tvg_lottie_animation_new*(): ptr Tvg_Animation {.
     importc: "tvg_lottie_animation_new", dynlib: thorvgLibName.}
   ##
                               ##  \}
@@ -2590,7 +2608,7 @@ proc tvgLottieAnimationNew*(): ptr TvgAnimation {.
                               ##  @since 0.15
                               ##
 
-proc tvgLottieAnimationOverride*(animation: ptr TvgAnimation; slot: cstring): TvgResult {.
+proc tvg_lottie_animation_override*(animation: ptr Tvg_Animation; slot: cstring): Tvg_Result {.
     importc: "tvg_lottie_animation_override", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2607,7 +2625,8 @@ proc tvgLottieAnimationOverride*(animation: ptr TvgAnimation; slot: cstring): Tv
                               ##  @since 1.0
                               ##
 
-proc tvgLottieAnimationSetMarker*(animation: ptr TvgAnimation; marker: cstring): TvgResult {.
+proc tvg_lottie_animation_set_marker*(animation: ptr Tvg_Animation;
+                                      marker: cstring): Tvg_Result {.
     importc: "tvg_lottie_animation_set_marker", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2624,9 +2643,9 @@ proc tvgLottieAnimationSetMarker*(animation: ptr TvgAnimation; marker: cstring):
                               ##  @since 1.0
                               ##
 
-proc tvgLottieAnimationGetMarkersCnt*(animation: ptr TvgAnimation;
-                                      cnt: ptr uint32): TvgResult {.
-    importc: "tvg_lottie_animation_get_markers_cnt", dynlib: thorvgLibName.}
+proc tvg_lottie_animation_get_markers_cnt*(animation: ptr Tvg_Animation;
+    cnt: ptr uint32): Tvg_Result {.importc: "tvg_lottie_animation_get_markers_cnt",
+                                   dynlib: thorvgLibName.}
   ##
                               ## !
                               ##  @brief Gets the marker count of the animation.
@@ -2640,8 +2659,8 @@ proc tvgLottieAnimationGetMarkersCnt*(animation: ptr TvgAnimation;
                               ##  @since 1.0
                               ##
 
-proc tvgLottieAnimationGetMarker*(animation: ptr TvgAnimation; idx: uint32;
-                                  name: cstringArray): TvgResult {.
+proc tvg_lottie_animation_get_marker*(animation: ptr Tvg_Animation; idx: uint32;
+                                      name: cstringArray): Tvg_Result {.
     importc: "tvg_lottie_animation_get_marker", dynlib: thorvgLibName.}
   ##
                               ## !
@@ -2657,8 +2676,8 @@ proc tvgLottieAnimationGetMarker*(animation: ptr TvgAnimation; idx: uint32;
                               ##  @since 1.0
                               ##
 
-proc tvgLottieAnimationTween*(animation: ptr TvgAnimation; `from`: cfloat;
-                              to: cfloat; progress: cfloat): TvgResult {.
+proc tvg_lottie_animation_tween*(animation: ptr Tvg_Animation; `from`: cfloat;
+                                 to: cfloat; progress: cfloat): Tvg_Result {.
     importc: "tvg_lottie_animation_tween", dynlib: thorvgLibName.}
   ##
                               ##
@@ -2678,8 +2697,8 @@ proc tvgLottieAnimationTween*(animation: ptr TvgAnimation; `from`: cfloat;
                               ##  @since 1.0
                               ##
 
-proc tvgLottieAnimationAssign*(animation: ptr TvgAnimation; layer: cstring;
-                               ix: uint32; `var`: cstring; val: cfloat): TvgResult {.
+proc tvg_lottie_animation_assign*(animation: ptr Tvg_Animation; layer: cstring;
+                                  ix: uint32; `var`: cstring; val: cfloat): Tvg_Result {.
     importc: "tvg_lottie_animation_assign", dynlib: thorvgLibName.}
   ##
                               ## !

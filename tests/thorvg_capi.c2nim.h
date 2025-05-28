@@ -5,7 +5,7 @@
 #pragma c2nim stdints
 #pragma c2nim mergeBlocks
 #pragma c2nim mergeDuplicates
-#pragma c2nim nep1
+// #pragma c2nim nep1
 #pragma c2nim render reindentlongcomments
 #pragma c2nim render extranewlines
 #pragma c2nim assumedef TVG_API

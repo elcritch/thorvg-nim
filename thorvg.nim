@@ -236,7 +236,7 @@ proc getVersion*(): tuple[major, minor, micro: uint32, version: string] =
   ## Get ThorVG version
   var major, minor, micro: uint32
   var version: cstring
-  checkResult(tvg_engine_version(addr major, addr minor, addr micro, version))
+  checkResult(tvgEngineVersion(addr major, addr minor, addr micro, cast[cstringArray](addr version)))
   result = (major, minor, micro, $version) 
 
 type ThorEngine* = object
