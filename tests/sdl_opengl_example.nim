@@ -70,13 +70,12 @@ echo "Renderer: ", $renderer
 # glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
 proc blitToScreen(fbo: GLFrameBuffer, posX: uint32, posY: uint32, width: uint32, height: uint32) =
-  discard
-  # glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
-  # glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
-  # glBlitFramebuffer(0, 0,
-  #       screenWidth, screenHeight,
-  #       posX.GLint, posY.GLint, (posX + width).GLint, (posY + height).GLint,
-  #       GL_COLOR_BUFFER_BIT, GL_NEAREST.GLEnum)
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
+  glBlitFramebuffer(0, 0,
+        screenWidth, screenHeight,
+        posX.GLint, posY.GLint, (posX + width).GLint, (posY + height).GLint,
+        GL_COLOR_BUFFER_BIT, GL_NEAREST.GLEnum)
 
 
 proc testBasicFunctionality(canvas: GlCanvas) =
@@ -209,8 +208,6 @@ reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 let fbo = createFbo(screenWidth, screenHeight)
 
-let canvas = newGlCanvas()
-canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
 while runGame:
   while pollEvent(evt):
@@ -224,9 +221,11 @@ while runGame:
         let newHeight = windowEvent.data2
         # reshape(newWidth, newHeight)
 
+  let canvas = newGlCanvas()
+  canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
   # render()
   testBasicFunctionality(canvas)
-  canvas.draw(false)
+  canvas.draw(true)
   canvas.sync()
   blitToScreen(fbo, 0, 0, uint32(screenWidth), uint32(screenHeight))
 
