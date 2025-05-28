@@ -167,15 +167,7 @@ proc main() =
 
     testBasicFunctionality(canvas)
 
-    canvas.render()
-    # canvas.update()
-    # canvas.draw(false)
-    # canvas.sync()
-
-    let res = updateSurface(window)
-    if res != SdlSuccess:
-      echo "Failed to update surface: ", getError()
-      break
+    canvas.render(false)
 
     # Draw some animated content
     let centerX = WINDOW_WIDTH div 2
