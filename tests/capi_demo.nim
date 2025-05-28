@@ -98,25 +98,24 @@ proc contents() =
   when false:
     # Note: In a real implementation, you'd load font data from memory
     # This is a simplified version
-    let fontDataResult = tvgFontLoadData("Arial", nil, 0, "ttf", true)
+    let fontDataResult = loadFontData("Arial", nil, 0, "ttf", true)
     if fontDataResult != tvgSuccess:
       echo "Problem with loading the font file from memory. Did you enable TTF Loader?"
 
-    let grad = tvgRadialGradientNew()
-    checkResult(tvgRadialGradientSet(grad, 200.0, 200.0, 20.0, 200.0, 200.0, 0.0))
+    let grad = newRadialGradient(200.0, 200.0, 20.0, 200.0, 200.0, 0.0)
     var colorStops = [
       TvgColorStop(offset: 0.0, r: 255, g: 0, b: 255, a: 255),
       TvgColorStop(offset: 1.0, r: 0, g: 0, b: 255, a: 255)
     ]
-    checkResult(tvgGradientSetColorStops(grad, addr colorStops[0], 2))
-    checkResult(tvgGradientSetSpread(grad, tvgStrokeFillReflect))
+    grad.setColorStops(colorStops)
+    grad.setSpread(TVG_STROKE_FILL_REFLECT)
 
-    let text = tvgTextNew()
-    checkResult(tvgTextSetFont(text, "Arial", 20.0, "italic"))
-    checkResult(tvgTextSetGradient(text, grad))
-    checkResult(tvgTextSetText(text, "ThorVG is the best"))
-    checkResult(tvgPaintTranslate(text, 70.0, 420.0))
-    checkResult(tvgCanvasPush(canvas.handle, text))
+    let text = newText()
+    text.setFont("Arial", 20.0, "italic")
+    text.setGradient(grad)
+    text.setText("ThorVG is the best")
+    text.translate(70.0, 420.0)
+    canvas.push(text)
 
 proc progress(elapsed: uint32, durationInSec: float): float =
   ## Calculate animation progress
