@@ -8,7 +8,6 @@ export thorvg
 type
   CanvasObj* = object of RootObj
     handle: TvgCanvas
-    width, height: uint32
 
   Canvas* = ref object of CanvasObj
 

@@ -6,29 +6,16 @@ import ../thorvg
 export thorvg
 
 type
-  PaintObj* = object of RootObj
+  Paint* = object
     handle*: TvgPaint
     owned*: bool
-
-  Paint* = ref object of PaintObj
-
+  
   Color* = object
     r*, g*, b*, a*: uint8
 
   Transform* = object
     matrix*: TvgMatrix
 
-proc newPaint*(handle: TvgPaint, owned: bool = true): Paint =
-  ## Create a new Paint wrapper
-  result = Paint(handle: handle, owned: owned)
-  if result.handle == nil:
-    raise newException(ThorVGError, "Invalid paint handle")
-
-proc gray*(value: uint8, a: uint8 = 255): Color =
-  ## Create a grayscale color
-  rgba(value, value, value, a)
-
-# Transform operations
 proc scale*(paint: Paint, factor: float) =
   ## Scale the paint by a factor
   checkResult(tvgPaintScale(paint.handle, factor.cfloat))

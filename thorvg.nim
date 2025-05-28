@@ -105,22 +105,22 @@ type
     tvgFillRuleEvenOdd
 
   # Opaque pointer types
-  TvgCanvas* {.importc: "Tvg_Canvas", header: hdr.} = ptr object
-  TvgPaint* {.importc: "Tvg_Paint", header: hdr.} = ptr object
-  TvgGradient* {.importc: "Tvg_Gradient", header: hdr.} = ptr object
-  TvgSaver* {.importc: "Tvg_Saver", header: hdr.} = ptr object
-  TvgAnimation* {.importc: "Tvg_Animation", header: hdr.} = ptr object
-  TvgAccessor* {.importc: "Tvg_Accessor", header: hdr.} = ptr object
+  TvgCanvas* {.importc: "Tvg_Canvas", header: hdr, byref.} = object
+  TvgPaint* {.importc: "Tvg_Paint", header: hdr, byref.} = object
+  TvgGradient* {.importc: "Tvg_Gradient", header: hdr, byref.} = object
+  TvgSaver* {.importc: "Tvg_Saver", header: hdr, byref.} = object
+  TvgAnimation* {.importc: "Tvg_Animation", header: hdr, byref.} = object
+  TvgAccessor* {.importc: "Tvg_Accessor", header: hdr, byref.} = object
 
   # Data structures
-  TvgColorStop* {.importc: "Tvg_Color_Stop", header: hdr.} = object
+  TvgColorStop* {.importc: "Tvg_Color_Stop", header: hdr, bycopy.} = object
     offset*: cfloat
     r*, g*, b*, a*: uint8
 
-  TvgPoint* {.importc: "Tvg_Point", header: hdr.} = object
+  TvgPoint* {.importc: "Tvg_Point", header: hdr, bycopy.} = object
     x*, y*: cfloat
 
-  TvgMatrix* {.importc: "Tvg_Matrix", header: hdr.} = object
+  TvgMatrix* {.importc: "Tvg_Matrix", header: hdr, bycopy.} = object
     e11*, e12*, e13*: cfloat
     e21*, e22*, e23*: cfloat
     e31*, e32*, e33*: cfloat
