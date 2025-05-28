@@ -3,6 +3,21 @@ type
   TvgCanvas* {.importc: "Tvg_Canvas", header: "thorvg_capi.h", bycopy.} = object
 
 
+  TvgPaint* {.importc: "Tvg_Paint", header: "thorvg_capi.h", bycopy.} = object
+
+
+  TvgGradient* {.importc: "Tvg_Gradient", header: "thorvg_capi.h", bycopy.} = object
+
+
+  TvgSaver* {.importc: "Tvg_Saver", header: "thorvg_capi.h", bycopy.} = object
+
+
+  TvgAnimation* {.importc: "Tvg_Animation", header: "thorvg_capi.h", bycopy.} = object
+
+
+  TvgAccessor* {.importc: "Tvg_Accessor", header: "thorvg_capi.h", bycopy.} = object
+
+
 ## !
 ##  @file thorvg_capi.h
 ##
