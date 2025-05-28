@@ -55,8 +55,6 @@ const
   WINDOW_WIDTH = 640
   WINDOW_HEIGHT = 480
 
-var canvas: SwCanvas
-
 # Helper function to set a pixel color
 proc setPixel(surface: SurfacePtr, x, y: int, color: uint32) =
   if x >= 0 and x < surface.w and y >= 0 and y < surface.h:
@@ -70,10 +68,10 @@ proc makeColor(r, g, b: uint8): uint32 =
   return (0xFF'u32 shl 24) or (r.uint32 shl 16) or (g.uint32 shl 8) or b.uint32
 
 proc main() =
-  let engine = initThorEngine(4)
+  let engine = initThorEngine(threads = 1)
 
   # Create the canvas
-  canvas = newSwCanvas()
+  let canvas = newSwCanvas()
   canvas.setTarget(100, 100, TVG_COLORSPACE_ARGB8888)
   # canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
 
