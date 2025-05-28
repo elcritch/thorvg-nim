@@ -70,12 +70,13 @@ echo "Renderer: ", $renderer
 # glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
 proc blitToScreen(fbo: GLFrameBuffer, posX: uint32, posY: uint32, width: uint32, height: uint32) =
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
-  glBlitFramebuffer(0, 0,
-        screenWidth, screenHeight,
-        posX.GLint, posY.GLint, (posX + width).GLint, (posY + height).GLint,
-        GL_COLOR_BUFFER_BIT, GL_NEAREST.GLEnum)
+  discard
+  # glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
+  # glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
+  # glBlitFramebuffer(0, 0,
+  #       screenWidth, screenHeight,
+  #       posX.GLint, posY.GLint, (posX + width).GLint, (posY + height).GLint,
+  #       GL_COLOR_BUFFER_BIT, GL_NEAREST.GLEnum)
 
 
 proc testBasicFunctionality(canvas: GlCanvas) =
