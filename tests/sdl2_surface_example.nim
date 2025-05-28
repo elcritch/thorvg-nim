@@ -19,35 +19,6 @@ import sdl2
 
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
-proc contents() =
-  ## Create the scene content (port of contents() function from Capi.cpp)
-  
-  # Linear gradient shape with a linear gradient stroke
-  block:
-    # Set a shape
-    let shape1 = newShape()
-    shape1.moveTo(25.0, 25.0)
-    shape1.lineTo(375.0, 25.0)
-    shape1.cubicTo(500.0, 100.0, -500.0, 200.0, 375.0, 375.0)
-    shape1.close()
-
-  # Scene
-  when false:
-    # Set a scene
-    let scene = newScene()
-
-    # Set circles
-    let sceneShape1 = newShape()
-    sceneShape1.appendCircle(80.0, 650.0, 40.0, 140.0, true)
-    sceneShape1.appendCircle(180.0, 600.0, 40.0, 60.0, true)
-    sceneShape1.setFillColor(rgb(0, 0, 255))
-    sceneShape1.setStrokeColor(rgb(75, 25, 155))
-    sceneShape1.setStrokeWidth(10.0)
-    sceneShape1.setStrokeCap(TVG_STROKE_CAP_ROUND)
-    sceneShape1.setStrokeJoin(TVG_STROKE_JOIN_ROUND)
-    sceneShape1.setTrimPath(0.25, 0.75, true)
-    scene.push(sceneShape1)
-
 proc testBasicFunctionality(canvas: SwCanvas) =
   # Test shape creation
   let rect = newRect(10, 10, 50, 30)
