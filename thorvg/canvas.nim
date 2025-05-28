@@ -2,12 +2,13 @@
 ## 
 ## High-level Nim wrapper for ThorVG Canvas functionality
 
-import ../thorvg
-export thorvg
+import paint
+export paint
 
 type
   CanvasObj* = object of RootObj
-    handle: ptr TvgCanvas
+    handle: ptr Tvg_Canvas
+    width, height: uint32
 
   Canvas* = ref object of CanvasObj
 
@@ -15,7 +16,6 @@ type
     buffer: seq[uint32]
     stride: uint32
     colorspace: TvgColorspace
-
 
 proc `=destroy`*(canvas: var CanvasObj) =
   echo "Destroying canvas: ", canvas.addr.repr
@@ -36,11 +36,11 @@ proc newSwCanvas*(): SwCanvas =
 
 proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
   ## Set the target buffer for the software canvas
-  # canvas.width = width
-  # canvas.height = height
-  # canvas.stride = width
-  # canvas.colorspace = colorspace
-  # canvas.buffer = newSeq[uint32](width * height)
+  canvas.width = width
+  canvas.height = height
+  canvas.stride = width
+  canvas.colorspace = colorspace
+  canvas.buffer = newSeq[uint32](width * height)
   
   checkResult(tvgSwCanvasSetTarget(
     canvas.handle,
@@ -55,9 +55,9 @@ proc getBuffer*(canvas: SwCanvas): seq[uint32] =
   ## Get the canvas buffer
   result = canvas.buffer
 
-proc push*(canvas: Canvas, paint: ptr TvgPaint) =
+proc push*(canvas: Canvas, paint: Paint) =
   ## Push a paint object to the canvas
-  checkResult(tvgCanvasPush(canvas.handle, paint))
+  checkResult(tvgCanvasPush(canvas.handle, paint.handle))
 
 proc update*(canvas: Canvas) =
   ## Update all paints in the canvas
@@ -79,6 +79,4 @@ proc render*(canvas: Canvas, clear: bool = true) =
 
 proc dimensions*(canvas: Canvas): tuple[width, height: uint32] =
   ## Get canvas dimensions
-  let width = tvgCanvasWidth(canvas.handle)
-  let height = tvgCanvasHeight(canvas.handle)
-  result = (width, height) 
+  result = (canvas.width, canvas.height) 

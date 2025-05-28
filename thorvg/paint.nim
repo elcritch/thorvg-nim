@@ -2,19 +2,18 @@
 ## 
 ## High-level Nim wrapper for ThorVG Paint functionality
 import std/math
+
 import ../thorvg
 export thorvg
 
 type
   Paint* = object
-    handle*: TvgPaint
-    owned*: bool
+    handle*: ptr Tvg_Paint
   
   Color* = object
     r*, g*, b*, a*: uint8
 
-  Transform* = object
-    matrix*: TvgMatrix
+  Transform* = Tvg_Matrix
 
 proc scale*(paint: Paint, factor: float) =
   ## Scale the paint by a factor
@@ -30,14 +29,13 @@ proc translate*(paint: Paint, x, y: float) =
 
 proc setTransform*(paint: Paint, transform: Transform) =
   ## Set the paint's transformation matrix
-  var matrix = transform.matrix
-  checkResult(tvgPaintSetTransform(paint.handle, addr matrix))
+  checkResult(tvgPaintSetTransform(paint.handle, addr transform))
 
 proc getTransform*(paint: Paint): Transform =
   ## Get the paint's transformation matrix
   var matrix: TvgMatrix
   checkResult(tvgPaintGetTransform(paint.handle, addr matrix))
-  result = Transform(matrix: matrix)
+  result = matrix
 
 proc setOpacity*(paint: Paint, opacity: uint8) =
   ## Set the paint's opacity (0-255)
@@ -54,7 +52,7 @@ proc duplicate*(paint: Paint): Paint =
   let newHandle = tvgPaintDuplicate(paint.handle)
   if newHandle == nil:
     raise newException(ThorVGError, "Failed to duplicate paint")
-  result = newPaint(newHandle, true)
+  result = Paint(handle: newHandle)
 
 # Transform helper functions
 proc identityMatrix*(): TvgMatrix =
@@ -88,7 +86,3 @@ proc rotationMatrix*(degrees: float): TvgMatrix =
     e21: sin_val, e22: cos_val, e23: 0.0,
     e31: 0.0, e32: 0.0, e33: 1.0
   )
-
-proc newTransform*(matrix: TvgMatrix = identityMatrix()): Transform =
-  ## Create a new transform
-  Transform(matrix: matrix) 
