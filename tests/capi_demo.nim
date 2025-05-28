@@ -11,7 +11,7 @@ import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 import sdl2
 
-discard sdl2.init(INIT_EVERYTHING)
+discard sdl2.init(INIT_VIDEO)
 
 const
   WIDTH = 800'u32
@@ -152,7 +152,8 @@ proc main() =
   canvas.draw(false)
   canvas.sync()
   
-  discard updateSurface(window)
+  let res = updateSurface(window)
+  echo "updateSurface: ", res
 
   echo "Rendered first frame"
   
@@ -172,7 +173,8 @@ proc main() =
     # Draw the canvas
     canvas.draw(false)
     canvas.sync()
-    discard updateSurface(window)
+    let res = updateSurface(window)
+    echo "updateSurface: ", res
     
     # Simulate time progression
     elapsed += 16 # ~60 FPS
