@@ -17,6 +17,8 @@ type
     stride: uint32
     colorspace: TvgColorspace
 
+  GlCanvas* = ref object of Canvas
+
 proc `=destroy`*(canvas: var CanvasObj) =
   echo "Destroying canvas: ", canvas.addr.repr
   if canvas.handle != nil:
@@ -66,6 +68,23 @@ proc setTarget*(canvas: SwCanvas, buffer: ptr uint32, stride: uint32, width: uin
 proc getBuffer*(canvas: SwCanvas): seq[uint32] =
   ## Get the canvas buffer
   result = canvas.buffer
+
+proc newGlCanvas*(): GlCanvas =
+  ## Create a new OpenGL canvas
+  result = GlCanvas()
+  result.handle = tvg_gl_canvas_create()
+  if result.handle == nil:
+    raise newException(ThorVGError, "Failed to create OpenGL canvas")
+
+proc setTarget*(canvas: GlCanvas, context: pointer, id: int32, width, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
+  checkResult(tvg_glcanvas_set_target(
+    canvas.handle,
+    context,
+    id,
+    width,
+    height,
+    colorspace
+  ))
 
 proc push*(canvas: Canvas, paint: Paint) =
   ## Push a paint object to the canvas

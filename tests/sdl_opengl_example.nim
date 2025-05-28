@@ -3,6 +3,8 @@
 import sdl2
 import opengl
 import opengl/glu
+import thorvg, thorvg/[canvases, paints, shapes, gradients]
+
 
 {.passc: gorge("pkg-config --cflags sdl2").}
 {.passl: gorge("pkg-config --libs sdl2").}
@@ -31,6 +33,36 @@ glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-c
 glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
 glShadeModel(GL_SMOOTH)                           # Enable smooth shading
 glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
+
+proc testBasicFunctionality(canvas: GlCanvas) =
+  # Test shape creation
+  let rect = newRect(10, 10, 150, 130)
+    .fill(rgb(255, 0, 0))
+    .stroke(rgb(0, 0, 0), width = 2.0)
+  
+  let circle = newCircle(50, 50, 20)
+    .fill(rgba(0, 255, 0, 128))
+  
+  # Test gradient
+  let grad = newLinearGradient(0, 0, 100, 100)
+    .stops(
+      colorStop(0.0, rgb(255, 0, 0)),
+      colorStop(1.0, rgb(0, 0, 255))
+    )
+  
+  let gradShape = newRect(20, 20, 40, 40)
+    .fill(grad)
+  
+  # Test transformations
+  circle.translate(10, 10)
+  circle.rotate(45)
+  circle.scale(1.2)
+  
+  # Test canvas operations
+  canvas.push(rect)
+  canvas.push(circle)
+  canvas.push(gradShape)
+
 
 proc reshape(newWidth: cint, newHeight: cint) =
   glViewport(0, 0, newWidth, newHeight)   # Set the viewport to cover the new window
@@ -139,7 +171,9 @@ while runGame:
         let newHeight = windowEvent.data2
         reshape(newWidth, newHeight)
 
-  render()
+  # testBasicFunctionality(canvas)
+
+  # render()
 
   limitFrameRate()
 
