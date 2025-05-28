@@ -45,19 +45,18 @@ var screenHeight: cint = 480
 
 let engine = initThorEngine(threads = 4)
 
+# # Initialize OpenGL
+discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
+
+loadExtensions()
+
 var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
 var context = window.glCreateContext()
 
 let canvas = newGlCanvas()
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
-
-# # Initialize OpenGL
-discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
-# discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY.cint)
-
-loadExtensions()
 
 # Check actual OpenGL version
 let version = cast[cstring](glGetString(GL_VERSION))
