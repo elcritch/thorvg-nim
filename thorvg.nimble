@@ -4,3 +4,5 @@ description = "ThorVG Nim Wrapper"
 license = "Unlicense"
 
 requires "chroma"
+
+includes "config.nims"
