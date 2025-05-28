@@ -41,7 +41,7 @@ type
     tvgArgb8888s
     tvgUnknownColorspace = 255
 
-  TvgMaskMethod* = enum
+  TvgMaskMethod* {.importc: "Tvg_Mask_Method", header: hdr.} = enum
     tvgMaskNone = 0
     tvgMaskAlpha
     tvgMaskInverseAlpha
@@ -54,7 +54,7 @@ type
     tvgMaskLighten
     tvgMaskDarken
 
-  TvgBlendMethod* = enum
+  TvgBlendMethod* {.importc: "Tvg_Blend_Method", header: hdr.} = enum
     tvgBlendNormal = 0
     tvgBlendMultiply
     tvgBlendScreen
@@ -74,7 +74,7 @@ type
     tvgBlendAdd
     tvgBlendHardMix
 
-  TvgType* = enum
+  TvgType* {.importc: "Tvg_Type", header: hdr.} = enum
     tvgTypeUndef = 0
     tvgTypeShape
     tvgTypeScene
@@ -85,32 +85,32 @@ type
 
   TvgPathCommand* = uint8
 
-  TvgStrokeCap* = enum
+  TvgStrokeCap* {.importc: "Tvg_Stroke_Cap", header: hdr.} = enum
     tvgStrokeCapButt = 0
     tvgStrokeCapRound
     tvgStrokeCapSquare
 
-  TvgStrokeJoin* = enum
+  TvgStrokeJoin* {.importc: "Tvg_Stroke_Join", header: hdr.} = enum
     tvgStrokeJoinMiter = 0
     tvgStrokeJoinRound
     tvgStrokeJoinBevel
 
-  TvgStrokeFill* = enum
+  TvgStrokeFill* {.importc: "Tvg_Stroke_Fill", header: hdr.} = enum
     tvgStrokeFillPad = 0
     tvgStrokeFillReflect
     tvgStrokeFillRepeat
 
-  TvgFillRule* = enum
+  TvgFillRule* {.importc: "Tvg_Fill_Rule", header: hdr.} = enum
     tvgFillRuleNonZero = 0
     tvgFillRuleEvenOdd
 
   # Opaque pointer types
-  TvgCanvas* = pointer
-  TvgPaint* = pointer
-  TvgGradient* = pointer
-  TvgSaver* = pointer
-  TvgAnimation* = pointer
-  TvgAccessor* = pointer
+  TvgCanvas* {.importc: "Tvg_Canvas", header: hdr.} = ptr object
+  TvgPaint* {.importc: "Tvg_Paint", header: hdr.} = ptr object
+  TvgGradient* {.importc: "Tvg_Gradient", header: hdr.} = ptr object
+  TvgSaver* {.importc: "Tvg_Saver", header: hdr.} = ptr object
+  TvgAnimation* {.importc: "Tvg_Animation", header: hdr.} = ptr object
+  TvgAccessor* {.importc: "Tvg_Accessor", header: hdr.} = ptr object
 
   # Data structures
   TvgColorStop* {.importc: "Tvg_Color_Stop", header: hdr.} = object
