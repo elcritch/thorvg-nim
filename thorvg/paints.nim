@@ -28,7 +28,7 @@ proc newPaint*(handle: ptr Tvg_Paint): Paint =
     raise newException(ThorVGError, "Invalid paint handle")
 
   result = Paint(handle: handle)
-  # discard tvg_paint_ref(handle)
+  discard tvg_paint_ref(handle)
 
 proc newScene*(): Paint =
   ## Create a new Scene

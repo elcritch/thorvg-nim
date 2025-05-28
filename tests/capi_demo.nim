@@ -3,6 +3,9 @@
 ## 
 ## This is a port of the examples/Capi.cpp example to Nim using the ThorVG wrapper
 
+{.passc: gorge("pkg-config --cflags sdl2").}
+{.passl: gorge("pkg-config --libs sdl2").}
+
 import std/[math, strutils]
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
@@ -145,7 +148,7 @@ proc main() =
   canvas.setTarget(WIDTH, HEIGHT, TVG_COLORSPACE_ARGB8888)
   
   # Create content
-  contents()
+  # contents()
   
   # Display the first frame
   canvas.draw(false)

@@ -60,3 +60,5 @@ proc initThorEngine*(threads: uint = 0): ThorEngine =
   #   raise newException(ThorVGError, "Failed to load ThorVG library")
   checkResult(tvg_engine_init(threads.cuint))
   thorvgEngineRunning = true
+
+  echo "ThorVG engine version: ", getVersion()
