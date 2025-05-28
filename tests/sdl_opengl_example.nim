@@ -220,9 +220,8 @@ while runGame:
         let newHeight = windowEvent.data2
         reshape(newWidth, newHeight)
 
-  testBasicFunctionality(canvas)
-
   # render()
+  testBasicFunctionality(canvas)
 
   limitFrameRate()
 
