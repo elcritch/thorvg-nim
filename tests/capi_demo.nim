@@ -167,6 +167,62 @@ proc main() =
   canvas = newSwCanvas()
   canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
   
+  var running = true
+  var event: Event
+  var frame = 0
+
+  while running:
+  # Handle events
+    while pollEvent(event):
+      case event.kind:
+      of QuitEvent:
+        running = false
+      of KeyDown:
+        if event.key.keysym.sym == K_ESCAPE:
+          running = false
+      else:
+        discard
+    
+  # Lock surface if needed
+    if SDL_MUSTLOCK(surface):
+      if lockSurface(surface) < 0:
+        echo "Failed to lock surface: ", getError()
+        break
+
+    # Draw some animated content
+    let centerX = int(WIDTH div 2)
+    let centerY = int(HEIGHT div 2)
+    let radius = 50
+    
+    # Draw a moving circle
+    let circleX = centerX + int(cos(frame.float * 0.05) * 100)
+    let circleY = centerY + int(sin(frame.float * 0.05) * 50)
+    
+    # Draw circle by setting pixels
+    for y in (circleY - radius)..(circleY + radius):
+      for x in (circleX - radius)..(circleX + radius):
+        let dx = x - circleX
+        let dy = y - circleY
+        let distance = sqrt(dx.float * dx.float + dy.float * dy.float)
+        
+        if distance <= radius.float:
+          # Create a colorful gradient based on distance
+          let intensity = uint8(255 - (distance / radius.float * 255))
+          let red = uint8((sin(frame.float * 0.02) * 127 + 128) * intensity.float / 255)
+          let green = uint8((sin(frame.float * 0.03 + 2) * 127 + 128) * intensity.float / 255)
+          let blue = uint8((sin(frame.float * 0.04 + 4) * 127 + 128) * intensity.float / 255)
+          
+          setPixel(surface, x, y, makeColor(red, green, blue))
+
+    # Unlock surface if it was locked
+    if SDL_MUSTLOCK(surface):
+      unlockSurface(surface)
+    
+    # Small delay to control frame rate
+    delay(16) # ~60 FPS
+    frame += 1
+
+
   # Create content
   # contents()
   
@@ -186,24 +242,11 @@ proc main() =
     quit(1)
 
   echo "Rendered first frame"
-  var running = true
-  var event: Event
-  while running:
-  # Handle events
-    while pollEvent(event):
-      case event.kind:
-      of QuitEvent:
-        running = false
-      of KeyDown:
-        if event.key.keysym.sym == K_ESCAPE:
-          running = false
-      else:
-        discard
 
   
   # Simulate main loop (simplified version without SDL)
   var elapsed = 0'u32
-  let maxFrames = 1000 # Simulate 100 frames
+  let maxFrames = 100 # Simulate 100 frames
   
   for frame in 0..<maxFrames:
     # Update the animation
