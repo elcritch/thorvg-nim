@@ -8,6 +8,7 @@ import dynlib, os, strutils, math
 const hdr = "<thorvg_capi.h>"
 when defined(macosx):
   {.passC: "-I/opt/homebrew/include".}
+  {.passL: "-L/opt/homebrew/lib -R/opt/homebrew/lib".}
 elif defined(windows):
   {.passC: "-I/usr/local/include".}
 else:
@@ -292,9 +293,9 @@ type ThorEngine* = object
 
 proc termEngine*() =
   ## Terminate ThorVG engine
-  echo "Terminating ThorVG engine"
-  discard tvgEngineTerm()
-  thorvgEngineRunning = false
+  if thorvgEngineRunning:
+    discard tvgEngineTerm()
+    thorvgEngineRunning = false
 
 proc `=destroy`*(engine: var ThorEngine) =
   ## Destroy ThorVG engine
@@ -306,7 +307,6 @@ proc initThorEngine*(threads: uint = 0): ThorEngine =
   doAssert not thorvgEngineRunning
 
   if not loadThorVG():
-    echo "Failed to load ThorVG library"
-    return
+    raise newException(ThorVGError, "Failed to load ThorVG library")
   checkResult(tvgEngineInit(threads.cuint))
   thorvgEngineRunning = true
