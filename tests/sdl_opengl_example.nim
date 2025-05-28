@@ -48,17 +48,25 @@ var context = window.glCreateContext()
 let engine = initThorEngine(threads = 4)
 
 # # Initialize OpenGL
-loadExtensions()
-discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
 discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
 discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
+# discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY.cint)
 
-# glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
-# glClearDepth(1.0)                                 # Set background depth to farthest
-# glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
-# glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
-# glShadeModel(GL_SMOOTH)                           # Enable smooth shading
-# glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
+loadExtensions()
+
+# Check actual OpenGL version
+let version = cast[cstring](glGetString(GL_VERSION))
+echo "OpenGL Version: ", $version
+let renderer = cast[cstring](glGetString(GL_RENDERER))
+echo "Renderer: ", $renderer
+
+glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
+glClearDepth(1.0)                                 # Set background depth to farthest
+glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
+glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
+glShadeModel(GL_SMOOTH)                           # Enable smooth shading
+glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
 let fbo = createFbo(screenWidth, screenHeight)
 
@@ -197,6 +205,9 @@ reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 #                               ##  a specific framebuffer object (FBO) or the main surface.
 
+let canvas = newGlCanvas()
+canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
+
 while runGame:
   while pollEvent(evt):
     if evt.kind == QuitEvent:
@@ -209,8 +220,6 @@ while runGame:
         let newHeight = windowEvent.data2
         reshape(newWidth, newHeight)
 
-  let canvas = newGlCanvas()
-  canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
   testBasicFunctionality(canvas)
 
   # render()
