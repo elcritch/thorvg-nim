@@ -35,6 +35,7 @@ proc createFbo(screenWidth: cint, screenHeight: cint): GLFrameBuffer =
   glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result.texture, 0)
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
   glBindTexture(GL_TEXTURE_2D, 0)
+  echo "FBO created: ", result.fbo
 
 
 discard sdl2.init(INIT_EVERYTHING)
@@ -68,11 +69,9 @@ echo "Renderer: ", $renderer
 # glShadeModel(GL_SMOOTH)                           # Enable smooth shading
 # glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
-let fbo = createFbo(screenWidth, screenHeight)
-
-proc blitToScreen(posX: uint32, posY: uint32, width: uint32, height: uint32) =
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
+proc blitToScreen(fbo: GLFrameBuffer, posX: uint32, posY: uint32, width: uint32, height: uint32) =
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
   glBlitFramebuffer(0, 0,
         screenWidth, screenHeight,
         posX.GLint, posY.GLint, (posX + width).GLint, (posY + height).GLint,
@@ -207,6 +206,8 @@ reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 #                               ##  a specific framebuffer object (FBO) or the main surface.
 
+let fbo = createFbo(screenWidth, screenHeight)
+
 let canvas = newGlCanvas()
 canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
@@ -226,7 +227,7 @@ while runGame:
   testBasicFunctionality(canvas)
   canvas.draw(false)
   canvas.sync()
-  blitToScreen(0, 0, uint32(screenWidth), uint32(screenHeight))
+  blitToScreen(fbo, 0, 0, uint32(screenWidth), uint32(screenHeight))
 
   limitFrameRate()
 
