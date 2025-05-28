@@ -132,6 +132,8 @@ proc main() =
         setPixel(surface, x, y, blackColor)
 
     contents()
+    canvas.draw(false)
+    canvas.sync()
 
     # Draw some animated content
     let centerX = WINDOW_WIDTH div 2
