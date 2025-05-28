@@ -42,6 +42,10 @@ discard sdl2.init(INIT_EVERYTHING)
 var screenWidth: cint = 640
 var screenHeight: cint = 480
 
+discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
+
 var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
 var context = window.glCreateContext()
 
