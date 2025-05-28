@@ -159,6 +159,9 @@ var
 
 reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
+let canvas = newGlCanvas()
+canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
+
 while runGame:
   while pollEvent(evt):
     if evt.kind == QuitEvent:
@@ -171,7 +174,7 @@ while runGame:
         let newHeight = windowEvent.data2
         reshape(newWidth, newHeight)
 
-  # testBasicFunctionality(canvas)
+  testBasicFunctionality(canvas)
 
   # render()
 
