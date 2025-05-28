@@ -72,6 +72,11 @@ proc makeColor(r, g, b: uint8): uint32 =
 proc main() =
   let engine = initThorEngine(4)
 
+  # Create the canvas
+  canvas = newSwCanvas()
+  canvas.setTarget(100, 100, TVG_COLORSPACE_ARGB8888)
+  # canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
+
   # Create window
   let window = createWindow(
     "SDL2 Surface Example", 
@@ -94,10 +99,6 @@ proc main() =
   echo "Window surface created successfully"
   echo "Surface dimensions: ", surface.w, "x", surface.h
   echo "Surface format: ", surface.format.format
-
-  # Create the canvas
-  canvas = newSwCanvas()
-  canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
 
   # Animation variables
   var
@@ -131,11 +132,12 @@ proc main() =
       for x in 0..<surface.w:
         setPixel(surface, x, y, blackColor)
 
-    contents()
+    # contents()
 
+    canvas.render()
     # canvas.update()
-    canvas.draw(false)
-    canvas.sync()
+    # canvas.draw(false)
+    # canvas.sync()
 
     let res = updateSurface(window)
     if res != SdlSuccess:
