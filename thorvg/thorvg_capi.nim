@@ -286,7 +286,7 @@ proc tvg_engine_term*(): Tvg_Result {.cdecl, importc: "tvg_engine_term",
                                                       ##  @see tvg_engine_init()
                                                       ##
 proc tvg_engine_version*(major: ptr uint32; minor: ptr uint32;
-                         micro: ptr uint32; version: cstringArray): Tvg_Result {.
+                         micro: ptr uint32; version: var cstring): Tvg_Result {.
     cdecl, importc: "tvg_engine_version", dynlib: thorvg.}
   ##
                                                           ##  @brief Retrieves the version of the TVG engine.
