@@ -119,11 +119,11 @@ proc main() =
       else:
         discard
 
-    # Lock surface if needed
-    if SDL_MUSTLOCK(surface):
-      if lockSurface(surface) < 0:
-        echo "Failed to lock surface: ", getError()
-        break
+    # # Lock surface if needed
+    # if SDL_MUSTLOCK(surface):
+    #   if lockSurface(surface) < 0:
+    #     echo "Failed to lock surface: ", getError()
+    #     break
 
     # Clear surface to black
     let blackColor = makeColor(0, 0, 0)
@@ -133,7 +133,7 @@ proc main() =
 
     contents()
 
-    canvas.update()
+    # canvas.update()
     canvas.draw(false)
     canvas.sync()
 
@@ -167,9 +167,9 @@ proc main() =
           
           setPixel(surface, x, y, makeColor(red, green, blue))
 
-    # Unlock surface if it was locked
-    if SDL_MUSTLOCK(surface):
-      unlockSurface(surface)
+    # # Unlock surface if it was locked
+    # if SDL_MUSTLOCK(surface):
+    #   unlockSurface(surface)
 
     # Update the window surface - this is the key function!
     let updateResult = updateSurface(window)
