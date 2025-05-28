@@ -4,6 +4,7 @@
 import std/math
 import chroma
 
+export chroma
 import ../thorvg
 export thorvg
 

@@ -16,16 +16,16 @@ proc main() =
   
   # Create a software canvas
   let canvas = newSwCanvas()
-  canvas.setTarget(800, 600, tvgArgb8888)
+  canvas.setTarget(800, 600, TVG_COLORSPACE_ARGB8888)
   
   # Create shapes using fluent API
   let rect = newRect(50, 50, 200, 150, rx = 10)
-    .fill(rgb(255, 100, 100))
-    .stroke(rgb(0, 0, 0), width = 3.0)
+    .fill(rgba(255, 100, 100, 255))
+    .stroke(rgba(0, 0, 0, 255), width = 3.0)
   
   let circle = newCircle(400, 200, 80)
     .fill(rgba(100, 255, 100, 200))
-    .stroke(rgb(0, 0, 255), width = 2.0)
+    .stroke(rgba(0, 0, 255, 255), width = 2.0)
   
   # Create a complex shape using path builder
   let star = newShape()
@@ -49,7 +49,7 @@ proc main() =
       path.lineTo(x, y)
   
   path.close()
-  star.fill(rgb(255, 255, 0)).stroke(rgb(255, 0, 0), width = 2.0)
+  star.fill(rgba(255, 255, 0, 255)).stroke(rgba(255, 0, 0, 255), width = 2.0)
   
   # Apply transformations
   circle.rotate(45.0)
@@ -57,9 +57,9 @@ proc main() =
   star.translate(50, -50)
   
   # Add shapes to canvas
-  canvas.push(rect.handle)
-  canvas.push(circle.handle)
-  canvas.push(star.handle)
+  canvas.push(rect)
+  canvas.push(circle)
+  canvas.push(star)
   
   # Render the scene
   canvas.render()

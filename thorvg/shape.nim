@@ -4,7 +4,7 @@
 import chroma
 
 import ../thorvg, paint
-export thorvg, paint
+export chroma, thorvg, paint
 
 type
   Shape* = ref object of Paint
