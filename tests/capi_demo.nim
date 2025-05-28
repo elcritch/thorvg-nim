@@ -88,11 +88,11 @@ proc contents() =
       echo "Problem with loading the font from the file. Did you enable TTF Loader?"
 
     let text = tvgTextNew()
-    checkResult(tvgTextSetFont(text, "SentyCloud", 25.0, ""))
-    checkResult(tvgTextSetFillColor(text, 0, 0, 255))
-    checkResult(tvgTextSetText(text, "\xE7\xB4\xA2\xE5\xB0\x94\x56\x47\x20\xE6\x98\xAF\xE6\x9C\x80\xE5\xA5\xBD\xE7\x9A\x84"))
-    checkResult(tvgPaintTranslate(text, 50.0, 380.0))
-    checkResult(tvgCanvasPush(canvas.handle, text))
+    text.setFont("SentyCloud", 25.0, "")
+    text.setFillColor(0, 0, 255)
+    text.setText("\xE7\xB4\xA2\xE5\xB0\x94\x56\x47\x20\xE6\x98\xAF\xE6\x9C\x80\xE5\xA5\xBD\xE7\x9A\x84")
+    text.translate(50.0, 380.0)
+    canvas.push(text)
 
   # Text 2
   when false:
