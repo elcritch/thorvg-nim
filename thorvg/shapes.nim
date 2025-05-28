@@ -4,8 +4,8 @@
 import std/sequtils
 import chroma
 
-import ../thorvg, paint
-export chroma, thorvg, paint
+import ../thorvg, paints
+export chroma, thorvg, paints
 
 type
   Shape* = ref object of Paint

@@ -2,8 +2,8 @@
 ## 
 ## High-level Nim wrapper for ThorVG Canvas functionality
 
-import paint
-export paint
+import paints
+export paints
 
 type
   CanvasObj* = object of RootObj

@@ -4,7 +4,7 @@
 ## This is a port of the examples/Capi.cpp example to Nim using the ThorVG wrapper
 
 import std/[math, strutils]
-import thorvg, thorvg/[canvas, paint, shape, gradient]
+import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 const
   WIDTH = 800
@@ -12,6 +12,7 @@ const
 
 var
   animation: TvgAnimation
+  canvas: Canvas
 
 proc contents() =
   ## Create the scene content (port of contents() function from Capi.cpp)
@@ -45,9 +46,9 @@ proc contents() =
   # Masked picture
   block:
     # Set a picture
-    let pict = newPicture()
     # Note: In a real implementation, you'd need to provide the actual path to tiger.svg
     try:
+      let pict = newPicture()
       pict.load("tiger.svg")
       let (w, h) = pict.getPictureSize()
       pict.scale(0.5)
@@ -60,12 +61,12 @@ proc contents() =
       pict.setMaskMethod(comp, TVG_MASK_METHOD_INVERSE_ALPHA)
 
       # Push the picture into the canvas
-      scene.push(pict)
+      canvas.push(pict)
     except ThorVGError as e:
       echo "Problem with loading the picture: ", e.msg
 
   # Animation with a picture
-  block:
+  when false:
     animation = tvgAnimationNew()
     let pictLottie = tvgAnimationGetPicture(animation)
     # Note: In a real implementation, you'd need to provide the actual path to sample.json
@@ -79,7 +80,7 @@ proc contents() =
       checkResult(tvgCanvasPush(canvas.handle, pictLottie))
 
   # Text 1
-  block:
+  when false:
     # Load from a file
     # Note: In a real implementation, you'd need to provide the actual path to the font
     let fontResult = tvgFontLoad("SentyCloud.ttf")
@@ -94,7 +95,7 @@ proc contents() =
     checkResult(tvgCanvasPush(canvas.handle, text))
 
   # Text 2
-  block:
+  when false:
     # Note: In a real implementation, you'd load font data from memory
     # This is a simplified version
     let fontDataResult = tvgFontLoadData("Arial", nil, 0, "ttf", true)
@@ -129,15 +130,11 @@ proc main() =
   # Initialize ThorVG engine
   let engine = initThorEngine(4)
   
-  if not loadAdditionalFunctions():
-    echo "Failed to load additional ThorVG functions"
-    return
-  
   echo "ThorVG Example (Software)"
   
   # Create the canvas
   canvas = newSwCanvas()
-  canvas.setTarget(WIDTH, HEIGHT, tvgArgb8888)
+  canvas.setTarget(WIDTH, HEIGHT, TVG_COLORSPACE_ARGB8888)
   
   # Create content
   contents()
