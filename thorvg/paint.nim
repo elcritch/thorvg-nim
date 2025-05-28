@@ -24,15 +24,6 @@ proc newPaint*(handle: TvgPaint, owned: bool = true): Paint =
   if result.handle == nil:
     raise newException(ThorVGError, "Invalid paint handle")
 
-# Color constructors
-proc rgba*(r, g, b: uint8, a: uint8 = 255): Color =
-  ## Create a color from RGBA values
-  Color(r: r, g: g, b: b, a: a)
-
-proc rgb*(r, g, b: uint8): Color =
-  ## Create an opaque color from RGB values
-  rgba(r, g, b, 255)
-
 proc gray*(value: uint8, a: uint8 = 255): Color =
   ## Create a grayscale color
   rgba(value, value, value, a)
