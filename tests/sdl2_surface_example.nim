@@ -131,6 +131,8 @@ proc main() =
       for x in 0..<surface.w:
         setPixel(surface, x, y, blackColor)
 
+    contents()
+
     # Draw some animated content
     let centerX = WINDOW_WIDTH div 2
     let centerY = WINDOW_HEIGHT div 2
