@@ -146,7 +146,7 @@ proc main() =
   ## Main function - port of main() from Capi.cpp
   
   # Initialize ThorVG engine
-  let engine = initThorEngine(4)
+  # let engine = initThorEngine(4)
   
   echo "ThorVG Example (Software)"
   
