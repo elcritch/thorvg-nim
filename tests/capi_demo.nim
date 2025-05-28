@@ -11,8 +11,8 @@ const
   HEIGHT = 800'u32
 
 var
-  animation: TvgAnimation
-  canvas: Canvas
+  animation: Tvg_Animation
+  canvas: SwCanvas
 
 proc contents() =
   ## Create the scene content (port of contents() function from Capi.cpp)
@@ -150,12 +150,12 @@ proc main() =
   
   for frame in 0..<maxFrames:
     # Update the animation
-    if animation != nil:
-      var duration, totalFrame: cfloat
-      checkResult(tvgAnimationGetDuration(animation, addr duration))
-      checkResult(tvgAnimationGetTotalFrame(animation, addr totalFrame))
-      let frameNo = totalFrame * progress(elapsed, duration)
-      checkResult(tvgAnimationSetFrame(animation, frameNo))
+    # if animation != nil:
+    #   var duration, totalFrame: cfloat
+    #   checkResult(tvgAnimationGetDuration(animation, addr duration))
+    #   checkResult(tvgAnimationGetTotalFrame(animation, addr totalFrame))
+    #   let frameNo = totalFrame * progress(elapsed, duration)
+    #   checkResult(tvgAnimationSetFrame(animation, frameNo))
     
     # Draw the canvas
     canvas.render()

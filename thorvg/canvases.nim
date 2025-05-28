@@ -42,7 +42,7 @@ proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspa
   canvas.colorspace = colorspace
   canvas.buffer = newSeq[uint32](width * height)
   
-  checkResult(tvg_sw_canvas_set_target(
+  checkResult(tvg_swcanvas_set_target(
     canvas.handle,
     addr canvas.buffer[0],
     canvas.stride,
