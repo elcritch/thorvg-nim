@@ -89,11 +89,11 @@ proc sync*(canvas: Canvas) =
   echo "sync: ", res
   # checkResult(res)
 
-# proc render*(canvas: Canvas, clear: bool = true) =
-#   ## Convenience method to update, draw and sync
-#   canvas.update()
-#   canvas.draw(clear)
-#   canvas.sync()
+proc render*(canvas: Canvas, clear: bool = true) =
+  ## Convenience method to update, draw and sync
+  canvas.update()
+  canvas.draw(clear)
+  canvas.sync()
 
 proc dimensions*(canvas: Canvas): tuple[width, height: uint32] =
   ## Get canvas dimensions

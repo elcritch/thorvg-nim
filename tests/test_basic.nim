@@ -1,6 +1,6 @@
 ## Basic test for ThorVG Nim wrapper
 
-import thorvg, thorvg/[canvas, shape, gradient]
+import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 proc testBasicFunctionality() =
   echo "Testing ThorVG Nim wrapper..."
