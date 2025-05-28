@@ -14,7 +14,7 @@ type
   
   Paint* = ref object of PaintObj
 
-  Transform* = Tvg_Matrix
+  Matrix* = Tvg_Matrix
 
 proc `=destroy`*(paint: var PaintObj) =
   if paint.handle != nil:
@@ -43,6 +43,14 @@ proc newPicture*(): Paint =
   if handle == nil:
     raise newException(ThorVGError, "Failed to create picture")
   result = Paint(handle: handle)
+
+proc matrix*(e11, e12, e13, e21, e22, e23, e31, e32, e33: float): Matrix =
+  ## Create a new Matrix
+  result = Matrix(
+    e11: e11.cfloat, e12: e12.cfloat, e13: e13.cfloat,
+    e21: e21.cfloat, e22: e22.cfloat, e23: e23.cfloat,
+    e31: e31.cfloat, e32: e32.cfloat, e33: e33.cfloat
+  )
 
 proc load*(picture: Paint, path: string) =
   ## Load a picture from a file
@@ -78,13 +86,13 @@ proc translate*(paint: Paint, x, y: float) =
   ## Translate the paint by x, y
   checkResult(tvgPaintTranslate(paint.handle, x.cfloat, y.cfloat))
 
-proc setTransform*(paint: Paint, transform: Transform) =
+proc setTransform*(paint: Paint, transform: Matrix) =
   ## Set the paint's transformation matrix
   checkResult(tvgPaintSetTransform(paint.handle, addr transform))
 
-proc getTransform*(paint: Paint): Transform =
+proc getTransform*(paint: Paint): Matrix =
   ## Get the paint's transformation matrix
-  var matrix: TvgMatrix
+  var matrix: Matrix
   checkResult(tvgPaintGetTransform(paint.handle, addr matrix))
   result = matrix
 
@@ -106,33 +114,33 @@ proc duplicate*(paint: Paint): Paint =
   result = Paint(handle: newHandle)
 
 # Transform helper functions
-proc identityMatrix*(): TvgMatrix =
+proc identityMatrix*(): Matrix =
   ## Create an identity transformation matrix
-  result = TvgMatrix(
+  result = Matrix(
     e11: 1.0, e12: 0.0, e13: 0.0,
     e21: 0.0, e22: 1.0, e23: 0.0,
     e31: 0.0, e32: 0.0, e33: 1.0
   )
 
-proc translationMatrix*(x, y: float): TvgMatrix =
+proc translationMatrix*(x, y: float): Matrix =
   ## Create a translation matrix
   result = identityMatrix()
   result.e13 = x.cfloat
   result.e23 = y.cfloat
 
-proc scaleMatrix*(sx, sy: float): TvgMatrix =
+proc scaleMatrix*(sx, sy: float): Matrix =
   ## Create a scale matrix
   result = identityMatrix()
   result.e11 = sx.cfloat
   result.e22 = sy.cfloat
 
-proc rotationMatrix*(degrees: float): TvgMatrix =
+proc rotationMatrix*(degrees: float): Matrix =
   ## Create a rotation matrix
   let radians = degrees * PI / 180.0
   let cos_val = cos(radians).cfloat
   let sin_val = sin(radians).cfloat
   
-  result = TvgMatrix(
+  result = Matrix(
     e11: cos_val, e12: -sin_val, e13: 0.0,
     e21: sin_val, e22: cos_val, e23: 0.0,
     e31: 0.0, e32: 0.0, e33: 1.0
