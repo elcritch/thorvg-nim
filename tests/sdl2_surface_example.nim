@@ -55,28 +55,7 @@ const
   WINDOW_WIDTH = 640
   WINDOW_HEIGHT = 480
 
-# Create window
-let window = createWindow(
-  "SDL2 Surface Example", 
-  100, 100, 
-  WINDOW_WIDTH, WINDOW_HEIGHT, 
-  SDL_WINDOW_SHOWN
-)
-
-if window.isNil:
-  echo "Failed to create window: ", getError()
-  quit(1)
-
-# Get the window surface
-let surface = getSurface(window)
-if surface.isNil:
-  echo "Failed to get window surface: ", getError()
-  destroyWindow(window)
-  quit(1)
-
-echo "Window surface created successfully"
-echo "Surface dimensions: ", surface.w, "x", surface.h
-echo "Surface format: ", surface.format.format
+var canvas: SwCanvas
 
 # Helper function to set a pixel color
 proc setPixel(surface: SurfacePtr, x, y: int, color: uint32) =
@@ -92,6 +71,33 @@ proc makeColor(r, g, b: uint8): uint32 =
 
 proc main() =
   let engine = initThorEngine(4)
+
+  # Create window
+  let window = createWindow(
+    "SDL2 Surface Example", 
+    100, 100, 
+    WINDOW_WIDTH, WINDOW_HEIGHT, 
+    SDL_WINDOW_SHOWN
+  )
+
+  if window.isNil:
+    echo "Failed to create window: ", getError()
+    quit(1)
+
+  # Get the window surface
+  let surface = getSurface(window)
+  if surface.isNil:
+    echo "Failed to get window surface: ", getError()
+    destroyWindow(window)
+    quit(1)
+
+  echo "Window surface created successfully"
+  echo "Surface dimensions: ", surface.w, "x", surface.h
+  echo "Surface format: ", surface.format.format
+
+  # Create the canvas
+  canvas = newSwCanvas()
+  canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
 
   # Animation variables
   var
