@@ -47,7 +47,7 @@ proc createFbo(): GLFrameBuffer =
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, result.fbo)
   glGenTextures(1, addr result.texture)
   glBindTexture(GL_TEXTURE_2D, result.texture)
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, screenWidth, screenHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nil)
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8.GLint, screenWidth, screenHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nil)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
   glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result.texture, 0)
@@ -58,7 +58,7 @@ proc blitFboToScreen(fbo: GLFrameBuffer) =
 
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
-  glBlitFramebuffer(0, 0, screenWidth, screenHeight, 0, 0, screenWidth, screenHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST)
+  glBlitFramebuffer(0, 0, screenWidth, screenHeight, 0, 0, screenWidth, screenHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST.GLEnum)
 
 
 proc testBasicFunctionality(canvas: GlCanvas) =
