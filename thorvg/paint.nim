@@ -30,6 +30,18 @@ proc newPaint*(handle: ptr Tvg_Paint): Paint =
   result = Paint(handle: handle)
   # discard tvg_paint_ref(handle)
 
+proc push*(scene: Paint, paint: Paint) =
+  ## Push the paint to the scene
+  checkResult(tvg_scene_push(scene.handle, paint.handle))
+
+proc pushAt*(scene: Paint, target: Paint, at: Paint) =
+  ## Push the paint to the scene at a specific position
+  checkResult(tvg_scene_push_at(scene.handle, target.handle, at.handle))
+
+proc remove*(scene: Paint, paint: Paint) =
+  ## Remove the paint from the scene
+  checkResult(tvg_scene_remove(scene.handle, paint.handle))
+
 proc scale*(paint: Paint, factor: float) =
   ## Scale the paint by a factor
   checkResult(tvgPaintScale(paint.handle, factor.cfloat))
