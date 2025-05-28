@@ -130,6 +130,18 @@ proc progress(elapsed: uint32, durationInSec: float): float =
   let clamped = elapsed mod duration
   result = float(clamped) / float(duration)
 
+# Helper function to set a pixel color
+proc setPixel(surface: SurfacePtr, x, y: int, color: uint32) =
+  if x >= 0 and x < surface.w and y >= 0 and y < surface.h:
+    let pixels = cast[ptr UncheckedArray[uint32]](surface.pixels)
+    let offset = y * (surface.pitch div 4) + x
+    pixels[offset] = color
+
+# Helper function to create a color value
+proc makeColor(r, g, b: uint8): uint32 =
+  # Assuming ARGB format (common on many systems)
+  return (0xFF'u32 shl 24) or (r.uint32 shl 16) or (g.uint32 shl 8) or b.uint32
+
 proc main() =
   ## Main function - port of main() from Capi.cpp
   
@@ -138,24 +150,56 @@ proc main() =
   
   echo "ThorVG Example (Software)"
   
-  let window = createWindow("ThorVG Example (Software)", 100, 100, WIDTH.cint, HEIGHT.cint, SDL_WINDOW_SHOWN)
+  let window = createWindow("ThorVG Example (Software)", 10, 10, WIDTH.cint, HEIGHT.cint, SDL_WINDOW_SHOWN)
+
+  if window.isNil:
+    echo "Failed to create window: ", getError()
+    quit(1)
+
+  # Get the window surface
   let surface = getSurface(window)
+  if surface.isNil:
+    echo "Failed to get window surface: ", getError()
+    destroyWindow(window)
+    quit(1)
 
   # Create the canvas
   canvas = newSwCanvas()
   canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
   
   # Create content
-  contents()
+  # contents()
   
+    # Clear surface to black
+  let blackColor = makeColor(0, 0, 0)
+  for y in 0..<surface.h:
+    for x in 0..<surface.w:
+      setPixel(surface, x, y, blackColor)
+
   # Display the first frame
-  canvas.draw(false)
-  canvas.sync()
+  # canvas.draw(false)
+  # canvas.sync()
 
   let res = updateSurface(window)
-  echo "updateSurface: ", res
+  if res != SdlSuccess:
+    echo "Failed to update surface: ", getError()
+    quit(1)
 
   echo "Rendered first frame"
+  var running = true
+  var event: Event
+  while running:
+  # Handle events
+    while pollEvent(event):
+      case event.kind:
+      of QuitEvent:
+        running = false
+      of KeyDown:
+        if event.key.keysym.sym == K_ESCAPE:
+          running = false
+      else:
+        discard
+
   
   # Simulate main loop (simplified version without SDL)
   var elapsed = 0'u32
@@ -171,8 +215,8 @@ proc main() =
     #   checkResult(tvgAnimationSetFrame(animation, frameNo))
     
     # Draw the canvas
-    canvas.draw(false)
-    canvas.sync()
+    # canvas.draw(false)
+    # canvas.sync()
     let res = updateSurface(window)
     echo "updateSurface: ", res
     
