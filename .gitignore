@@ -7,3 +7,5 @@
 nimcache/
 nimblecache/
 htmldocs/
+deps/
+nim.cfg
