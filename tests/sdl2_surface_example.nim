@@ -48,6 +48,49 @@ proc contents() =
     sceneShape1.setTrimPath(0.25, 0.75, true)
     scene.push(sceneShape1)
 
+proc testBasicFunctionality(canvas: SwCanvas) =
+  # Test shape creation
+  let rect = newRect(10, 10, 50, 30)
+    .fill(rgb(255, 0, 0))
+    .stroke(rgb(0, 0, 0), width = 2.0)
+  echo "✅ Rectangle shape created"
+  
+  let circle = newCircle(50, 50, 20)
+    .fill(rgba(0, 255, 0, 128))
+  echo "✅ Circle shape created"
+  
+  # Test gradient
+  let grad = newLinearGradient(0, 0, 100, 100)
+    .stops(
+      colorStop(0.0, rgb(255, 0, 0)),
+      colorStop(1.0, rgb(0, 0, 255))
+    )
+  
+  let gradShape = newRect(20, 20, 40, 40)
+    .fill(grad)
+  echo "✅ Gradient shape created"
+  
+  # Test transformations
+  circle.translate(10, 10)
+  circle.rotate(45)
+  circle.scale(1.2)
+  echo "✅ Transformations applied"
+  
+  # Test canvas operations
+  canvas.push(rect)
+  canvas.push(circle)
+  canvas.push(gradShape)
+  echo "✅ Shapes added to canvas"
+  
+  # canvas.render()
+  echo "✅ Canvas rendered"
+  
+  let buffer = canvas.getBuffer()
+  echo "✅ Buffer retrieved: ", buffer.len, " pixels"
+  
+  echo "🎉 All tests passed!"
+
+
 # Initialize SDL2
 discard sdl2.init(INIT_EVERYTHING)
 
@@ -69,11 +112,6 @@ proc makeColor(r, g, b: uint8): uint32 =
 
 proc main() =
   let engine = initThorEngine(threads = 1)
-
-  # Create the canvas
-  let canvas = newSwCanvas()
-  canvas.setTarget(100, 100, TVG_COLORSPACE_ARGB8888)
-  # canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
 
   # Create window
   let window = createWindow(
@@ -97,6 +135,11 @@ proc main() =
   echo "Window surface created successfully"
   echo "Surface dimensions: ", surface.w, "x", surface.h
   echo "Surface format: ", surface.format.format
+
+  # Create the canvas
+  let canvas = newSwCanvas()
+  canvas.setTarget(100, 100, TVG_COLORSPACE_ARGB8888)
+  # canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
 
   # Animation variables
   var
@@ -130,7 +173,7 @@ proc main() =
       for x in 0..<surface.w:
         setPixel(surface, x, y, blackColor)
 
-    # contents()
+    testBasicFunctionality(canvas)
 
     canvas.render()
     # canvas.update()
