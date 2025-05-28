@@ -135,11 +135,8 @@ proc main() =
   
   discard sdl2.init(INIT_EVERYTHING)
 
-  let window = createWindow("ThorVG Example (Software)", 100, 100, WIDTH, HEIGHT, SDL_WINDOW_SHOWN)
+  let window = createWindow("ThorVG Example (Software)", 100, 100, WIDTH.cint, HEIGHT.cint, SDL_WINDOW_SHOWN)
   let surface = getWindowSurface(window)
-
-  # //create the canvas
-
 
   # Create the canvas
   canvas = newSwCanvas()
