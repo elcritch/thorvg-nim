@@ -187,6 +187,8 @@ var
 
 reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
+let engine = initThorEngine(threads = 1)
+
 let canvas = newGlCanvas()
 #                               ##  a specific framebuffer object (FBO) or the main surface.
 let fbo = createFbo()
