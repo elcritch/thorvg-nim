@@ -7,6 +7,8 @@ import dynlib, os, strutils, math
 
 import thorvg/thorvg_capi
 
+export thorvg_capi
+
 # const hdr = "<thorvg_capi.h>"
 # when defined(macosx):
 #   {.passC: "-I/opt/homebrew/include".}

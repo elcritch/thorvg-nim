@@ -7,7 +7,7 @@ export thorvg
 
 type
   CanvasObj* = object of RootObj
-    handle: TvgCanvas
+    handle: ptr TvgCanvas
 
   Canvas* = ref object of CanvasObj
 
@@ -34,13 +34,13 @@ proc newSwCanvas*(): SwCanvas =
     raise newException(ThorVGError, "Failed to create software canvas")
   echo "SwCanvas created: ", getVersion()
 
-proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspace = tvgArgb8888) =
+proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
   ## Set the target buffer for the software canvas
-  canvas.width = width
-  canvas.height = height
-  canvas.stride = width
-  canvas.colorspace = colorspace
-  canvas.buffer = newSeq[uint32](width * height)
+  # canvas.width = width
+  # canvas.height = height
+  # canvas.stride = width
+  # canvas.colorspace = colorspace
+  # canvas.buffer = newSeq[uint32](width * height)
   
   checkResult(tvgSwCanvasSetTarget(
     canvas.handle,
@@ -55,7 +55,7 @@ proc getBuffer*(canvas: SwCanvas): seq[uint32] =
   ## Get the canvas buffer
   result = canvas.buffer
 
-proc push*(canvas: Canvas, paint: TvgPaint) =
+proc push*(canvas: Canvas, paint: ptr TvgPaint) =
   ## Push a paint object to the canvas
   checkResult(tvgCanvasPush(canvas.handle, paint))
 
@@ -79,4 +79,6 @@ proc render*(canvas: Canvas, clear: bool = true) =
 
 proc dimensions*(canvas: Canvas): tuple[width, height: uint32] =
   ## Get canvas dimensions
-  result = (canvas.width, canvas.height) 
+  let width = tvgCanvasWidth(canvas.handle)
+  let height = tvgCanvasHeight(canvas.handle)
+  result = (width, height) 
