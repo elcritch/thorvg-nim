@@ -275,5 +275,9 @@ proc main() =
   let buffer = canvas.getBuffer()
   echo "Final buffer size: ", buffer.len, " pixels"
 
+  destroyWindow(window)
+  sdl2.quit()
+  echo "SDL2 Surface Example completed successfully" 
+
 when isMainModule:
   main() 
