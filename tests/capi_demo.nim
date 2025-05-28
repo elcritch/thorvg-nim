@@ -44,7 +44,7 @@ proc contents() =
     scene.push(sceneShape1)
 
   # Masked picture
-  block:
+  when false:
     # Set a picture
     # Note: In a real implementation, you'd need to provide the actual path to tiger.svg
     try:
