@@ -7,8 +7,8 @@ import std/[math, strutils]
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 const
-  WIDTH = 800
-  HEIGHT = 800
+  WIDTH = 800'u32
+  HEIGHT = 800'u32
 
 var
   animation: TvgAnimation
