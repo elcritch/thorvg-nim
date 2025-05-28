@@ -105,12 +105,12 @@ type
     tvgFillRuleEvenOdd
 
   # Opaque pointer types
-  TvgCanvas* {.importc: "Tvg_Canvas", header: hdr, byref.} = object
-  TvgPaint* {.importc: "Tvg_Paint", header: hdr, byref.} = object
-  TvgGradient* {.importc: "Tvg_Gradient", header: hdr, byref.} = object
-  TvgSaver* {.importc: "Tvg_Saver", header: hdr, byref.} = object
-  TvgAnimation* {.importc: "Tvg_Animation", header: hdr, byref.} = object
-  TvgAccessor* {.importc: "Tvg_Accessor", header: hdr, byref.} = object
+  TvgCanvas* {.importc: "Tvg_Canvas", header: hdr, bycopy.} = object
+  TvgPaint* {.importc: "Tvg_Paint", header: hdr, bycopy.} = object
+  TvgGradient* {.importc: "Tvg_Gradient", header: hdr, bycopy.} = object
+  TvgSaver* {.importc: "Tvg_Saver", header: hdr, bycopy.} = object
+  TvgAnimation* {.importc: "Tvg_Animation", header: hdr, bycopy.} = object
+  TvgAccessor* {.importc: "Tvg_Accessor", header: hdr, bycopy.} = object
 
   # Data structures
   TvgColorStop* {.importc: "Tvg_Color_Stop", header: hdr, bycopy.} = object
