@@ -17,29 +17,11 @@ elif defined(windows):
 else:
   {.passC: "-I/usr/local/include".}
 
-discard sdl2.init(INIT_EVERYTHING)
-
-var screenWidth: cint = 640
-var screenHeight: cint = 480
-
-var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
-var context = window.glCreateContext()
-
 type GLFrameBuffer = object
   fbo: GLuint
   texture: GLuint
 
-
-# Initialize OpenGL
-loadExtensions()
-glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
-glClearDepth(1.0)                                 # Set background depth to farthest
-glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
-glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
-glShadeModel(GL_SMOOTH)                           # Enable smooth shading
-glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
-
-proc createFbo(): GLFrameBuffer =
+proc createFbo(screenWidth: cint, screenHeight: cint): GLFrameBuffer =
   result.fbo = 0
   result.texture = 0
 
@@ -53,6 +35,27 @@ proc createFbo(): GLFrameBuffer =
   glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result.texture, 0)
   glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
   glBindTexture(GL_TEXTURE_2D, 0)
+
+
+discard sdl2.init(INIT_EVERYTHING)
+
+var screenWidth: cint = 640
+var screenHeight: cint = 480
+
+var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
+var context = window.glCreateContext()
+
+let engine = initThorEngine(threads = 4)
+let fbo = createFbo(screenWidth, screenHeight)
+
+# # Initialize OpenGL
+# loadExtensions()
+# glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
+# glClearDepth(1.0)                                 # Set background depth to farthest
+# glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
+# glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
+# glShadeModel(GL_SMOOTH)                           # Enable smooth shading
+# glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
 proc blitFboToScreen(fbo: GLFrameBuffer) =
 
@@ -186,9 +189,6 @@ var
   runGame = true
 
 reshape(screenWidth, screenHeight) # Set up initial viewport and projection
-
-let engine = initThorEngine(threads = 4)
-let fbo = createFbo()
 
 #                               ##  a specific framebuffer object (FBO) or the main surface.
 
