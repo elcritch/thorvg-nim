@@ -189,8 +189,8 @@ reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 let canvas = newGlCanvas()
 #                               ##  a specific framebuffer object (FBO) or the main surface.
-let fboId = 0'i32
-canvas.setTarget(context, fboId, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
+let fbo = createFbo()
+canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
 
 while runGame:
   while pollEvent(evt):
