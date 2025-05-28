@@ -1,6 +1,7 @@
 ## ThorVG Shape Module
 ## 
 ## High-level Nim wrapper for ThorVG Shape functionality
+import std/sequtils
 import chroma
 
 import ../thorvg, paint
@@ -86,6 +87,38 @@ proc setStrokeColor*(shape: Shape, color: SomeColor) =
 proc setStrokeColor*(shape: Shape, r, g, b: uint8, a: uint8 = 255) =
   ## Set the stroke color from RGBA values
   shape.setStrokeColor(rgba(r, g, b, a))
+
+proc setStrokeCap*(shape: Shape, cap: TvgStrokeCap) =
+  ## Set the stroke cap
+  checkResult(tvg_shape_set_stroke_cap(shape.handle, cap))
+
+proc setStrokeJoin*(shape: Shape, join: TvgStrokeJoin) =
+  ## Set the stroke join
+  checkResult(tvg_shape_set_stroke_join(shape.handle, join))
+
+proc setStrokeDash*(shape: Shape, dash: seq[cfloat], offset: float = 0.0) =
+  ## Set the stroke dash
+  checkResult(tvg_shape_set_stroke_dash(shape.handle, addr dash[0], dash.len.uint32, offset.cfloat))
+
+proc setStrokeDash*(shape: Shape, dash: seq[float], offset: float = 0.0) =
+  when sizeof(cfloat) == sizeof(float):
+    shape.setStrokeDash(cast[seq[cfloat]](dash), offset)
+  else:
+    shape.setStrokeDash(dash.mapIt(it.cfloat), offset)
+
+proc setTrimPath*(shape: Shape, start, ends: float, clockwise: bool = true) =
+  ## Set the trim path
+  checkResult(tvg_shape_set_trim_path(shape.handle, start.cfloat, ends.cfloat, clockwise))
+
+proc getStrokeDash*(shape: Shape): seq[float] =
+  ## Get the stroke dash
+  var dash: ptr UncheckedArray[cfloat]
+  var cnt: uint32
+  var offset: cfloat
+  checkResult(tvg_shape_get_stroke_dash(shape.handle, cast[ptr ptr cfloat](addr dash), addr cnt, addr offset))
+  result = newSeq[float](cnt)
+  for i in 0..<cnt:
+    result[i] = dash[i]
 
 # Path builder pattern
 proc path*(shape: Shape): PathBuilder =
