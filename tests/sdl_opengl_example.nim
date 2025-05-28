@@ -49,9 +49,9 @@ var context = window.glCreateContext()
 let engine = initThorEngine(threads = 4)
 
 # # Initialize OpenGL
+discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
 discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
 discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
 # discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY.cint)
 
 loadExtensions()
@@ -206,8 +206,10 @@ reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 #                               ##  a specific framebuffer object (FBO) or the main surface.
 
-let fbo = createFbo(screenWidth, screenHeight)
+# let fbo = createFbo(screenWidth, screenHeight)
 
+let canvas = newGlCanvas()
+canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
 while runGame:
   while pollEvent(evt):
@@ -221,13 +223,13 @@ while runGame:
         let newHeight = windowEvent.data2
         # reshape(newWidth, newHeight)
 
-  let canvas = newGlCanvas()
-  canvas.setTarget(context, fbo.fbo.int32, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
   # render()
   testBasicFunctionality(canvas)
   canvas.draw(true)
   canvas.sync()
-  blitToScreen(fbo, 0, 0, uint32(screenWidth), uint32(screenHeight))
+  # blitToScreen(fbo, 0, 0, uint32(screenWidth), uint32(screenHeight))
+
+  window.glSwapWindow()
 
   limitFrameRate()
 
