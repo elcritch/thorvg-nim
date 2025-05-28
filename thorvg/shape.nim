@@ -58,9 +58,10 @@ proc appendCircle*(shape: Shape, cx, cy, radius: float, clockwise: bool = true) 
   shape.appendCircle(cx, cy, radius, radius, clockwise)
 
 # Fill methods
-proc setFillColor*(shape: Shape, color: ColorRGBA) =
+proc setFillColor*(shape: Shape, color: SomeColor) =
   ## Set the fill color
-  checkResult(tvg_shape_set_fill_color(shape.handle, color.r, color.g, color.b, color.a))
+  let rgba = color.asRgba()
+  checkResult(tvg_shape_set_fill_color(shape.handle, rgba.r, rgba.g, rgba.b, rgba.a))
 
 proc setFillColor*(shape: Shape, r, g, b: uint8, a: uint8 = 255) =
   ## Set the fill color from RGBA values
@@ -77,9 +78,10 @@ proc setStrokeWidth*(shape: Shape, width: float) =
   ## Set the stroke width
   checkResult(tvg_shape_set_stroke_width(shape.handle, width.cfloat))
 
-proc setStrokeColor*(shape: Shape, color: ColorRGBA) =
+proc setStrokeColor*(shape: Shape, color: SomeColor) =
   ## Set the stroke color
-  checkResult(tvgShapeSetStrokeColor(shape.handle, color.r, color.g, color.b, color.a))
+  let rgba = color.asRgba()
+  checkResult(tvg_shape_set_stroke_color(shape.handle, rgba.r, rgba.g, rgba.b, rgba.a))
 
 proc setStrokeColor*(shape: Shape, r, g, b: uint8, a: uint8 = 255) =
   ## Set the stroke color from RGBA values
@@ -135,7 +137,7 @@ proc newEllipse*(cx, cy, rx, ry: float): Shape =
   result.appendCircle(cx, cy, rx, ry)
 
 # Method chaining for fluent API
-proc fill*(shape: Shape, color: ColorRGBA): Shape {.discardable.} =
+proc fill*(shape: Shape, color: SomeColor): Shape {.discardable.} =
   shape.setFillColor(color)
   result = shape
 
@@ -143,12 +145,13 @@ proc fill*(shape: Shape, r, g, b: uint8, a: uint8 = 255): Shape {.discardable.} 
   shape.setFillColor(r, g, b, a)
   result = shape
 
-proc stroke*(shape: Shape, color: ColorRGBA, width: float = 1.0): Shape {.discardable.} =
-  shape.setStrokeColor(color)
+proc stroke*(shape: Shape, color: SomeColor, width: float = 1.0): Shape {.discardable.} =
+  let rgba = color.asRgba()
+  shape.setStrokeColor(rgba)
   shape.setStrokeWidth(width)
   result = shape
 
 proc stroke*(shape: Shape, r, g, b: uint8, width: float = 1.0, a: uint8 = 255): Shape {.discardable.} =
-  shape.setStrokeColor(r, g, b, a)
+  shape.setStrokeColor(rgba(r, g, b, a))
   shape.setStrokeWidth(width)
   result = shape 

@@ -6,13 +6,6 @@ proc testBasicFunctionality() =
   echo "Testing ThorVG Nim wrapper..."
   
   # Test library loading
-  if not loadThorVG():
-    echo "❌ Failed to load ThorVG library"
-    echo "Make sure ThorVG is installed and accessible"
-    return
-  
-  echo "✅ ThorVG library loaded successfully"
-  
   # Test engine initialization
   let engine = initThorEngine(threads = 1)
   echo "✅ Engine initialized"
@@ -23,7 +16,7 @@ proc testBasicFunctionality() =
   
   # Test canvas creation
   let canvas = newSwCanvas()
-  canvas.setTarget(100, 100, tvgArgb8888)
+  canvas.setTarget(100, 100, TVG_COLORSPACE_ARGB8888)
   echo "✅ Canvas created and target set"
   
   # Test shape creation
@@ -54,9 +47,9 @@ proc testBasicFunctionality() =
   echo "✅ Transformations applied"
   
   # Test canvas operations
-  canvas.push(rect.handle)
-  canvas.push(circle.handle)
-  canvas.push(gradShape.handle)
+  canvas.push(rect)
+  canvas.push(circle)
+  canvas.push(gradShape)
   echo "✅ Shapes added to canvas"
   
   canvas.render()

@@ -5,7 +5,7 @@
 import std/dynlib
 
 import ../thorvg, paint, shape
-export thorvg, paint
+export chroma, thorvg, paint
 
 type
   GradientObj* = object of RootObj
@@ -21,7 +21,7 @@ type
 
   ColorStop* = object
     offset*: float
-    color*: Color
+    color*: ColorRGBA
 
 proc newLinearGradient*(x1, y1, x2, y2: float): LinearGradient =
   ## Create a new linear gradient
@@ -47,9 +47,10 @@ proc newRadialGradient*(cx, cy, r: float, fx: float = 0, fy: float = 0, fr: floa
   checkResult(tvg_radial_gradient_set(handle, cx.cfloat, cy.cfloat, r.cfloat, 
                                    actualFx.cfloat, actualFy.cfloat, fr.cfloat))
 
-proc colorStop*(offset: float, color: Color): ColorStop =
+proc colorStop*(offset: float, color: SomeColor): ColorStop =
   ## Create a color stop
-  ColorStop(offset: offset, color: color)
+  let rgba = color.asRgba()
+  ColorStop(offset: offset, color: rgba)
 
 proc colorStop*(offset: float, r, g, b: uint8, a: uint8 = 255): ColorStop =
   ## Create a color stop from RGBA values
@@ -66,7 +67,7 @@ proc addColorStop*(grad: Gradient, stop: ColorStop) =
   )
   grad.colorStops.add(tvgStop)
 
-proc addColorStop*(grad: Gradient, offset: float, color: Color) =
+proc addColorStop*(grad: Gradient, offset: float, color: ColorRGBA) =
   ## Add a color stop to the gradient
   grad.addColorStop(colorStop(offset, color))
 
