@@ -21,14 +21,14 @@ proc `=destroy`*(canvas: var CanvasObj) =
   echo "Destroying canvas: ", canvas.addr.repr
   if canvas.handle != nil:
     echo "Destroying canvas: ", canvas.handle.repr()
-    discard tvgCanvasDestroy(canvas.handle)
+    discard tvg_canvas_destroy(canvas.handle)
   canvas.handle = nil
 
 proc newSwCanvas*(): SwCanvas =
   ## Create a new software canvas
   result = SwCanvas()
   echo "Creating SwCanvas"
-  result.handle = tvgSwCanvasCreate()
+  result.handle = tvg_sw_canvas_create()
   echo "SwCanvas created: ", result.handle.repr()
   if result.handle == nil:
     raise newException(ThorVGError, "Failed to create software canvas")
@@ -42,7 +42,7 @@ proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspa
   canvas.colorspace = colorspace
   canvas.buffer = newSeq[uint32](width * height)
   
-  checkResult(tvgSwCanvasSetTarget(
+  checkResult(tvg_sw_canvas_set_target(
     canvas.handle,
     addr canvas.buffer[0],
     canvas.stride,
@@ -57,19 +57,19 @@ proc getBuffer*(canvas: SwCanvas): seq[uint32] =
 
 proc push*(canvas: Canvas, paint: Paint) =
   ## Push a paint object to the canvas
-  checkResult(tvgCanvasPush(canvas.handle, paint.handle))
+  checkResult(tvg_canvas_push(canvas.handle, paint.handle))
 
 proc update*(canvas: Canvas) =
   ## Update all paints in the canvas
-  checkResult(tvgCanvasUpdate(canvas.handle))
+  checkResult(tvg_canvas_update(canvas.handle))
 
 proc draw*(canvas: Canvas, clear: bool = true) =
   ## Draw all paints to the canvas
-  checkResult(tvgCanvasDraw(canvas.handle, clear))
+  checkResult(tvg_canvas_draw(canvas.handle, clear))
 
 proc sync*(canvas: Canvas) =
   ## Synchronize drawing operations
-  checkResult(tvgCanvasSync(canvas.handle))
+  checkResult(tvg_canvas_sync(canvas.handle))
 
 proc render*(canvas: Canvas, clear: bool = true) =
   ## Convenience method to update, draw and sync
