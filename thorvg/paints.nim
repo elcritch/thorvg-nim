@@ -18,8 +18,8 @@ type
 
 proc `=destroy`*(paint: var PaintObj) =
   if paint.handle != nil:
-    echo "destroy paint:", paint.handle.repr
-    echo "destroy paint: count: ", tvg_paint_unref(paint.handle, true)
+    # echo "destroy paint:", paint.handle.repr
+    # echo "destroy paint: count: ", tvg_paint_unref(paint.handle, true)
     paint.handle = nil
 
 proc newPaint*(handle: ptr Tvg_Paint): Paint =
@@ -28,7 +28,7 @@ proc newPaint*(handle: ptr Tvg_Paint): Paint =
     raise newException(ThorVGError, "Invalid paint handle")
 
   result = Paint(handle: handle)
-  discard tvg_paint_ref(handle)
+  # discard tvg_paint_ref(handle)
 
 proc newScene*(): Paint =
   ## Create a new Scene
