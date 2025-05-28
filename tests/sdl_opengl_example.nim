@@ -25,6 +25,11 @@ var screenHeight: cint = 480
 var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
 var context = window.glCreateContext()
 
+type GLFrameBuffer = object
+  fbo: GLuint
+  texture: GLuint
+
+
 # Initialize OpenGL
 loadExtensions()
 glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
@@ -33,6 +38,28 @@ glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-c
 glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
 glShadeModel(GL_SMOOTH)                           # Enable smooth shading
 glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
+
+proc createFbo(): GLFrameBuffer =
+  result.fbo = 0
+  result.texture = 0
+
+  glGenFramebuffers(1, addr result.fbo)
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, result.fbo)
+  glGenTextures(1, addr result.texture)
+  glBindTexture(GL_TEXTURE_2D, result.texture)
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, screenWidth, screenHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nil)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+  glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result.texture, 0)
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
+  glBindTexture(GL_TEXTURE_2D, 0)
+
+proc blitFboToScreen(fbo: GLFrameBuffer) =
+
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
+  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
+  glBlitFramebuffer(0, 0, screenWidth, screenHeight, 0, 0, screenWidth, screenHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST)
+
 
 proc testBasicFunctionality(canvas: GlCanvas) =
   # Test shape creation
@@ -62,6 +89,7 @@ proc testBasicFunctionality(canvas: GlCanvas) =
   canvas.push(rect)
   canvas.push(circle)
   canvas.push(gradShape)
+
 
 
 proc reshape(newWidth: cint, newHeight: cint) =
@@ -160,7 +188,9 @@ var
 reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 let canvas = newGlCanvas()
-canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
+#                               ##  a specific framebuffer object (FBO) or the main surface.
+let fboId = 0'i32
+canvas.setTarget(context, fboId, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ARGB8888)
 
 while runGame:
   while pollEvent(evt):
