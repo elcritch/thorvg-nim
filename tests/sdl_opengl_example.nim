@@ -51,7 +51,6 @@ var context = window.glCreateContext()
 let canvas = newGlCanvas()
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
-
 # # Initialize OpenGL
 discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
 discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
@@ -150,8 +149,9 @@ while runGame:
         # reshape(newWidth, newHeight)
 
   # render()
+  canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
+
   testBasicFunctionality(canvas)
-  # canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
   canvas.draw(true)
   canvas.sync()
   # blitToScreen(fbo, 0, 0, uint32(screenWidth), uint32(screenHeight))
