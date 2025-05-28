@@ -5,4 +5,4 @@ license = "Unlicense"
 
 requires "chroma"
 
-includes "config.nims"
+includes "build.nims"
