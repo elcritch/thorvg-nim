@@ -208,6 +208,7 @@ reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
 # let fbo = createFbo(screenWidth, screenHeight)
 
+let canvas = newGlCanvas()
 
 while runGame:
   while pollEvent(evt):
@@ -222,7 +223,6 @@ while runGame:
         # reshape(newWidth, newHeight)
 
   # render()
-  let canvas = newGlCanvas()
   canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
   testBasicFunctionality(canvas)
   canvas.draw(false)
