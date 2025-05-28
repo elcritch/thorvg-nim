@@ -2,18 +2,31 @@
 ## 
 ## High-level Nim wrapper for ThorVG Paint functionality
 import std/math
+import chroma
 
 import ../thorvg
 export thorvg
 
 type
-  Paint* = object
+  PaintObj* = object of RootObj
     handle*: ptr Tvg_Paint
   
-  Color* = object
-    r*, g*, b*, a*: uint8
+  Paint* = ref object of PaintObj
 
   Transform* = Tvg_Matrix
+
+proc `=destroy`*(paint: var PaintObj) =
+  if paint.handle != nil:
+    discard tvg_paint_unref(paint.handle, true)
+    paint.handle = nil
+
+proc newPaint*(handle: ptr Tvg_Paint): Paint =
+  ## Create a new Paint wrapper
+  if result.handle == nil:
+    raise newException(ThorVGError, "Invalid paint handle")
+
+  result = Paint(handle: handle)
+  discard tvg_paint_ref(handle)
 
 proc scale*(paint: Paint, factor: float) =
   ## Scale the paint by a factor

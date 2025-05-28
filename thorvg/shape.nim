@@ -1,6 +1,7 @@
 ## ThorVG Shape Module
 ## 
 ## High-level Nim wrapper for ThorVG Shape functionality
+import chroma
 
 import ../thorvg, paint
 export thorvg, paint
@@ -13,43 +14,43 @@ type
 
 proc newShape*(): Shape =
   ## Create a new shape
-  let handle = tvgShapeNew()
+  let handle = tvg_shape_new()
   if handle == nil:
     raise newException(ThorVGError, "Failed to create shape")
   result = Shape()
   result.handle = handle
-  result.owned = true
+  discard tvg_paint_ref(handle)
 
 proc reset*(shape: Shape) =
   ## Reset the shape path
-  checkResult(tvgShapeReset(shape.handle))
+  checkResult(tvg_shape_reset(shape.handle))
 
 # Path building methods
 proc moveTo*(shape: Shape, x, y: float) =
   ## Move to a point
-  checkResult(tvgShapeMoveTo(shape.handle, x.cfloat, y.cfloat))
+  checkResult(tvg_shape_move_to(shape.handle, x.cfloat, y.cfloat))
 
 proc lineTo*(shape: Shape, x, y: float) =
   ## Draw a line to a point
-  checkResult(tvgShapeLineTo(shape.handle, x.cfloat, y.cfloat))
+  checkResult(tvg_shape_line_to(shape.handle, x.cfloat, y.cfloat))
 
 proc cubicTo*(shape: Shape, cx1, cy1, cx2, cy2, x, y: float) =
   ## Draw a cubic Bezier curve
-  checkResult(tvgShapeCubicTo(shape.handle, 
+  checkResult(tvg_shape_cubic_to(shape.handle, 
     cx1.cfloat, cy1.cfloat, cx2.cfloat, cy2.cfloat, x.cfloat, y.cfloat))
 
 proc close*(shape: Shape) =
   ## Close the current path
-  checkResult(tvgShapeClose(shape.handle))
+  checkResult(tvg_shape_close(shape.handle))
 
 proc appendRect*(shape: Shape, x, y, width, height: float, rx: float = 0, ry: float = 0, clockwise: bool = true) =
   ## Append a rectangle to the path
-  checkResult(tvgShapeAppendRect(shape.handle, 
+  checkResult(tvg_shape_append_rect(shape.handle, 
     x.cfloat, y.cfloat, width.cfloat, height.cfloat, rx.cfloat, ry.cfloat, clockwise))
 
 proc appendCircle*(shape: Shape, cx, cy, rx, ry: float, clockwise: bool = true) =
   ## Append an ellipse/circle to the path
-  checkResult(tvgShapeAppendCircle(shape.handle, 
+  checkResult(tvg_shape_append_circle(shape.handle, 
     cx.cfloat, cy.cfloat, rx.cfloat, ry.cfloat, clockwise))
 
 proc appendCircle*(shape: Shape, cx, cy, radius: float, clockwise: bool = true) =
@@ -57,26 +58,26 @@ proc appendCircle*(shape: Shape, cx, cy, radius: float, clockwise: bool = true) 
   shape.appendCircle(cx, cy, radius, radius, clockwise)
 
 # Fill methods
-proc setFillColor*(shape: Shape, color: Color) =
+proc setFillColor*(shape: Shape, color: ColorRGBA) =
   ## Set the fill color
-  checkResult(tvgShapeSetFillColor(shape.handle, color.r, color.g, color.b, color.a))
+  checkResult(tvg_shape_set_fill_color(shape.handle, color.r, color.g, color.b, color.a))
 
 proc setFillColor*(shape: Shape, r, g, b: uint8, a: uint8 = 255) =
   ## Set the fill color from RGBA values
   shape.setFillColor(rgba(r, g, b, a))
 
-proc getFillColor*(shape: Shape): Color =
+proc getFillColor*(shape: Shape): ColorRGBA =
   ## Get the fill color
   var r, g, b, a: uint8
-  checkResult(tvgShapeGetFillColor(shape.handle, addr r, addr g, addr b, addr a))
+  checkResult(tvg_shape_get_fill_color(shape.handle, addr r, addr g, addr b, addr a))
   result = rgba(r, g, b, a)
 
 # Stroke methods
 proc setStrokeWidth*(shape: Shape, width: float) =
   ## Set the stroke width
-  checkResult(tvgShapeSetStrokeWidth(shape.handle, width.cfloat))
+  checkResult(tvg_shape_set_stroke_width(shape.handle, width.cfloat))
 
-proc setStrokeColor*(shape: Shape, color: Color) =
+proc setStrokeColor*(shape: Shape, color: ColorRGBA) =
   ## Set the stroke color
   checkResult(tvgShapeSetStrokeColor(shape.handle, color.r, color.g, color.b, color.a))
 
@@ -134,7 +135,7 @@ proc newEllipse*(cx, cy, rx, ry: float): Shape =
   result.appendCircle(cx, cy, rx, ry)
 
 # Method chaining for fluent API
-proc fill*(shape: Shape, color: Color): Shape {.discardable.} =
+proc fill*(shape: Shape, color: ColorRGBA): Shape {.discardable.} =
   shape.setFillColor(color)
   result = shape
 
@@ -142,7 +143,7 @@ proc fill*(shape: Shape, r, g, b: uint8, a: uint8 = 255): Shape {.discardable.} 
   shape.setFillColor(r, g, b, a)
   result = shape
 
-proc stroke*(shape: Shape, color: Color, width: float = 1.0): Shape {.discardable.} =
+proc stroke*(shape: Shape, color: ColorRGBA, width: float = 1.0): Shape {.discardable.} =
   shape.setStrokeColor(color)
   shape.setStrokeWidth(width)
   result = shape
