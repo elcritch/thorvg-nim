@@ -143,7 +143,7 @@ proc main() =
   canvas.setTarget(WIDTH, HEIGHT, TVG_COLORSPACE_ARGB8888)
   
   # Create content
-  # contents()
+  contents()
   
   # Display the first frame
   canvas.draw(false)
@@ -165,7 +165,7 @@ proc main() =
     #   checkResult(tvgAnimationSetFrame(animation, frameNo))
     
     # Draw the canvas
-    canvas.render()
+    # canvas.render()
     
     # Simulate time progression
     elapsed += 16 # ~60 FPS

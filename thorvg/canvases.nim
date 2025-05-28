@@ -65,11 +65,15 @@ proc update*(canvas: Canvas) =
 
 proc draw*(canvas: Canvas, clear: bool = true) =
   ## Draw all paints to the canvas
-  checkResult(tvg_canvas_draw(canvas.handle, clear))
+  let res = tvg_canvas_draw(canvas.handle, clear)
+  echo "draw: ", res
+  # checkResult(res)
 
 proc sync*(canvas: Canvas) =
   ## Synchronize drawing operations
-  checkResult(tvg_canvas_sync(canvas.handle))
+  let res = tvg_canvas_sync(canvas.handle)
+  echo "sync: ", res
+  # checkResult(res)
 
 proc render*(canvas: Canvas, clear: bool = true) =
   ## Convenience method to update, draw and sync
