@@ -164,8 +164,8 @@ proc main() =
     quit(1)
 
   # Create the canvas
-  canvas = newSwCanvas()
-  canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
+  # canvas = newSwCanvas()
+  # canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
   
   var running = true
   var event: Event
@@ -199,6 +199,7 @@ proc main() =
     let circleY = centerY + int(sin(frame.float * 0.05) * 50)
     
     # Draw circle by setting pixels
+    echo "circleX: ", circleX, " circleY: ", circleY
     for y in (circleY - radius)..(circleY + radius):
       for x in (circleX - radius)..(circleX + radius):
         let dx = x - circleX
