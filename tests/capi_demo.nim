@@ -57,10 +57,10 @@ proc contents() =
       let comp = newShape()
       comp.appendCircle(600.0, 600.0, 100.0, 100.0, true)
       comp.setFillColor(rgb(0, 0, 0))
-      pict.setMaskMethod(comp, TVG_MASK_INVERSE_ALPHA)
+      pict.setMaskMethod(comp, TVG_MASK_METHOD_INVERSE_ALPHA)
 
       # Push the picture into the canvas
-      checkResult(tvgCanvasPush(canvas.handle, pict))
+      scene.push(pict)
     except ThorVGError as e:
       echo "Problem with loading the picture: ", e.msg
 

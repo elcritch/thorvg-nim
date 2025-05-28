@@ -2,8 +2,6 @@
 ## 
 ## High-level Nim wrapper for ThorVG Gradient functionality
 
-import std/dynlib
-
 import ../thorvg, paint, shape
 export chroma, thorvg, paint
 
@@ -121,3 +119,14 @@ proc fill*(shape: Shape, grad: Gradient): Shape {.discardable.} =
   ## Set gradient fill using fluent API
   shape.setGradient(grad)
   result = shape 
+
+proc setMaskMethod*(paint: Paint, target: Paint, meth: Tvg_Mask_Method) =
+  ## Set the mask method for the paint
+  checkResult(tvg_paint_set_mask_method(paint.handle, target.handle, meth))
+
+proc getMaskMethod*(paint: Paint): (Paint, Tvg_Mask_Method) =
+  ## Get the mask method for the paint
+  var target: ptr Tvg_Paint
+  var meth: Tvg_Mask_Method
+  checkResult(tvg_paint_get_mask_method(paint.handle, addr target, addr meth))
+  result = (Paint(handle: target), meth)  
