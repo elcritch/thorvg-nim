@@ -138,14 +138,12 @@ proc main() =
   
   echo "ThorVG Example (Software)"
   
-  discard sdl2.init(INIT_VIDEO)
-
   let window = createWindow("ThorVG Example (Software)", 100, 100, WIDTH.cint, HEIGHT.cint, SDL_WINDOW_SHOWN)
   let surface = getSurface(window)
 
   # Create the canvas
   canvas = newSwCanvas()
-  canvas.setTarget(WIDTH, HEIGHT, TVG_COLORSPACE_ARGB8888)
+  canvas.setTarget(cast[ptr uint32](surface.pixels), uint32(surface.pitch div 4), uint32(surface.w), uint32(surface.h), TVG_COLORSPACE_ARGB8888)
   
   # Create content
   # contents()

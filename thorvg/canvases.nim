@@ -51,6 +51,18 @@ proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspa
     colorspace
   ))
 
+proc setTarget*(canvas: SwCanvas, buffer: ptr uint32, stride: uint32, width: uint32, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
+  ## Set the target buffer for the software canvas
+  
+  checkResult(tvg_swcanvas_set_target(
+    canvas.handle,
+    buffer,
+    stride,
+    width,
+    height,
+    colorspace
+  ))
+
 proc getBuffer*(canvas: SwCanvas): seq[uint32] =
   ## Get the canvas buffer
   result = canvas.buffer
