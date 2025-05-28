@@ -21,7 +21,7 @@ import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 proc testBasicFunctionality(canvas: SwCanvas) =
   # Test shape creation
-  let rect = newRect(10, 10, 50, 30)
+  let rect = newRect(10, 10, 150, 130)
     .fill(rgb(255, 0, 0))
     .stroke(rgb(0, 0, 0), width = 2.0)
   
