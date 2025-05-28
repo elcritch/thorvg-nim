@@ -37,6 +37,23 @@ proc newScene*(): Paint =
     raise newException(ThorVGError, "Failed to create scene")
   result = Paint(handle: handle)
 
+proc newPicture*(): Paint =
+  ## Create a new Picture
+  let handle = tvg_picture_new()
+  if handle == nil:
+    raise newException(ThorVGError, "Failed to create picture")
+  result = Paint(handle: handle)
+
+proc load*(picture: Paint, path: string) =
+  ## Load a picture from a file
+  checkResult(tvg_picture_load(picture.handle, path.cstring))
+
+proc getPictureSize*(picture: Paint): (float, float) =
+  ## Get the size of the picture
+  var w, h: cfloat
+  checkResult(tvg_picture_get_size(picture.handle, addr w, addr h))
+  result = (w.float, h.float)
+
 proc push*(scene: Paint, paint: Paint) =
   ## Push the paint to the scene
   checkResult(tvg_scene_push(scene.handle, paint.handle))

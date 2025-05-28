@@ -45,31 +45,24 @@ proc contents() =
   # Masked picture
   block:
     # Set a picture
-    let pict = tvgPictureNew()
+    let pict = newPicture()
     # Note: In a real implementation, you'd need to provide the actual path to tiger.svg
-    let loadResult = tvgPictureLoad(pict, "tiger.svg")
-    if loadResult != tvgSuccess:
-      echo "Problem with loading an svg file"
-      discard tvgPaintDel(pict)
-    else:
-      var w, h: cfloat
-      checkResult(tvgPictureGetSize(pict, addr w, addr h))
-      checkResult(tvgPictureSetSize(pict, w/2, h/2))
-      var m = TvgMatrix(
-        e11: 0.8, e12: 0.0, e13: 400.0,
-        e21: 0.0, e22: 0.8, e23: 400.0,
-        e31: 0.0, e32: 0.0, e33: 1.0
-      )
-      checkResult(tvgPaintSetTransform(pict, addr m))
+    try:
+      pict.load("tiger.svg")
+      let (w, h) = pict.getPictureSize()
+      pict.scale(0.5)
+      pict.setTransform(matrix(0.8, 0.0, 400.0, 0.0, 0.8, 400.0, 0.0, 0.0, 1.0))
 
       # Set a composite shape
-      let comp = tvgShapeNew()
-      checkResult(tvgShapeAppendCircle(comp, 600.0, 600.0, 100.0, 100.0, true))
-      checkResult(tvgShapeSetFillColor(comp, 0, 0, 0, 200))
-      checkResult(tvgPaintSetMaskMethod(pict, comp, tvgMaskInverseAlpha))
+      let comp = newShape()
+      comp.appendCircle(600.0, 600.0, 100.0, 100.0, true)
+      comp.setFillColor(rgb(0, 0, 0))
+      pict.setMaskMethod(comp, TVG_MASK_INVERSE_ALPHA)
 
       # Push the picture into the canvas
       checkResult(tvgCanvasPush(canvas.handle, pict))
+    except ThorVGError as e:
+      echo "Problem with loading the picture: ", e.msg
 
   # Animation with a picture
   block:
