@@ -9,3 +9,5 @@ requires "opengl"
 
 
 includes "build.nims"
+requires "https://github.com/elcritch/windex"
+
