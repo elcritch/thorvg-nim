@@ -92,11 +92,12 @@ proc testBasicFunctionality(canvas: GlCanvas) =
   canvas.push(circle)
   canvas.push(gradShape)
 
-proc reshape(newWidth: cint, newHeight: cint) =
+proc reshape(canvas: GlCanvas, newWidth: cint, newHeight: cint) =
   glViewport(0, 0, newWidth, newHeight)   # Set the viewport to cover the new window
   glMatrixMode(GL_PROJECTION)             # To operate on the projection matrix
   glLoadIdentity()                        # Reset
   gluPerspective(45.0, newWidth / newHeight, 0.1, 100.0)  # Enable perspective projection with fovy, aspect, zNear and zFar
+  canvas.setTarget(context, 0, uint32(newWidth), uint32(newHeight), TVG_COLORSPACE_ABGR8888S)
 
 # Frame rate limiter
 
@@ -117,6 +118,7 @@ var
 
 # reshape(screenWidth, screenHeight) # Set up initial viewport and projection
 
+canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
 while runGame:
   while pollEvent(evt):
@@ -128,10 +130,7 @@ while runGame:
       if windowEvent.event == WindowEvent_Resized:
         let newWidth = windowEvent.data1
         let newHeight = windowEvent.data2
-        reshape(newWidth, newHeight)
-
-  # render()
-  canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
+        reshape(canvas, newWidth, newHeight)
 
   testBasicFunctionality(canvas)
   canvas.render(true)
