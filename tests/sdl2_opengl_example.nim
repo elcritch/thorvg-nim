@@ -21,23 +21,6 @@ type GLFrameBuffer = object
   fbo: GLuint
   texture: GLuint
 
-proc createFbo(screenWidth: cint, screenHeight: cint): GLFrameBuffer =
-  result.fbo = 0
-  result.texture = 0
-
-  glGenFramebuffers(1, addr result.fbo)
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, result.fbo)
-  glGenTextures(1, addr result.texture)
-  glBindTexture(GL_TEXTURE_2D, result.texture)
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8.GLint, screenWidth, screenHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, nil)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-  glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result.texture, 0)
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
-  glBindTexture(GL_TEXTURE_2D, 0)
-  echo "FBO created: ", result.fbo
-
-
 discard sdl2.init(INIT_EVERYTHING)
 
 var screenWidth: cint = 640
@@ -145,7 +128,7 @@ while runGame:
       if windowEvent.event == WindowEvent_Resized:
         let newWidth = windowEvent.data1
         let newHeight = windowEvent.data2
-        # reshape(newWidth, newHeight)
+        reshape(newWidth, newHeight)
 
   # render()
   canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
