@@ -62,7 +62,6 @@ proc setupWindow*(
     echo "resize"
 
 
-
 proc newWindexWindow*(): Window =
   let window = newWindow("Example", ivec2(screenWidth, screenHeight), visible = false)
   result = window
@@ -70,13 +69,48 @@ proc newWindexWindow*(): Window =
 
   setupWindow(window)
 
-
+proc testBasicFunctionality(canvas: GlCanvas) =
+  # Test shape creation
+  let rect = newRect(10, 10, 150, 130)
+    .fill(rgb(255, 0, 0))
+    .stroke(rgb(0, 0, 0), width = 2.0)
+  
+  let circle = newCircle(50, 50, 20)
+    .fill(rgba(0, 255, 0, 128))
+  
+  # Test gradient
+  let grad = newLinearGradient(0, 0, 100, 100)
+    .stops(
+      colorStop(0.0, rgb(255, 0, 0)),
+      colorStop(1.0, rgb(0, 0, 255))
+    )
+  
+  let gradShape = newRect(20, 20, 40, 40)
+    .fill(grad)
+  
+  # Test transformations
+  circle.translate(10, 10)
+  circle.rotate(45)
+  circle.scale(1.2)
+  
+  # Test canvas operations
+  canvas.push(rect)
+  canvas.push(circle)
+  canvas.push(gradShape)
 
 let window = newWindexWindow()
+let glcontext = window.rawOpenglContext()
 
+echo "glcontext: ", glcontext.repr()
+
+let canvas = newGlCanvas()
+canvas.setTarget(cast[pointer](glcontext), 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
 while true:
   var event: Event
   windex.pollEvents()
+
+  testBasicFunctionality(canvas)
+  canvas.render(true)
 
   window.swapBuffers()
