@@ -17,10 +17,6 @@ elif defined(windows):
 else:
   {.passC: "-I/usr/local/include".}
 
-type GLFrameBuffer = object
-  fbo: GLuint
-  texture: GLuint
-
 discard sdl2.init(INIT_EVERYTHING)
 
 var screenWidth: cint = 640
