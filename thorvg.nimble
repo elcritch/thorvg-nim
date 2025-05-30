@@ -5,7 +5,7 @@ license = "Unlicense"
 
 requires "chroma"
 requires "sdl2"
-
-includes "build.nims"
 requires "opengl"
 
+
+includes "build.nims"
