@@ -26,17 +26,24 @@ discard sdl2.init(INIT_EVERYTHING)
 var screenWidth: cint = 640
 var screenHeight: cint = 480
 
-let engine = initThorEngine(threads = 4)
-
 # # Initialize OpenGL
 discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1.cint)
 
-loadExtensions()
+let engine = initThorEngine(threads = 4)
 
 var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
 var context = window.glCreateContext()
+
+loadExtensions()
+
+glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
+glClearDepth(1.0)                                 # Set background depth to farthest
+glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
+glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
+glShadeModel(GL_SMOOTH)                           # Enable smooth shading
+glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
 let canvas = newGlCanvas()
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
@@ -47,20 +54,6 @@ echo "OpenGL Version: ", $version
 let renderer = cast[cstring](glGetString(GL_RENDERER))
 echo "Renderer: ", $renderer
 
-# glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
-# glClearDepth(1.0)                                 # Set background depth to farthest
-# glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
-# glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
-# glShadeModel(GL_SMOOTH)                           # Enable smooth shading
-# glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
-
-proc blitToScreen(fbo: GLFrameBuffer, posX: uint32, posY: uint32, width: uint32, height: uint32) =
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0)
-  glBindFramebuffer(GL_FRAMEBUFFER_EXT, fbo.fbo)
-  glBlitFramebuffer(0, 0,
-        screenWidth, screenHeight,
-        posX.GLint, posY.GLint, (posX + width).GLint, (posY + height).GLint,
-        GL_COLOR_BUFFER_BIT, GL_NEAREST.GLEnum)
 
 
 proc testBasicFunctionality(canvas: GlCanvas) =
