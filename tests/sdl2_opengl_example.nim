@@ -134,8 +134,7 @@ while runGame:
   canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
   testBasicFunctionality(canvas)
-  canvas.draw(true)
-  canvas.sync()
+  canvas.render(true)
 
   window.glSwapWindow()
 
