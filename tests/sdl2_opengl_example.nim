@@ -136,7 +136,6 @@ while runGame:
   testBasicFunctionality(canvas)
   canvas.draw(true)
   canvas.sync()
-  # blitToScreen(fbo, 0, 0, uint32(screenWidth), uint32(screenHeight))
 
   window.glSwapWindow()
 
