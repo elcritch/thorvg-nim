@@ -62,7 +62,7 @@ proc setupWindow*(
 
 
 proc newWindexWindow*(): Window =
-  let window = newWindow("Example", ivec2(screenWidth, screenHeight), visible = false)
+  let window = newWindow("Example", ivec2(screenWidth, screenHeight), visible = false, vsync = true)
   result = window
   startOpenGL(openglVersion)
 
@@ -116,12 +116,13 @@ proc draw() =
 
 window.onResize = proc() =
   let size = window.size
-  echo "resize:: ", size
-  # glViewport(0, size.y - 600, 800, 600);  #// Note: OpenGL Y is flipped
+  # echo "resize:: ", size
   canvas.setTarget(cast[pointer](glcontext), 0, uint32(size.x), uint32(size.y), TVG_COLORSPACE_ABGR8888S)
   screenWidth = size.x
   screenHeight = size.y
-  draw()
+  glViewport(0, 0, size.x, size.y);  #// Note: OpenGL Y is flipped
+
+  # draw()
 
 while true:
   var event: Event
