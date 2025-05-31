@@ -107,6 +107,8 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(cast[pointer](glcontext), 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
+# glViewport(0, screenHeight - 600, 800, 600);  #// Note: OpenGL Y is flipped
+
 proc draw() =
   testBasicFunctionality(canvas)
   canvas.render(true)
@@ -115,8 +117,11 @@ proc draw() =
 window.onResize = proc() =
   let size = window.size
   echo "resize:: ", size
-  draw()
+  # glViewport(0, size.y - 600, 800, 600);  #// Note: OpenGL Y is flipped
   canvas.setTarget(cast[pointer](glcontext), 0, uint32(size.x), uint32(size.y), TVG_COLORSPACE_ABGR8888S)
+  screenWidth = size.x
+  screenHeight = size.y
+  draw()
 
 while true:
   var event: Event
