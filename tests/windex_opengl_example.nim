@@ -30,8 +30,6 @@ proc setupOpenGL() =
   discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4.cint)
   discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1.cint)
 
-  let engine = initThorEngine(threads = 4)
-
   var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_RESIZABLE)
   var context = window.glCreateContext()
 
@@ -59,7 +57,8 @@ proc setupWindow*(
 
   window.onResize = proc() =
     # updateWindowSize(renderer.frame, window)
-    echo "resize"
+    let size = window.size
+    echo "resize:: ", size
 
 
 proc newWindexWindow*(): Window =
@@ -98,6 +97,8 @@ proc testBasicFunctionality(canvas: GlCanvas) =
   canvas.push(circle)
   canvas.push(gradShape)
 
+let engine = initThorEngine(threads = 4)
+
 let window = newWindexWindow()
 let glcontext = window.rawOpenglContext()
 
@@ -106,11 +107,19 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(cast[pointer](glcontext), 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
+proc draw() =
+  testBasicFunctionality(canvas)
+  canvas.render(true)
+  window.swapBuffers()
+
+window.onResize = proc() =
+  let size = window.size
+  echo "resize:: ", size
+  canvas.setTarget(cast[pointer](glcontext), 0, uint32(size.x), uint32(size.y), TVG_COLORSPACE_ABGR8888S)
+  draw()
+
 while true:
   var event: Event
   windex.pollEvents()
 
-  testBasicFunctionality(canvas)
-  canvas.render(true)
-
-  window.swapBuffers()
+  draw()
