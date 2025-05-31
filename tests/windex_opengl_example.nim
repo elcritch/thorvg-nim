@@ -115,8 +115,8 @@ proc draw() =
 window.onResize = proc() =
   let size = window.size
   echo "resize:: ", size
-  canvas.setTarget(cast[pointer](glcontext), 0, uint32(size.x), uint32(size.y), TVG_COLORSPACE_ABGR8888S)
   draw()
+  canvas.setTarget(cast[pointer](glcontext), 0, uint32(size.x), uint32(size.y), TVG_COLORSPACE_ABGR8888S)
 
 while true:
   var event: Event
