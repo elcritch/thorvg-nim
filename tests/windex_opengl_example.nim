@@ -122,7 +122,7 @@ window.onResize = proc() =
   screenHeight = size.y
   glViewport(0, 0, size.x, size.y);  #// Note: OpenGL Y is flipped
 
-  # draw()
+  draw()
 
 while true:
   var event: Event

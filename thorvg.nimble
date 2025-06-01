@@ -8,6 +8,8 @@ requires "sdl2"
 requires "opengl"
 
 
-includes "build.nims"
 requires "https://github.com/elcritch/windex"
+# requires "https://github.com/gfx-rs/wgpu-native#fad19f59"
 
+
+includes "build.nims"

@@ -120,6 +120,11 @@ while runGame:
         let newWidth = windowEvent.data1
         let newHeight = windowEvent.data2
         reshape(canvas, newWidth, newHeight)
+        canvas.setTarget(context, 0, uint32(newWidth), uint32(newHeight), TVG_COLORSPACE_ABGR8888S)
+        testBasicFunctionality(canvas)
+        canvas.render(true)
+        window.glSwapWindow()
+
 
   testBasicFunctionality(canvas)
   canvas.render(true)
