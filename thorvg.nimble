@@ -7,9 +7,10 @@ requires "chroma"
 requires "sdl2"
 requires "opengl"
 
+feature "wgpu_native":
+  requires "https://github.com/gfx-rs/wgpu-native#fad19f59"
 
-requires "https://github.com/elcritch/windex"
-# requires "https://github.com/gfx-rs/wgpu-native#fad19f59"
-
+feature "test":
+  requires "https://github.com/elcritch/windex"
 
 includes "build.nims"
