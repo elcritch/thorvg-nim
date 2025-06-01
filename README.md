@@ -39,11 +39,9 @@ requires "thorvg"
 import thorvg, thorvg/[canvas, shape, gradient]
 
 # Load the ThorVG library
-if not loadThorVG():
-  echo "Failed to load ThorVG library"
-  quit(1)
+let engine = initThorEngine(threads = 4)
 
-try:
+block:
   # Initialize the engine
   initEngine(threads = 4)
   
@@ -80,9 +78,6 @@ try:
   let buffer = canvas.getBuffer()
   echo "Rendered ", buffer.len, " pixels"
   
-finally:
-  termEngine()
-  unloadThorVG()
 ```
 
 ## API Overview
