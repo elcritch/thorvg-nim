@@ -36,7 +36,7 @@ requires "thorvg"
 ## Quick Start
 
 ```nim
-import thorvg, thorvg/[canvas, shape, gradient]
+import thorvg, thorvg/[canvases, shape, gradient]
 
 # Load the ThorVG library
 let engine = initThorEngine(threads = 4)
@@ -85,7 +85,7 @@ block:
 ### Core Modules
 
 - **`thorvg`**: Main module with library loading and engine management
-- **`thorvg/canvas`**: Canvas creation and rendering
+- **`thorvg/canvases`**: Canvas creation and rendering
 - **`thorvg/paint`**: Base paint functionality and transformations
 - **`thorvg/shape`**: Shape creation and path building
 - **`thorvg/gradient`**: Linear and radial gradients
@@ -266,7 +266,7 @@ See the `example.nim` file for a comprehensive example showing:
 ```
 thorvg.nim              # Main module with library loading
 thorvg/
-  ├── canvas.nim        # Canvas functionality
+  ├── canvases.nim        # Canvas functionality
   ├── paint.nim         # Base paint and transformations
   ├── shape.nim         # Shape creation and path building
   └── gradient.nim      # Gradient support
