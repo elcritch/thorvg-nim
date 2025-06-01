@@ -2,6 +2,7 @@ version = "0.1.0"
 author = "ElCritch"
 description = "ThorVG Nim Wrapper"
 license = "Unlicense"
+srcDir = "."
 
 requires "chroma"
 requires "sdl2"
@@ -13,4 +14,4 @@ feature "wgpu_native":
 feature "test":
   requires "https://github.com/elcritch/windex"
 
-includes "build.nims"
+include "build.nims"
