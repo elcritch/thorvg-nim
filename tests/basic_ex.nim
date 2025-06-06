@@ -59,11 +59,10 @@ proc testBasicFunctionality*(canvas: Canvas) =
 proc testScene*(canvas: Canvas) =
   cnt.inc()
 
-  bck.init(canvas)
-  bck.appendRect(0, 0, canvas.width().float, canvas.height().float)
-  bck.setFillColor(rgb(255, 255, 255))
-  bck.setStrokeColor(rgb(0, 0, 0))
-  bck.setStrokeWidth(1.0)
+  bck.init(canvas):
+    echo "canvas width: ", canvas.width(), " canvas height: ", canvas.height()
+    bck.appendRect(0, 0, canvas.width().float, canvas.height().float)
+    bck.setFillColor(rgb(255, 255, 255))
 
   scene.init(canvas)
 

@@ -10,13 +10,13 @@ type
   CanvasObj* = object of RootObj
     handle*: ptr Tvg_Canvas
     width, height: uint32
+    colorspace: Colorspace
 
   Canvas* = ref object of CanvasObj
 
   SwCanvas* = ref object of Canvas
     buffer: seq[uint32]
     stride: uint32
-    colorspace: Colorspace
 
   GlCanvas* = ref object of Canvas
 
@@ -47,12 +47,19 @@ proc newSwCanvas*(): SwCanvas =
     raise newException(ThorVGError, "Failed to create software canvas")
   echo "SwCanvas created: ", getVersion()
 
-proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: Colorspace = Colorspace(TVG_COLORSPACE_ARGB8888)) =
-  ## Set the target buffer for the software canvas
+proc setInfo(canvas: Canvas, width, height: uint32, colorspace: TVG_Colorspace) =
   canvas.width = width
   canvas.height = height
-  canvas.stride = width
+  canvas.colorspace = Colorspace(colorspace)
+
+proc setInfo*(canvas: Canvas, width, height: uint32, colorspace: Colorspace) =
+  canvas.width = width
+  canvas.height = height
   canvas.colorspace = colorspace
+
+proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: Colorspace = Colorspace(TVG_COLORSPACE_ARGB8888)) =
+  ## Set the target buffer for the software canvas
+  canvas.setInfo(width, height, colorspace)
   canvas.buffer = newSeq[uint32](width * height)
   
   checkResult(tvg_swcanvas_set_target(
@@ -66,6 +73,7 @@ proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: Colorspace 
 
 proc setTarget*(canvas: SwCanvas, buffer: ptr uint32, stride: uint32, width: uint32, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
   ## Set the target buffer for the software canvas
+  canvas.setInfo(width, height, colorspace)
   
   checkResult(tvg_swcanvas_set_target(
     canvas.handle,
@@ -92,6 +100,7 @@ proc newGlCanvas*(): GlCanvas =
     raise newException(ThorVGError, "Failed to create OpenGL canvas")
 
 proc setTarget*(canvas: GlCanvas, context: pointer, id: int32, width, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
+  canvas.setInfo(width, height, colorspace)
   checkResult(tvg_glcanvas_set_target(
     canvas.handle,
     context,
