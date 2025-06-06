@@ -12,7 +12,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
   # Test shape creation
   let rect = newRect(10, 10, 100 * sin(cnt.float * 0.01), 100 * cos(cnt.float * 0.01))
     .fill(rgb(255, 0, 0))
-    .stroke(rgb(0, 0, 0), width = 2.0)
+    .stroke(rgb(255, 162, 0), width = 2.0)
   
   let circle = newCircle(50, 50, 20)
     .fill(rgba(0, 255, 0, 128))
@@ -24,7 +24,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
       colorStop(1.0, rgb(0, 0, 255))
     )
   
-  let gradShape = newRect(400, 20, 300, 400)
+  let gradShape = newRect(100, 20, 200, 200)
     .fill(grad)
   
   # Test transformations
