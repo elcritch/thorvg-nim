@@ -28,7 +28,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
 
   circle.init(canvas)
 
-  circle.addCircle(50, 50, 20)
+  circle.addCircle(vec2(50, 50), 20)
   circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient
@@ -74,7 +74,7 @@ proc testScene*(canvas: Canvas) =
   rect.setStrokeWidth(2.0)
 
   circle.init(canvas)
-  circle.addCircle(50, 50, 20)
+  circle.addCircle(vec2(50, 50), 20)
   circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient

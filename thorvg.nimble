@@ -7,6 +7,7 @@ srcDir = "."
 requires "chroma"
 requires "sdl2"
 requires "opengl"
+requires "vmath"
 
 feature "wgpu_native":
   requires "https://github.com/gfx-rs/wgpu-native#fad19f59"
