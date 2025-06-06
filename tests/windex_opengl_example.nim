@@ -64,7 +64,10 @@ canvas.setTarget(cast[pointer](glcontext), 0, uint32(screenWidth), uint32(screen
 
 proc draw() =
   testBasicFunctionality(canvas)
-  canvas.render(true)
+  # canvas.render(true)
+  # canvas.update()
+  canvas.draw(true)
+  canvas.sync()
   window.swapBuffers()
 
 window.onResize = proc() =
