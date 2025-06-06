@@ -4,8 +4,9 @@
 import std/sequtils
 import chroma
 
-import ../thorvg, paints, canvases
-export chroma, thorvg, paints, canvases
+import thorvg_capi
+import engine, paints, canvases
+export chroma, engine, paints, canvases
 
 type
   Shape* = object of Paint

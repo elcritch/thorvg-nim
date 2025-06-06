@@ -2,8 +2,7 @@
 ## 
 ## High-level Nim wrapper for ThorVG Canvas functionality
 
-import ../thorvg
-import thorvg_capi
+import engine, thorvg_capi
 
 type
   CanvasObj* = object of RootObj

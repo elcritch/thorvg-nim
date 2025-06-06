@@ -5,10 +5,10 @@ import std/math
 import chroma
 
 export chroma
-import ../thorvg
-export thorvg
 
-import canvases
+import ./engine
+import ./thorvg_capi
+import ./canvases
 
 type
   PaintObj* = object of RootObj
@@ -34,13 +34,6 @@ proc newPaint*(handle: ptr Tvg_Paint): Paint =
 
   result = Paint(handle: handle)
   # discard tvg_paint_ref(handle)
-
-proc newScene*(): Paint =
-  ## Create a new Scene
-  let handle = tvg_scene_new()
-  if handle == nil:
-    raise newException(ThorVGError, "Failed to create scene")
-  result = Paint(handle: handle)
 
 proc newPicture*(): Paint =
   ## Create a new Picture
@@ -70,10 +63,6 @@ proc getPictureSize*(picture: Paint): (float, float) =
   var w, h: cfloat
   checkResult(tvg_picture_get_size(picture.handle, addr w, addr h))
   result = (w.float, h.float)
-
-proc push*(scene: Paint, paint: Paint) =
-  ## Push the paint to the scene
-  checkResult(tvg_scene_push(scene.handle, paint.handle))
 
 proc pushAt*(scene: Paint, target: Paint, at: Paint) =
   ## Push the paint to the scene at a specific position

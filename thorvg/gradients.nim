@@ -2,8 +2,9 @@
 ## 
 ## High-level Nim wrapper for ThorVG Gradient functionality
 
-import ../thorvg, paints, shapes
-export chroma, thorvg, paints, shapes
+import thorvg_capi
+import engine, paints, shapes
+export chroma, engine, paints, shapes
 
 type
   GradientObj* = object of RootObj
