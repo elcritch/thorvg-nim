@@ -3,8 +3,8 @@
 ## High-level Nim wrapper for ThorVG Shape functionality
 import std/sequtils
 import chroma
-import vmath
-export vmath
+import vmath, bumpy
+export vmath, bumpy
 
 import thorvg_capi
 import engine, paints, canvases
@@ -61,14 +61,22 @@ proc addRect*(shape: Shape, x, y, width, height: float, rx: float = 0, ry: float
   checkResult(tvg_shape_append_rect(shape.handle, 
     x.cfloat, y.cfloat, width.cfloat, height.cfloat, rx.cfloat, ry.cfloat, clockwise))
 
-proc addCircle*(shape: Shape, center: Vec2, rx, ry: float, clockwise: bool = true) =
+proc addCircle*(shape: Shape, cx, cy: float, rx, ry: float, clockwise: bool = true) =
   ## Append an ellipse/circle to the path
   checkResult(tvg_shape_append_circle(shape.handle, 
-    center[0].cfloat, center[1].cfloat, rx.cfloat, ry.cfloat, clockwise))
+    cx.cfloat, cy.cfloat, rx.cfloat, ry.cfloat, clockwise))
 
 proc addCircle*(shape: Shape, center: Vec2, radius: float, clockwise: bool = true) =
   ## Append a circle to the path
-  shape.addCircle(center, radius, radius, clockwise)
+  shape.addCircle(center.x, center.y, radius, radius, clockwise)
+
+proc add*(shape: Shape, circle: Circle, clockwise: bool = true) =
+  ## Append a circle to the path
+  shape.addCircle(circle.pos.x, circle.pos.y, circle.radius, circle.radius, clockwise)
+
+proc add*(shape: Shape, rect: Rect, rx, ry: float = 0, clockwise: bool = true) =
+  ## Append a rectangle to the path
+  shape.addRect(rect.x, rect.y, rect.w, rect.h, rx, ry, clockwise)
 
 # Fill methods
 proc setFillColor*(shape: Shape, color: SomeColor) =
@@ -162,7 +170,7 @@ proc circle*(builder: var PathBuilder, center: Vec2, radius: float): PathBuilder
   result = builder
 
 proc ellipse*(builder: var PathBuilder, center: Vec2, rx, ry: float): PathBuilder {.discardable.} =
-  builder.shape.addCircle(center, rx, ry)
+  builder.shape.addCircle(center.x, center.y, rx, ry)
   result = builder
 
 # Convenience constructors
@@ -179,7 +187,7 @@ proc newCircle*(center: Vec2, radius: float): Shape =
 proc newEllipse*(center: Vec2, rx, ry: float): Shape =
   ## Create an ellipse shape
   result = newShape()
-  result.addCircle(center, rx, ry)
+  result.addCircle(center.x, center.y, rx, ry)
 
 # Method chaining for fluent API
 proc fill*(shape: Shape, color: SomeColor): Shape {.discardable.} =
