@@ -115,31 +115,6 @@ proc main() =
 
     canvas.render(false)
 
-    # Draw some animated content
-    let centerX = WINDOW_WIDTH div 2
-    let centerY = WINDOW_HEIGHT div 2
-    let radius = 50
-    
-    # Draw a moving circle
-    let circleX = centerX + int(cos(frame.float * 0.05) * 100)
-    let circleY = centerY + int(sin(frame.float * 0.05) * 50)
-    
-    # Draw circle by setting pixels
-    for y in (circleY - radius)..(circleY + radius):
-      for x in (circleX - radius)..(circleX + radius):
-        let dx = x - circleX
-        let dy = y - circleY
-        let distance = sqrt(dx.float * dx.float + dy.float * dy.float)
-        
-        if distance <= radius.float:
-          # Create a colorful gradient based on distance
-          let intensity = uint8(255 - (distance / radius.float * 255))
-          let red = uint8((sin(frame.float * 0.02) * 127 + 128) * intensity.float / 255)
-          let green = uint8((sin(frame.float * 0.03 + 2) * 127 + 128) * intensity.float / 255)
-          let blue = uint8((sin(frame.float * 0.04 + 4) * 127 + 128) * intensity.float / 255)
-          
-          setPixel(surface, x, y, makeColor(red, green, blue))
-
     # Unlock surface if it was locked
     if SDL_MUSTLOCK(surface):
       unlockSurface(surface)
