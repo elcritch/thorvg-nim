@@ -63,9 +63,9 @@ canvas.setTarget(cast[pointer](glcontext), 0, uint32(screenWidth), uint32(screen
 # glViewport(0, screenHeight - 600, 800, 600);  #// Note: OpenGL Y is flipped
 
 proc draw() =
-  testBasicFunctionality(canvas)
-  # canvas.render(true)
-  # canvas.update()
+  # testBasicFunctionality(canvas)
+  testScene(canvas)
+
   canvas.draw(true)
   canvas.sync()
   window.swapBuffers()
