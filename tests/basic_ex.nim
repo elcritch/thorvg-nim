@@ -10,7 +10,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
   cnt.inc()
 
   # Test shape creation
-  let rect = newRect(10, 10, 100 * sin(cnt.float * 0.01), 100 * cos(cnt.float * 0.01))
+  let rect = newRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
     .fill(rgb(255, 0, 0))
     .stroke(rgb(255, 162, 0), width = 2.0)
   
