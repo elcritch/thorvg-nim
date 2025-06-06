@@ -2,7 +2,7 @@ import std/math, std/times, std/monotimes
 import sdl2
 import opengl
 import opengl/glu
-import thorvg, thorvg/[canvases, paints, shapes, gradients]
+import thorvg, thorvg/[canvases, paints, shapes, gradients, scenes]
 import chroma
 
 var cnt = 0
@@ -12,28 +12,20 @@ var
   circle: Shape
   gradShape: Shape
   grad: Gradient
-  scene: Paint
+  scene: Scene
 
 proc testBasicFunctionality*(canvas: Canvas) =
   cnt.inc()
 
   # Test shape creation
-  if rect.isNil:
-    rect = newShape()
-    canvas.push(rect)
-  else:
-    rect.reset()
+  rect.init(canvas)
 
   rect.appendRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
   rect.setFillColor(rgb(255, 0, 0))
   rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
   rect.setStrokeWidth(2.0)
 
-  if circle.isNil:
-    circle = newShape()
-    canvas.push(circle)
-  else:
-    circle.reset()
+  circle.init(canvas)
 
   circle.appendCircle(50, 50, 20)
   circle.setFillColor(rgba(0, 255, 0, 128))
@@ -46,11 +38,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
         colorStop(1.0, rgb(0, 0, 255))
       )
 
-  if gradShape.isNil:
-    gradShape = newShape()
-    canvas.push(gradShape)
-  else:
-    gradShape.reset()
+  gradShape.init(canvas)
 
   gradShape.appendRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
   gradShape.setGradient(grad)
@@ -70,16 +58,10 @@ proc testBasicFunctionality*(canvas: Canvas) =
 proc testScene*(canvas: Canvas) =
   cnt.inc()
 
-  if scene.isNil:
-    scene = newScene()
-    canvas.push(scene)
+  scene.init(canvas)
 
   # Test shape creation
-  if rect.isNil:
-    rect = newShape()
-    scene.push(rect)
-  else:
-    rect.reset()
+  rect.init(canvas)
 
   rect.appendRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
   rect.setFillColor(rgb(255, 0, 0))
