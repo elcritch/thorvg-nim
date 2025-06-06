@@ -21,36 +21,7 @@ import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
 var cnt = 0
 
-proc testBasicFunctionality(canvas: Canvas) =
-  cnt.inc()
-
-  # Test shape creation
-  let rect = newRect(10, 10, 100 * sin(cnt.float * 0.01), 100 * cos(cnt.float * 0.01))
-    .fill(rgb(255, 0, 0))
-    .stroke(rgb(0, 0, 0), width = 2.0)
-  
-  let circle = newCircle(50, 50, 20)
-    .fill(rgba(0, 255, 0, 128))
-  
-  # Test gradient
-  let grad = newLinearGradient(0, 0, 200, 200)
-    .stops(
-      colorStop(0.0, rgb(255, 0, 0)),
-      colorStop(1.0, rgb(0, 0, 255))
-    )
-  
-  let gradShape = newRect(400, 20, 300, 400)
-    .fill(grad)
-  
-  # Test transformations
-  circle.translate(300, 300)
-  circle.rotate(45)
-  circle.scale(1.2)
-  
-  # Test canvas operations
-  canvas.push(rect)
-  canvas.push(circle)
-  canvas.push(gradShape)
+import basic_ex
 
 # Initialize SDL2
 discard sdl2.init(INIT_EVERYTHING)
