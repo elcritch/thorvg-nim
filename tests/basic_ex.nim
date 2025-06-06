@@ -21,14 +21,14 @@ proc testBasicFunctionality*(canvas: Canvas) =
   # Test shape creation
   rect.init(canvas)
 
-  rect.appendRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
+  rect.addRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
   rect.setFillColor(rgb(255, 0, 0))
   rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
   rect.setStrokeWidth(2.0)
 
   circle.init(canvas)
 
-  circle.appendCircle(50, 50, 20)
+  circle.addCircle(50, 50, 20)
   circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient
@@ -41,7 +41,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
 
   gradShape.init(canvas)
 
-  gradShape.appendRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
+  gradShape.addRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
   gradShape.setGradient(grad)
   
   # Test transformations
@@ -60,7 +60,7 @@ proc testScene*(canvas: Canvas) =
   cnt.inc()
 
   bck.onInit(canvas):
-    bck.appendRect(0, 0, canvas.width().float, canvas.height().float)
+    bck.addRect(0, 0, canvas.width().float, canvas.height().float)
     bck.setFillColor(rgb(255, 255, 255))
 
   scene.init(canvas)
@@ -68,18 +68,13 @@ proc testScene*(canvas: Canvas) =
   # Test shape creation
   rect.init(canvas)
 
-  rect.appendRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
+  rect.addRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
   rect.setFillColor(rgb(255, 0, 0))
   rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
   rect.setStrokeWidth(2.0)
 
-  if circle.isNil:
-    circle = newShape()
-    scene.push(circle)
-  else:
-    circle.reset()
-
-  circle.appendCircle(50, 50, 20)
+  circle.init(canvas)
+  circle.addCircle(50, 50, 20)
   circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient
@@ -96,7 +91,7 @@ proc testScene*(canvas: Canvas) =
   else:
     gradShape.reset()
 
-  gradShape.appendRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
+  gradShape.addRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
   gradShape.setGradient(grad)
   
   # Test transformations
@@ -105,7 +100,4 @@ proc testScene*(canvas: Canvas) =
   circle.scale(4.2)
   
   # # Test canvas operations
-  # canvas.push(rect)
-  # canvas.push(circle)
-  # canvas.push(gradShape)
   canvas.update()
