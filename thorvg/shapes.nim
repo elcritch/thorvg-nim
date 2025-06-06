@@ -28,17 +28,13 @@ proc reset*(shape: Shape) =
   ## Reset the shape path
   checkResult(tvg_shape_reset(shape.handle))
 
-proc init*(shape: var Shape, canvas: Canvas): bool {.discardable.} =
+proc init*(shape: var Shape, canvas: Canvas, reset: bool = true): bool {.discardable.} =
   if shape.handle == nil:
     shape = newShape()
     canvas.push(shape)
     result = true
-  else:
+  elif reset:
     shape.reset()
-
-template init*(shape: var Shape, canvas: Canvas, blk: untyped) =
-  if init(shape, canvas):
-    blk
 
 # Path building methods
 proc moveTo*(shape: Shape, x, y: float) =

@@ -12,3 +12,6 @@ import thorvg/scenes
 
 export engine, canvases, paints, shapes, gradients, scenes
 
+template onInit*(shape: var Shape, canvas: Canvas, blk: untyped) =
+  if init(shape, canvas, false):
+    blk

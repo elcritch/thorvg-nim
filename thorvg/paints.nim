@@ -46,6 +46,14 @@ proc push*(canvas: Canvas, paint: Paint) =
   ## Push a paint object to the canvas
   checkResult(tvg_canvas_push(canvas.handle, paint.handle))
 
+proc init*(paint: var Paint, canvas: Canvas, handle: ptr Tvg_Paint, reset: bool = true): bool {.discardable.} =
+  if paint.handle == nil:
+    paint = newPaint(handle)
+    canvas.push(paint)
+    result = true
+  elif reset:
+    paint.reset()
+
 proc matrix*(e11, e12, e13, e21, e22, e23, e31, e32, e33: float): Matrix =
   ## Create a new Matrix
   result = Matrix(
