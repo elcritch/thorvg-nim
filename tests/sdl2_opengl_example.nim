@@ -1,6 +1,7 @@
 # OpenGL example using SDL2
 
 import sdl2
+import std/math
 import opengl
 import opengl/glu
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
@@ -38,8 +39,8 @@ glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to blac
 glClearDepth(1.0)                                 # Set background depth to farthest
 glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
 glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
-glShadeModel(GL_SMOOTH)                           # Enable smooth shading
-glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
+# glShadeModel(GL_SMOOTH)                           # Enable smooth shading
+# glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
 
 let canvas = newGlCanvas()
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
@@ -51,10 +52,13 @@ let renderer = cast[cstring](glGetString(GL_RENDERER))
 echo "Renderer: ", $renderer
 
 
+var cnt = 0
 
 proc testBasicFunctionality(canvas: GlCanvas) =
+  cnt.inc()
+
   # Test shape creation
-  let rect = newRect(10, 10, 150, 130)
+  let rect = newRect(10, 10, 250 + 100 * sin(cnt.float * 0.01), 250 + 100 * cos(cnt.float * 0.01))
     .fill(rgb(255, 0, 0))
     .stroke(rgb(0, 0, 0), width = 2.0)
   
@@ -105,8 +109,6 @@ var
   evt = sdl2.defaultEvent
   runGame = true
 
-# reshape(screenWidth, screenHeight) # Set up initial viewport and projection
-
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
 while runGame:
@@ -120,11 +122,6 @@ while runGame:
         let newWidth = windowEvent.data1
         let newHeight = windowEvent.data2
         reshape(canvas, newWidth, newHeight)
-        canvas.setTarget(context, 0, uint32(newWidth), uint32(newHeight), TVG_COLORSPACE_ABGR8888S)
-        testBasicFunctionality(canvas)
-        canvas.render(true)
-        window.glSwapWindow()
-
 
   testBasicFunctionality(canvas)
   canvas.render(true)
