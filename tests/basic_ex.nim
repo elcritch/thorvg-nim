@@ -32,10 +32,10 @@ proc testBasicFunctionality*(canvas: Canvas) =
   # Test gradient
   if grad.isNil:
     grad = newLinearGradient(0, 0, 200, 200)
-      .stops(
-        colorStop(0.0, rgb(255, 0, 0)),
-        colorStop(1.0, rgb(0, 0, 255))
-      )
+    grad.stops(
+      colorStop(0.0, rgb(255, 0, 0)),
+      colorStop(1.0, rgb(0, 0, 255))
+    )
 
   gradShape.init(canvas)
 
@@ -74,21 +74,21 @@ proc testScene*(canvas: Canvas) =
   r.w = 40
   r.h = 40
 
-  rect.add(r).with:
+  with rect.add(r):
     fill(rgb(255, 0, 0))
     stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
     strokeWidth(2.0)
 
-  circle.add(circle(vec2(50, 50), 20)).with:
+  with circle.add(circle(vec2(50, 50), 20)):
     fill(rgba(0, 255, 0, 128))
   
   # Test gradient
   if grad.isNil:
     grad = newLinearGradient(0, 0, 200, 200)
-      .stops(
-        colorStop(0.0, rgb(255, 0, 0)),
-        colorStop(1.0, rgb(0, 0, 255))
-      )
+    grad.stops(
+      colorStop(0.0, rgb(255, 0, 0)),
+      colorStop(1.0, rgb(0, 0, 255))
+    )
 
   with gradShape.add(rect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))):
     setGradient(grad)

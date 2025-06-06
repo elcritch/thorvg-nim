@@ -11,17 +11,21 @@ type
     handle: ptr Tvg_Gradient
     colorStops: seq[Tvg_Color_Stop]
 
-  Gradient* = ref object of GradientObj
+  Gradient* = object of GradientObj
 
-  LinearGradient* = ref object of Gradient
+  LinearGradient* = object of Gradient
     x1, y1, x2, y2: float
 
-  RadialGradient* = ref object of Gradient
+  RadialGradient* = object of Gradient
     cx, cy, r, fx, fy, fr: float
 
   ColorStop* = object
     offset*: float
     color*: ColorRGBA
+
+proc isNil*(grad: Gradient): bool =
+  ## Check if the gradient is nil
+  grad.handle == nil
 
 proc newLinearGradient*(x1, y1, x2, y2: float): LinearGradient =
   ## Create a new linear gradient
@@ -56,9 +60,9 @@ proc colorStop*(offset: float, r, g, b: uint8, a: uint8 = 255): ColorStop =
   ## Create a color stop from RGBA values
   colorStop(offset, rgba(r, g, b, a))
 
-proc addColorStop*(grad: Gradient, stop: ColorStop) =
+proc addColorStop*(grad: var Gradient, stop: ColorStop) =
   ## Add a color stop to the gradient
-  let tvgStop = TvgColorStop(
+  let tvgStop = Tvg_Color_Stop(
     offset: stop.offset.cfloat,
     r: stop.color.r,
     g: stop.color.g,
@@ -67,15 +71,15 @@ proc addColorStop*(grad: Gradient, stop: ColorStop) =
   )
   grad.colorStops.add(tvgStop)
 
-proc addColorStop*(grad: Gradient, offset: float, color: ColorRGBA) =
+proc addColorStop*(grad: var Gradient, offset: float, color: ColorRGBA) =
   ## Add a color stop to the gradient
   grad.addColorStop(colorStop(offset, color))
 
-proc addColorStop*(grad: Gradient, offset: float, r, g, b: uint8, a: uint8 = 255) =
+proc addColorStop*(grad: var Gradient, offset: float, r, g, b: uint8, a: uint8 = 255) =
   ## Add a color stop to the gradient
   grad.addColorStop(colorStop(offset, r, g, b, a))
 
-proc setColorStops*(grad: Gradient, stops: seq[ColorStop]) =
+proc setColorStops*(grad: var Gradient, stops: seq[ColorStop]) =
   ## Set all color stops for the gradient
   grad.colorStops.setLen(0)
   for stop in stops:
@@ -97,12 +101,12 @@ proc getSpread*(grad: Gradient): TvgStrokeFill =
   result = spread
 
 # Fluent API for gradients
-proc stops*(grad: Gradient, stops: seq[ColorStop]): Gradient {.discardable.} =
+proc stops*(grad: var Gradient, stops: seq[ColorStop]): Gradient {.discardable.} =
   grad.setColorStops(stops)
   grad.applyColorStops()
   result = grad
 
-proc stops*(grad: Gradient, stops: varargs[ColorStop]): Gradient {.discardable.} =
+proc stops*(grad: var Gradient, stops: varargs[ColorStop]): Gradient {.discardable.} =
   grad.setColorStops(@stops)
   grad.applyColorStops()
   result = grad
