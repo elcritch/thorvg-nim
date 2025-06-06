@@ -5,6 +5,8 @@
 import engine, thorvg_capi
 
 type
+  Colorspace = distinct Tvg_Colorspace
+
   CanvasObj* = object of RootObj
     handle*: ptr Tvg_Canvas
     width, height: uint32
@@ -14,9 +16,16 @@ type
   SwCanvas* = ref object of Canvas
     buffer: seq[uint32]
     stride: uint32
-    colorspace: TvgColorspace
+    colorspace: Colorspace
 
   GlCanvas* = ref object of Canvas
+
+const
+  ColorspaceABGR8888* = TVG_COLORSPACE_ABGR8888 ## < The channels are joined in the order: alpha, blue, green, red. Colors are alpha-premultiplied.
+  ColorspaceARGB8888* = TVG_COLORSPACE_ARGB8888 ## < The channels are joined in the order: alpha, red, green, blue. Colors are alpha-premultiplied.
+  ColorspaceABGR8888S* = TVG_COLORSPACE_ABGR8888S ## < The channels are joined in the order: alpha, blue, green, red. Colors are un-alpha-premultiplied. (since 0.13)
+  ColorspaceARGB8888S* = TVG_COLORSPACE_ARGB8888S ## < The channels are joined in the order: alpha, red, green, blue. Colors are un-alpha-premultiplied. (since 0.13)
+  ColorspaceUNKNOWN* = TVG_COLORSPACE_UNKNOWN ## < Unknown channel data. This is reserved for an initial ColorSpace value. (since 1.0)
 
 proc `=destroy`*(canvas: var CanvasObj) =
   echo "Destroying canvas: ", canvas.addr.repr
@@ -24,6 +33,9 @@ proc `=destroy`*(canvas: var CanvasObj) =
     echo "Destroying canvas: ", canvas.handle.repr()
     discard tvg_canvas_destroy(canvas.handle)
   canvas.handle = nil
+
+proc toTvgColorspace*(colorspace: Colorspace): Tvg_Colorspace =
+  cast[Tvg_Colorspace](colorspace)
 
 proc newSwCanvas*(): SwCanvas =
   ## Create a new software canvas
@@ -35,7 +47,7 @@ proc newSwCanvas*(): SwCanvas =
     raise newException(ThorVGError, "Failed to create software canvas")
   echo "SwCanvas created: ", getVersion()
 
-proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
+proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: Colorspace = Colorspace(TVG_COLORSPACE_ARGB8888)) =
   ## Set the target buffer for the software canvas
   canvas.width = width
   canvas.height = height
@@ -49,7 +61,7 @@ proc setTarget*(canvas: SwCanvas, width, height: uint32, colorspace: TvgColorspa
     canvas.stride,
     width,
     height,
-    colorspace
+    colorspace.toTvgColorspace()
   ))
 
 proc setTarget*(canvas: SwCanvas, buffer: ptr uint32, stride: uint32, width: uint32, height: uint32, colorspace: TvgColorspace = TVG_COLORSPACE_ARGB8888) =
