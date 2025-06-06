@@ -101,7 +101,6 @@ window.onResize = proc() =
   draw()
 
 while true:
-  var event: Event
   windex.pollEvents()
 
   draw()
