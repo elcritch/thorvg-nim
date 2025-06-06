@@ -9,6 +9,7 @@ type
   GradientObj* = object of RootObj
     handle: ptr Tvg_Gradient
     colorStops: seq[Tvg_Color_Stop]
+
   Gradient* = ref object of GradientObj
 
   LinearGradient* = ref object of Gradient

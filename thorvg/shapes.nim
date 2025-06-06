@@ -8,7 +8,7 @@ import ../thorvg, paints
 export chroma, thorvg, paints
 
 type
-  Shape* = ref object of Paint
+  Shape* = object of Paint
     
   PathBuilder* = object
     shape: Shape

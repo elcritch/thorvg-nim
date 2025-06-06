@@ -18,7 +18,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
   cnt.inc()
 
   # Test shape creation
-  if rect == nil:
+  if rect.isNil:
     rect = newShape()
     canvas.push(rect)
   else:
@@ -29,7 +29,7 @@ proc testBasicFunctionality*(canvas: Canvas) =
   rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
   rect.setStrokeWidth(2.0)
 
-  if circle == nil:
+  if circle.isNil:
     circle = newShape()
     canvas.push(circle)
   else:
@@ -39,14 +39,14 @@ proc testBasicFunctionality*(canvas: Canvas) =
   circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient
-  if grad == nil:
+  if grad.isNil:
     grad = newLinearGradient(0, 0, 200, 200)
       .stops(
         colorStop(0.0, rgb(255, 0, 0)),
         colorStop(1.0, rgb(0, 0, 255))
       )
 
-  if gradShape == nil:
+  if gradShape.isNil:
     gradShape = newShape()
     canvas.push(gradShape)
   else:
@@ -70,12 +70,12 @@ proc testBasicFunctionality*(canvas: Canvas) =
 proc testScene*(canvas: Canvas) =
   cnt.inc()
 
-  if scene == nil:
+  if scene.isNil:
     scene = newScene()
     canvas.push(scene)
 
   # Test shape creation
-  if rect == nil:
+  if rect.isNil:
     rect = newShape()
     scene.push(rect)
   else:
@@ -86,7 +86,7 @@ proc testScene*(canvas: Canvas) =
   rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
   rect.setStrokeWidth(2.0)
 
-  if circle == nil:
+  if circle.isNil:
     circle = newShape()
     scene.push(circle)
   else:
@@ -96,14 +96,14 @@ proc testScene*(canvas: Canvas) =
   circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient
-  if grad == nil:
+  if grad.isNil:
     grad = newLinearGradient(0, 0, 200, 200)
       .stops(
         colorStop(0.0, rgb(255, 0, 0)),
         colorStop(1.0, rgb(0, 0, 255))
       )
 
-  if gradShape == nil:
+  if gradShape.isNil:
     gradShape = newShape()
     scene.push(gradShape)
   else:

@@ -12,7 +12,7 @@ type
   PaintObj* = object of RootObj
     handle*: ptr Tvg_Paint
   
-  Paint* = ref object of PaintObj
+  Paint* = object of PaintObj
 
   Matrix* = Tvg_Matrix
 
@@ -21,6 +21,9 @@ proc `=destroy`*(paint: var PaintObj) =
     # echo "destroy paint:", paint.handle.repr
     # echo "destroy paint: count: ", tvg_paint_unref(paint.handle, true)
     paint.handle = nil
+
+proc isNil*(paint: Paint): bool =
+  paint.handle == nil
 
 proc newPaint*(handle: ptr Tvg_Paint): Paint =
   ## Create a new Paint wrapper
