@@ -68,7 +68,13 @@ proc testScene*(canvas: Canvas) =
   # Test shape creation
   rect.init(canvas)
 
-  rect.addRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
+  var r: Rect
+  r.x = 450 + 100 * sin(cnt.float * 0.01)
+  r.y = 150 + 100 * cos(cnt.float * 0.01)
+  r.w = 40
+  r.h = 40
+
+  rect.add(r)
   rect.setFillColor(rgb(255, 0, 0))
   rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
   rect.setStrokeWidth(2.0)
