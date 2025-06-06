@@ -1,6 +1,6 @@
 # OpenGL example using SDL2
 
-import std/math
+import std/math, std/times, std/monotimes
 import sdl2
 import opengl
 import opengl/glu
@@ -75,9 +75,9 @@ proc testBasicFunctionality(canvas: Canvas) =
     .fill(grad)
   
   # Test transformations
-  circle.translate(300, 300)
+  circle.translate(200, 100)
   circle.rotate(45)
-  circle.scale(1.2)
+  circle.scale(4.2)
   
   # Test canvas operations
   canvas.push(rect)
@@ -110,6 +110,8 @@ var
 
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
 
+var ts = getMonoTime()
+
 while runGame:
   while pollEvent(evt):
     if evt.kind == QuitEvent:
@@ -121,6 +123,9 @@ while runGame:
         let newWidth = windowEvent.data1
         let newHeight = windowEvent.data2
         reshape(canvas, newWidth, newHeight)
+
+  echo "fps: ", 1_000.0 / ((getMonoTime() - ts).inMilliseconds.toFloat)
+  ts = getMonoTime()
 
   testBasicFunctionality(canvas)
   canvas.render(true)
