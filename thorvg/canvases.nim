@@ -21,11 +21,11 @@ type
   GlCanvas* = ref object of Canvas
 
 const
-  ColorspaceABGR8888* = TVG_COLORSPACE_ABGR8888 ## < The channels are joined in the order: alpha, blue, green, red. Colors are alpha-premultiplied.
-  ColorspaceARGB8888* = TVG_COLORSPACE_ARGB8888 ## < The channels are joined in the order: alpha, red, green, blue. Colors are alpha-premultiplied.
-  ColorspaceABGR8888S* = TVG_COLORSPACE_ABGR8888S ## < The channels are joined in the order: alpha, blue, green, red. Colors are un-alpha-premultiplied. (since 0.13)
-  ColorspaceARGB8888S* = TVG_COLORSPACE_ARGB8888S ## < The channels are joined in the order: alpha, red, green, blue. Colors are un-alpha-premultiplied. (since 0.13)
-  ColorspaceUNKNOWN* = TVG_COLORSPACE_UNKNOWN ## < Unknown channel data. This is reserved for an initial ColorSpace value. (since 1.0)
+  ColorspaceABGR8888* = Colorspace(TVG_COLORSPACE_ABGR8888) ## < The channels are joined in the order: alpha, blue, green, red. Colors are alpha-premultiplied.
+  ColorspaceARGB8888* = Colorspace(TVG_COLORSPACE_ARGB8888) ## < The channels are joined in the order: alpha, red, green, blue. Colors are alpha-premultiplied.
+  ColorspaceABGR8888S* = Colorspace(TVG_COLORSPACE_ABGR8888S) ## < The channels are joined in the order: alpha, blue, green, red. Colors are un-alpha-premultiplied. (since 0.13)
+  ColorspaceARGB8888S* = Colorspace(TVG_COLORSPACE_ARGB8888S) ## < The channels are joined in the order: alpha, red, green, blue. Colors are un-alpha-premultiplied. (since 0.13)
+  ColorspaceUNKNOWN* = Colorspace(TVG_COLORSPACE_UNKNOWN) ## < Unknown channel data. This is reserved for an initial ColorSpace value. (since 1.0)
 
 proc `=destroy`*(canvas: var CanvasObj) =
   echo "Destroying canvas: ", canvas.addr.repr
@@ -96,6 +96,9 @@ proc setTarget*(canvas: GlCanvas, context: pointer, id: int32, width, height: ui
     height,
     colorspace
   ))
+
+proc setTarget*[T](canvas: GlCanvas, context: T, id: int, width, height: int, colorspace: Colorspace = Colorspace(ColorspaceABGR8888S)) =
+  setTarget(canvas, cast[pointer](context), id.int32, width.uint32, height.uint32, colorspace.toTvgColorspace())
 
 proc update*(canvas: Canvas) =
   ## Update all paints in the canvas
