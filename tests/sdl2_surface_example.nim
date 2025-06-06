@@ -25,7 +25,7 @@ proc testBasicFunctionality(canvas: Canvas) =
   cnt.inc()
 
   # Test shape creation
-  let rect = newRect(10, 10, 250 + 100 * sin(cnt.float * 0.01), 250 + 100 * cos(cnt.float * 0.01))
+  let rect = newRect(10, 10, 100 * sin(cnt.float * 0.01), 100 * cos(cnt.float * 0.01))
     .fill(rgb(255, 0, 0))
     .stroke(rgb(0, 0, 0), width = 2.0)
   
