@@ -72,9 +72,9 @@ proc testScene*(canvas: Canvas) =
   r.h = 40
 
   rect.add(r)
-  rect.setFillColor(rgb(255, 0, 0))
-  rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
-  rect.setStrokeWidth(2.0)
+    .fill(rgb(255, 0, 0))
+    .stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
+    .strokeWidth(2.0)
 
   circle.init(canvas)
   circle.addCircle(vec2(50, 50), 20)

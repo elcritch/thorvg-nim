@@ -77,6 +77,7 @@ proc add*(shape: Shape, circle: Circle, clockwise: bool = true) =
 proc add*(shape: Shape, rect: Rect, rx, ry: float = 0, clockwise: bool = true): Shape {.discardable.} =
   ## Append a rectangle to the path
   shape.addRect(rect.x, rect.y, rect.w, rect.h, rx, ry, clockwise)
+  result = shape
 
 # Fill methods
 proc setFillColor*(shape: Shape, color: SomeColor) =
@@ -208,3 +209,7 @@ proc stroke*(shape: Shape, r, g, b: uint8, width: float = 1.0, a: uint8 = 255): 
   shape.setStrokeColor(rgba(r, g, b, a))
   shape.setStrokeWidth(width)
   result = shape 
+
+proc strokeWidth*(shape: Shape, width: float): Shape {.discardable.} =
+  shape.setStrokeWidth(width)
+  result = shape
