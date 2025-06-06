@@ -20,7 +20,8 @@ proc newShape*(): Shape =
     raise newException(ThorVGError, "Failed to create shape")
   result = Shape()
   result.handle = handle
-  discard tvg_paint_ref(handle)
+  # discard tvg_paint_ref(handle)
+  discard tvg_paint_unref(handle, false)
 
 proc reset*(shape: Shape) =
   ## Reset the shape path
