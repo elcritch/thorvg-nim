@@ -1,7 +1,7 @@
 # OpenGL example using SDL2
 
-import sdl2
 import std/math
+import sdl2
 import opengl
 import opengl/glu
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
@@ -25,8 +25,8 @@ var screenHeight: cint = 480
 
 # # Initialize OpenGL
 discard glSetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4.cint)
-discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3.cint)
+discard glSetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3.cint)
 
 let engine = initThorEngine(threads = 4)
 
@@ -34,7 +34,6 @@ var window = createWindow("SDL/OpenGL Skeleton", 100, 100, screenWidth, screenHe
 var context = window.glCreateContext()
 
 loadExtensions()
-
 glClearColor(0.0, 0.0, 0.0, 1.0)                  # Set background color to black and opaque
 glClearDepth(1.0)                                 # Set background depth to farthest
 glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-culling
