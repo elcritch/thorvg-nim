@@ -54,7 +54,7 @@ echo "Renderer: ", $renderer
 
 var cnt = 0
 
-proc testBasicFunctionality(canvas: GlCanvas) =
+proc testBasicFunctionality(canvas: Canvas) =
   cnt.inc()
 
   # Test shape creation

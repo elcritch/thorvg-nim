@@ -19,9 +19,13 @@ import sdl2
 
 import thorvg, thorvg/[canvases, paints, shapes, gradients]
 
-proc testBasicFunctionality(canvas: SwCanvas) =
+var cnt = 0
+
+proc testBasicFunctionality(canvas: Canvas) =
+  cnt.inc()
+
   # Test shape creation
-  let rect = newRect(10, 10, 150, 130)
+  let rect = newRect(10, 10, 250 + 100 * sin(cnt.float * 0.01), 250 + 100 * cos(cnt.float * 0.01))
     .fill(rgb(255, 0, 0))
     .stroke(rgb(0, 0, 0), width = 2.0)
   
@@ -29,17 +33,17 @@ proc testBasicFunctionality(canvas: SwCanvas) =
     .fill(rgba(0, 255, 0, 128))
   
   # Test gradient
-  let grad = newLinearGradient(0, 0, 100, 100)
+  let grad = newLinearGradient(0, 0, 200, 200)
     .stops(
       colorStop(0.0, rgb(255, 0, 0)),
       colorStop(1.0, rgb(0, 0, 255))
     )
   
-  let gradShape = newRect(20, 20, 40, 40)
+  let gradShape = newRect(400, 20, 300, 400)
     .fill(grad)
   
   # Test transformations
-  circle.translate(10, 10)
+  circle.translate(300, 300)
   circle.rotate(45)
   circle.scale(1.2)
   
