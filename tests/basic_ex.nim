@@ -1,6 +1,7 @@
 import std/math, std/times, std/monotimes
 import thorvg, thorvg/[canvases, paints, shapes, gradients, scenes]
 import chroma
+import std/with
 
 var cnt = 0
 
@@ -71,10 +72,10 @@ proc testScene*(canvas: Canvas) =
   r.w = 40
   r.h = 40
 
-  rect.add(r)
-    .fill(rgb(255, 0, 0))
-    .stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
-    .strokeWidth(2.0)
+  with rect.add(r):
+    fill(rgb(255, 0, 0))
+    stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
+    strokeWidth(2.0)
 
   circle.init(canvas)
   circle.addCircle(vec2(50, 50), 20)
