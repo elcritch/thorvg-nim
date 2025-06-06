@@ -47,6 +47,10 @@ proc newWindexWindow*(): Window =
 
   setupWindow(window)
 
+  glEnable(GL_MULTISAMPLE)
+
+
+
 let engine = initThorEngine(threads = 4)
 
 let window = newWindexWindow()

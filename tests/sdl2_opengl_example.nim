@@ -41,6 +41,7 @@ glEnable(GL_DEPTH_TEST)                           # Enable depth testing for z-c
 glDepthFunc(GL_LEQUAL)                            # Set the type of depth-test
 # glShadeModel(GL_SMOOTH)                           # Enable smooth shading
 # glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST) # Nice perspective corrections
+glEnable(GL_MULTISAMPLE)
 
 let canvas = newGlCanvas()
 canvas.setTarget(context, 0, uint32(screenWidth), uint32(screenHeight), TVG_COLORSPACE_ABGR8888S)
