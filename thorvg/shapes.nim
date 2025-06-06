@@ -21,7 +21,7 @@ proc newShape*(): Shape =
   result = Shape()
   result.handle = handle
   # discard tvg_paint_ref(handle)
-  discard tvg_paint_unref(handle, false)
+  # discard tvg_paint_unref(handle, false)
 
 proc reset*(shape: Shape) =
   ## Reset the shape path
