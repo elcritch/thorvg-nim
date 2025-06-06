@@ -2,12 +2,12 @@
 ## 
 ## High-level Nim wrapper for ThorVG Canvas functionality
 
-import paints
-export paints
+import ../thorvg
+import thorvg_capi
 
 type
   CanvasObj* = object of RootObj
-    handle: ptr Tvg_Canvas
+    handle*: ptr Tvg_Canvas
     width, height: uint32
 
   Canvas* = ref object of CanvasObj
@@ -85,10 +85,6 @@ proc setTarget*(canvas: GlCanvas, context: pointer, id: int32, width, height: ui
     height,
     colorspace
   ))
-
-proc push*(canvas: Canvas, paint: Paint) =
-  ## Push a paint object to the canvas
-  checkResult(tvg_canvas_push(canvas.handle, paint.handle))
 
 proc update*(canvas: Canvas) =
   ## Update all paints in the canvas

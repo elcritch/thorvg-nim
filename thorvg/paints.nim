@@ -8,6 +8,8 @@ export chroma
 import ../thorvg
 export thorvg
 
+import canvases
+
 type
   PaintObj* = object of RootObj
     handle*: ptr Tvg_Paint
@@ -46,6 +48,10 @@ proc newPicture*(): Paint =
   if handle == nil:
     raise newException(ThorVGError, "Failed to create picture")
   result = Paint(handle: handle)
+
+proc push*(canvas: Canvas, paint: Paint) =
+  ## Push a paint object to the canvas
+  checkResult(tvg_canvas_push(canvas.handle, paint.handle))
 
 proc matrix*(e11, e12, e13, e21, e22, e23, e31, e32, e33: float): Matrix =
   ## Create a new Matrix

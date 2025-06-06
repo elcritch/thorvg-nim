@@ -4,8 +4,8 @@
 import std/sequtils
 import chroma
 
-import ../thorvg, paints
-export chroma, thorvg, paints
+import ../thorvg, paints, canvases
+export chroma, thorvg, paints, canvases
 
 type
   Shape* = object of Paint
@@ -26,6 +26,13 @@ proc newShape*(): Shape =
 proc reset*(shape: Shape) =
   ## Reset the shape path
   checkResult(tvg_shape_reset(shape.handle))
+
+proc init*(shape: var Shape, canvas: Canvas) =
+  if shape.handle == nil:
+    shape = newShape()
+    canvas.push(shape)
+  else:
+    shape.reset()
 
 # Path building methods
 proc moveTo*(shape: Shape, x, y: float) =
