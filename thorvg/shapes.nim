@@ -74,7 +74,7 @@ proc add*(shape: Shape, circle: Circle, clockwise: bool = true) =
   ## Append a circle to the path
   shape.addCircle(circle.pos.x, circle.pos.y, circle.radius, circle.radius, clockwise)
 
-proc add*(shape: Shape, rect: Rect, rx, ry: float = 0, clockwise: bool = true): Shape {.discardable.} =
+proc add*(shape: Shape, rect: Rect, rx, ry: float = 0, clockwise: bool = true): lent Shape {.discardable.} =
   ## Append a rectangle to the path
   shape.addRect(rect.x, rect.y, rect.w, rect.h, rx, ry, clockwise)
   result = shape
@@ -191,25 +191,25 @@ proc newEllipse*(center: Vec2, rx, ry: float): Shape =
   result.addCircle(center.x, center.y, rx, ry)
 
 # Method chaining for fluent API
-proc fill*(shape: Shape, color: SomeColor): Shape {.discardable.} =
+proc fill*(shape: Shape, color: SomeColor): lent Shape {.discardable.} =
   shape.setFillColor(color)
   result = shape
 
-proc fill*(shape: Shape, r, g, b: uint8, a: uint8 = 255): Shape {.discardable.} =
+proc fill*(shape: Shape, r, g, b: uint8, a: uint8 = 255): lent Shape {.discardable.} =
   shape.setFillColor(r, g, b, a)
   result = shape
 
-proc stroke*(shape: Shape, color: SomeColor, width: float = 1.0): Shape {.discardable.} =
+proc stroke*(shape: Shape, color: SomeColor, width: float = 1.0): lent Shape {.discardable.} =
   let rgba = color.asRgba()
   shape.setStrokeColor(rgba)
   shape.setStrokeWidth(width)
   result = shape
 
-proc stroke*(shape: Shape, r, g, b: uint8, width: float = 1.0, a: uint8 = 255): Shape {.discardable.} =
+proc stroke*(shape: Shape, r, g, b: uint8, width: float = 1.0, a: uint8 = 255): lent Shape {.discardable.} =
   shape.setStrokeColor(rgba(r, g, b, a))
   shape.setStrokeWidth(width)
   result = shape 
 
-proc strokeWidth*(shape: Shape, width: float): Shape {.discardable.} =
+proc strokeWidth*(shape: Shape, width: float): lent Shape {.discardable.} =
   shape.setStrokeWidth(width)
   result = shape
