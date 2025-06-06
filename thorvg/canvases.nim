@@ -76,6 +76,10 @@ proc setTarget*(canvas: SwCanvas, buffer: ptr uint32, stride: uint32, width: uin
     colorspace
   ))
 
+proc setTarget*[T](canvas: SwCanvas, buffer: T, stride: int, width: int, height: int, colorspace: Colorspace = Colorspace(TVG_COLORSPACE_ARGB8888)) =
+  ## Set the target buffer for the software canvas
+  setTarget(canvas, cast[ptr uint32](buffer), stride.uint32, width.uint32, height.uint32, colorspace.toTvgColorspace())
+
 proc getBuffer*(canvas: SwCanvas): seq[uint32] =
   ## Get the canvas buffer
   result = canvas.buffer
@@ -121,6 +125,15 @@ proc render*(canvas: Canvas, clear: bool = true) =
   canvas.draw(clear)
   canvas.sync()
 
+
 proc dimensions*(canvas: Canvas): tuple[width, height: uint32] =
   ## Get canvas dimensions
   result = (canvas.width, canvas.height) 
+
+proc width*(canvas: Canvas): uint32 =
+  ## Get canvas width
+  result = canvas.width
+
+proc height*(canvas: Canvas): uint32 =
+  ## Get canvas height
+  result = canvas.height

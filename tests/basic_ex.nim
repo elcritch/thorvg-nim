@@ -13,6 +13,7 @@ var
   gradShape: Shape
   grad: Gradient
   scene: Scene
+  bck: Shape
 
 proc testBasicFunctionality*(canvas: Canvas) =
   cnt.inc()
@@ -57,6 +58,12 @@ proc testBasicFunctionality*(canvas: Canvas) =
 
 proc testScene*(canvas: Canvas) =
   cnt.inc()
+
+  bck.init(canvas)
+  bck.appendRect(0, 0, canvas.width().float, canvas.height().float)
+  bck.setFillColor(rgb(255, 255, 255))
+  bck.setStrokeColor(rgb(0, 0, 0))
+  bck.setStrokeWidth(1.0)
 
   scene.init(canvas)
 

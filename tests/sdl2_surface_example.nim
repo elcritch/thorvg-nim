@@ -72,11 +72,11 @@ proc main() =
   let canvas = newSwCanvas()
   # canvas.setTarget(100, 100, TVG_COLORSPACE_ARGB8888)
   canvas.setTarget(
-    cast[ptr uint32](surface.pixels),
-    uint32(surface.pitch div 4),
-    uint32(surface.w),
-    uint32(surface.h),
-     TVG_COLORSPACE_ARGB8888
+    surface.pixels,
+    surface.pitch div 4,
+    surface.w,
+    surface.h,
+    ColorspaceARGB8888
   )
 
   # Animation variables
