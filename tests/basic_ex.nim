@@ -65,6 +65,8 @@ proc testScene*(canvas: Canvas) =
 
   # Test shape creation
   rect.init(canvas)
+  circle.init(canvas)
+  gradShape.init(canvas)
 
   var r: Rect
   r.x = 450 + 100 * sin(cnt.float * 0.01)
@@ -72,14 +74,13 @@ proc testScene*(canvas: Canvas) =
   r.w = 40
   r.h = 40
 
-  with rect.add(r):
+  rect.add(r).with:
     fill(rgb(255, 0, 0))
     stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
     strokeWidth(2.0)
 
-  circle.init(canvas)
-  circle.addCircle(vec2(50, 50), 20)
-  circle.setFillColor(rgba(0, 255, 0, 128))
+  circle.add(circle(vec2(50, 50), 20)).with:
+    fill(rgba(0, 255, 0, 128))
   
   # Test gradient
   if grad.isNil:
@@ -89,14 +90,8 @@ proc testScene*(canvas: Canvas) =
         colorStop(1.0, rgb(0, 0, 255))
       )
 
-  if gradShape.isNil:
-    gradShape = newShape()
-    scene.push(gradShape)
-  else:
-    gradShape.reset()
-
-  gradShape.addRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
-  gradShape.setGradient(grad)
+  with gradShape.add(rect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))):
+    setGradient(grad)
   
   # Test transformations
   circle.translate(200, 100)

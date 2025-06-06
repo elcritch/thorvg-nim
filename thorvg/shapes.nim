@@ -70,13 +70,14 @@ proc addCircle*(shape: Shape, center: Vec2, radius: float, clockwise: bool = tru
   ## Append a circle to the path
   shape.addCircle(center.x, center.y, radius, radius, clockwise)
 
-proc add*(shape: Shape, circle: Circle, clockwise: bool = true) =
-  ## Append a circle to the path
-  shape.addCircle(circle.pos.x, circle.pos.y, circle.radius, circle.radius, clockwise)
-
-proc add*(shape: var Shape, rect: Rect, rx, ry: float = 0, clockwise: bool = true): lent Shape {.discardable.} =
+proc add*(shape: var Shape, dims: Rect | Circle, rx, ry: float = 0, clockwise: bool = true): lent Shape {.discardable.} =
   ## Append a rectangle to the path
-  shape.addRect(rect.x, rect.y, rect.w, rect.h, rx, ry, clockwise)
+  when dims is Rect:
+    shape.addRect(dims.x, dims.y, dims.w, dims.h, rx, ry, clockwise)
+  elif dims is Circle:
+    shape.addCircle(dims.pos.x, dims.pos.y, dims.radius, dims.radius, clockwise)
+  else:
+    {.error: "Unsupported shape type".}
   result = shape
 
 # Fill methods
