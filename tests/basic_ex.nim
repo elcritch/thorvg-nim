@@ -1,7 +1,4 @@
 import std/math, std/times, std/monotimes
-import sdl2
-import opengl
-import opengl/glu
 import thorvg, thorvg/[canvases, paints, shapes, gradients, scenes]
 import chroma
 
