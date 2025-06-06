@@ -60,8 +60,6 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(glcontext, 0, screenWidth, screenHeight, ColorspaceABGR8888S)
 
-# glViewport(0, screenHeight - 600, 800, 600);  #// Note: OpenGL Y is flipped
-
 proc draw() =
   # testBasicFunctionality(canvas)
   testScene(canvas)
