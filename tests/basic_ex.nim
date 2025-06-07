@@ -100,8 +100,9 @@ proc testScene*(canvas: Canvas) =
 
   scene.clearEffects()
   # Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
-  scene.dropShadow(0, 0, 0,
-                    125, 120.0, 20.0 * cnt.float, 3.0, 100)
+  scene.dropShadow(0, 0, 0, 125,
+                   120.0, 20.0 * cnt.float, 3.0,
+                    100)
 
   # # Test canvas operations
   canvas.update()
