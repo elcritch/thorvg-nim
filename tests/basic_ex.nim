@@ -98,11 +98,11 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
     setGradient(self.grad)
   
   # Test transformations
-  self.circle.translate(vec2(200, 200))
+  self.circle.translate(vec2(200, 300))
   # self.circle.scale(4.2)
   
   self.scene.resetEffects()
-  self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * (cnt mod 100).float / 30, 3.0, 100)
+  self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * 3 * cos((cnt.float * 0.01).float), 3.0, 100)
 
   # # Test canvas operations
   canvas.update()

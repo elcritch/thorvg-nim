@@ -57,7 +57,8 @@ canvas.setTarget(glcontext, 0, screenWidth, screenHeight, ColorspaceABGR8888S)
 
 var basics: seq[BasicEx] = @[
   BasicEx(start: vec2(0, 0)),
-  BasicEx(start: vec2(1 * screenWidth.float, 0)),
+  BasicEx(start: vec2(1 * screenWidth.float, 0 * screenHeight.float)),
+  BasicEx(start: vec2(0 * screenWidth.float, 1 * screenHeight.float)),
 ]
 
 proc draw(self: var seq[BasicEx]) =
@@ -73,11 +74,11 @@ window.onResize = proc() =
   let size = window.size
   # echo "resize:: ", size
   canvas.setTarget(glcontext, 0, size.x, size.y)
-  screenWidth = size.x
-  screenHeight = size.y
   glViewport(0, 0, size.x, size.y);  #// Note: OpenGL Y is flipped
 
   draw(basics)
+
+window.size = ivec2(4*screenWidth, 4*screenHeight)
 
 while true:
   windex.pollEvents()
