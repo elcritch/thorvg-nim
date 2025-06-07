@@ -68,14 +68,14 @@ proc testScene*(canvas: Canvas) =
   circle.init(canvas)
   gradShape.init(canvas)
 
-  let r: Rect = rect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
-  with rect.add(r):
+  with rect:
+    add(rect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40))
     fill(rgb(255, 0, 0))
     stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
     strokeWidth(2.0)
 
-  with circle.add(circle(vec2(50, 50), 20)):
-    fill(rgba(0, 255, 0, 128))
+  circle.add(circle(vec2(50, 50), 20))
+    .fill(rgba(0, 255, 0, 128))
   
   # Test gradient
   if grad.isNil:
