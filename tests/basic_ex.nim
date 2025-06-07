@@ -15,7 +15,7 @@ type
     gradShape: Shape
     grad: Gradient
     bck: Shape
-    start: Vec2
+    start*: Vec2
 
 proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
   cnt.inc()
@@ -63,7 +63,7 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   let start = self.start
 
   self.bck.onInit(canvas):
-    self.bck.addRect(0, 0, canvas.width().float, canvas.height().float)
+    self.bck.addRect(start.x, start.y, canvas.width().float, canvas.height().float)
     self.bck.setFillColor(rgb(255, 255, 255))
 
   self.scene.init(canvas)
@@ -100,7 +100,7 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
     setGradient(self.grad)
   
   # Test transformations
-  self.circle.translate(self.start + vec2(200, 100))
+  self.circle.translate(vec2(200, 100))
   self.circle.rotate(45)
   self.circle.scale(4.2)
   

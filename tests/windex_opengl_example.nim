@@ -34,11 +34,6 @@ proc setupWindow*(
   window.onMove = proc() =
     discard
 
-  window.onResize = proc() =
-    # updateWindowSize(renderer.frame, window)
-    let size = window.size
-    echo "resize:: ", size
-
 
 proc newWindexWindow*(): Window =
   let window = newWindow("Example", ivec2(screenWidth, screenHeight), visible = false, vsync = true)
@@ -60,11 +55,15 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(glcontext, 0, screenWidth, screenHeight, ColorspaceABGR8888S)
 
-var self = BasicEx()
+var basics: seq[BasicEx] = @[
+  BasicEx(start: vec2(0, 0)),
+  BasicEx(start: vec2(1 * screenWidth.float, 0)),
+]
 
-proc draw(self: var BasicEx) =
+proc draw(self: var seq[BasicEx]) =
   # testBasicFunctionality(canvas)
-  testScene(canvas, self)
+  for basic in self.mitems():
+    testScene(canvas, basic)
 
   canvas.draw(true)
   canvas.sync()
@@ -78,11 +77,11 @@ window.onResize = proc() =
   screenHeight = size.y
   glViewport(0, 0, size.x, size.y);  #// Note: OpenGL Y is flipped
 
-  draw(self)
+  draw(basics)
 
 while true:
   windex.pollEvents()
 
-  draw(self)
+  draw(basics)
 
   os.sleep(15)
