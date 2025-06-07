@@ -31,11 +31,15 @@ proc init*(scene: var Scene, canvas: Canvas) =
 
 proc dropShadow*(scene: Scene,
                  r, g, b, a: uint8;
-                 angle, distance, sigma: cfloat;
-                 quality: uint8) =
+                 angle, distance, sigma: float;
+                 quality: int) =
   ## Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
   checkResult: tvg_scene_push_effect(scene.handle,
-    Tvg_Scene_Effect.TVG_SCENE_EFFECT_DROP_SHADOW, r, g, b, a, angle, distance, sigma, quality)
+    Tvg_Scene_Effect.TVG_SCENE_EFFECT_DROP_SHADOW,
+    r.cint, g.cint, b.cint, a.cint,
+    angle.cdouble, distance.cdouble, sigma.cdouble,
+    quality.cint
+  )
 
 proc clearEffects*(scene: Scene) =
   ## Clear all effects
