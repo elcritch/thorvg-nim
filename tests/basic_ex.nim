@@ -71,7 +71,7 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   self.circle.init(self.scene)
   self.gradShape.init(self.scene)
 
-  var rect = rect(450 + 100 * sin(self.cnt.float * 0.01) + start.x,
+  var rect = rect(250 + 100 * sin(self.cnt.float * 0.01) + start.x,
                         150 + 100 * cos(self.cnt.float * 0.01) + start.y,
                         40, 40)
 
