@@ -55,11 +55,15 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(glcontext, 0, screenWidth, screenHeight, ColorspaceABGR8888S)
 
+let n = 4
+let m = 4
+
 var basics: seq[BasicEx] = @[
   BasicEx(start: vec2(0, 0)),
-  BasicEx(start: vec2(1 * screenWidth.float, 0 * screenHeight.float)),
-  BasicEx(start: vec2(0 * screenWidth.float, 1 * screenHeight.float)),
 ]
+for i in 0..<n:
+  for j in 0..<m:
+    basics.add(BasicEx(start: vec2(i.float * screenWidth.float, j.float * screenHeight.float)))
 
 proc draw(self: var seq[BasicEx]) =
   # testBasicFunctionality(canvas)
@@ -80,7 +84,7 @@ window.onResize = proc() =
 
   draw(basics)
 
-window.size = ivec2(4*screenWidth, 4*screenHeight)
+window.size = ivec2(int32(n*screenWidth), int32(m*screenHeight))
 
 while true:
   windex.pollEvents()

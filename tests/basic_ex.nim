@@ -5,10 +5,10 @@ import std/with
 import vmath
 import bumpy
 
-var cnt = 0
 
 type
   BasicEx* = object
+    cnt: int
     scene: Scene
     rect: Shape
     circle: Shape
@@ -18,14 +18,14 @@ type
     start*: Vec2
 
 proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
-  cnt.inc()
+  self.cnt.inc()
 
   # Test shape creation
   self.rect.init(canvas)
 
-  self.rect.addRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
+  self.rect.addRect(450 + 100 * sin(self.cnt.float * 0.01), 150 + 100 * cos(self.cnt.float * 0.01), 40, 40)
   self.rect.setFillColor(rgb(255, 0, 0))
-  self.rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
+  self.rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(self.cnt mod 100)))
   self.rect.setStrokeWidth(2.0)
 
   self.circle.init(canvas)
@@ -43,7 +43,7 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
 
   self.gradShape.init(canvas)
 
-  self.gradShape.addRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
+  self.gradShape.addRect(100, 20, 200 + 50 * sin(self.cnt.float * 0.01), 200 + 50 * cos(self.cnt.float * 0.01))
   self.gradShape.setGradient(self.grad)
   
   # Test transformations
@@ -56,7 +56,7 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
 
 
 proc testScene*(canvas: Canvas, self: var BasicEx) =
-  cnt.inc()
+  self.cnt.inc()
   let start = self.start
 
   self.bck.onInit(canvas):
@@ -71,17 +71,17 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   self.circle.init(self.scene)
   self.gradShape.init(self.scene)
 
-  var rect = rect(450 + 100 * sin(cnt.float * 0.01) + start.x,
-                        150 + 100 * cos(cnt.float * 0.01) + start.y,
+  var rect = rect(450 + 100 * sin(self.cnt.float * 0.01) + start.x,
+                        150 + 100 * cos(self.cnt.float * 0.01) + start.y,
                         40, 40)
 
   with self.rect:
     add(rect)
     fill(rgb(255, 0, 0))
-    stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)).asColor())
+    stroke(rgb(255, 162, 0).asColor().spin(toFloat(self.cnt mod 100)).asColor())
     strokeWidth(2.0)
 
-  let circleWave = vec2(100 * sin(cnt.float * 0.01), 100 * cos(cnt.float * 0.01))
+  let circleWave = vec2(100 * sin(self.cnt.float * 0.01), 100 * cos(self.cnt.float * 0.01))
   self.circle.add(circle(circleWave + start, 20))
     .fill(rgba(0, 255, 0, 128))
   
@@ -94,7 +94,7 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
     )
 
   with self.gradShape:
-    add(rect(100 + start.x, 20 + start.y, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01)))
+    add(rect(100 + start.x, 20 + start.y, 200 + 50 * sin(self.cnt.float * 0.01), 200 + 50 * cos(self.cnt.float * 0.01)))
     setGradient(self.grad)
   
   # Test transformations
@@ -102,7 +102,7 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   # self.circle.scale(4.2)
   
   self.scene.resetEffects()
-  self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * 3 * cos((cnt.float * 0.01).float), 3.0, 100)
+  self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * 3 * cos((self.cnt.float * 0.01).float), 3.0, 100)
 
   # # Test canvas operations
   # canvas.update()
