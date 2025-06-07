@@ -1,4 +1,6 @@
 import std/os
+import std/times
+import std/monotimes
 
 import opengl
 import opengl/glu
@@ -55,8 +57,8 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(glcontext, 0, screenWidth, screenHeight, ColorspaceABGR8888S)
 
-let n = 4
-let m = 4
+let n = 8
+let m = 8
 
 var basics: seq[BasicEx] = @[
   BasicEx(start: vec2(0, 0)),
@@ -70,7 +72,7 @@ proc draw(self: var seq[BasicEx]) =
   for basic in self.mitems():
     testScene(canvas, basic)
 
-  canvas.update()
+  # canvas.update()
 
   canvas.draw(true)
   canvas.sync()
@@ -86,9 +88,12 @@ window.onResize = proc() =
 
 window.size = ivec2(int32(n*screenWidth), int32(m*screenHeight))
 
+var ts = getMonoTime()
 while true:
   windex.pollEvents()
 
   draw(basics)
 
-  os.sleep(15)
+  # os.sleep(15)
+  echo "fps: ", 1000.0 / toFloat((getMonoTime() - ts).inMilliseconds())
+  ts = getMonoTime()
