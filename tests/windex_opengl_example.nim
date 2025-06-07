@@ -73,7 +73,7 @@ proc draw(self: var seq[BasicEx]) =
     # testScene(canvas, basic)
     testBasicFunctionality(canvas, basic)
 
-  # canvas.update()
+  canvas.update()
 
   canvas.draw(true)
   canvas.sync()

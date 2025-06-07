@@ -55,7 +55,7 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
   
   # # Test canvas operations
 
-  canvas.update()
+  # canvas.update()
 
 
 proc testScene*(canvas: Canvas, self: var BasicEx) =
