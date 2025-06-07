@@ -40,6 +40,6 @@ proc dropShadow*(scene: Scene,
     quality.cint
   )
 
-proc clearEffects*(scene: Scene) =
+proc resetEffects*(scene: Scene) =
   ## Clear all effects
-  checkResult: tvg_scene_push_effect(scene.handle, Tvg_Scene_Effect.TVG_SCENE_EFFECT_CLEAR_ALL)
+  checkResult: tvg_scene_reset_effects(scene.handle)

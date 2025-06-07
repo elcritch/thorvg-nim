@@ -2118,11 +2118,8 @@ proc tvg_scene_remove*(scene: ptr Tvg_Paint; paint: ptr Tvg_Paint): Tvg_Result {
                               ##  @since 1.0
                               ##
 
-proc tvg_scene_push_drop_shadow*(scene: ptr Tvg_Paint; r: cint; g: cint;
-                                 b: cint; a: cint; angle: cdouble;
-                                 distance: cdouble; sigma: cdouble;
-                                 quality: cint): Tvg_Result {.
-    importc: "tvg_scene_push_drop_shadow", dynlib: thorvgLibName.}
+proc tvg_scene_reset_effects*(scene: ptr Tvg_Paint): Tvg_Result {.
+    importc: "tvg_scene_reset_effects", dynlib: thorvgLibName.}
   ##
                               ##
                               ##  @brief Apply a post-processing effect to the scene.
@@ -2140,6 +2137,12 @@ proc tvg_scene_push_drop_shadow*(scene: ptr Tvg_Paint; r: cint; g: cint;
                               ##
                               ##  @since 1.0
                               ##
+
+proc tvg_scene_push_drop_shadow*(scene: ptr Tvg_Paint; r: cint; g: cint;
+                                 b: cint; a: cint; angle: cdouble;
+                                 distance: cdouble; sigma: cdouble;
+                                 quality: cint): Tvg_Result {.
+    importc: "tvg_scene_push_drop_shadow", dynlib: thorvgLibName.}
 
 proc tvg_text_new*(): ptr Tvg_Paint {.importc: "tvg_text_new",
                                       dynlib: thorvgLibName.}

@@ -98,7 +98,7 @@ proc testScene*(canvas: Canvas) =
   # # //Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
   # scene1->push(tvg::SceneEffect::DropShadow, 0, 0, 0, 125, 120.0, (double)(20.0f * progress), 3.0, 100);
 
-  scene.clearEffects()
+  scene.resetEffects()
   # Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
   scene.dropShadow(0, 0, 0, 125,
                    120.0, 20.0 * cnt.float, 3.0,
