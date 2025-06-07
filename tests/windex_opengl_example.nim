@@ -18,8 +18,8 @@ elif defined(windows):
 else:
   {.passC: "-I/usr/local/include".}
 
-var screenWidth: cint = 640
-var screenHeight: cint = 480
+var screenWidth: cint = 400
+var screenHeight: cint = 400
 
 proc setupWindow*(
     window: Window,
@@ -65,6 +65,8 @@ proc draw(self: var seq[BasicEx]) =
   # testBasicFunctionality(canvas)
   for basic in self.mitems():
     testScene(canvas, basic)
+
+  canvas.update()
 
   canvas.draw(true)
   canvas.sync()

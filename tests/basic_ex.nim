@@ -105,4 +105,4 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * 3 * cos((cnt.float * 0.01).float), 3.0, 100)
 
   # # Test canvas operations
-  canvas.update()
+  # canvas.update()
