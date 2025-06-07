@@ -63,7 +63,7 @@ var basics: seq[BasicEx] = @[
 ]
 for i in 0..<n:
   for j in 0..<m:
-    basics.add(BasicEx(start: vec2(i.float * screenWidth.float, j.float * screenHeight.float)))
+    basics.add(BasicEx(start: vec2(i.float * screenWidth.float, j.float * screenHeight.float), stride: i + j))
 
 proc draw(self: var seq[BasicEx]) =
   # testBasicFunctionality(canvas)

@@ -16,6 +16,7 @@ type
     grad: Gradient
     bck: Shape
     start*: Vec2
+    stride*: int = 1
 
 proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
   self.cnt.inc()
@@ -56,7 +57,7 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
 
 
 proc testScene*(canvas: Canvas, self: var BasicEx) =
-  self.cnt.inc()
+  self.cnt.inc(self.stride)
   let start = self.start
 
   self.bck.onInit(canvas):
