@@ -35,12 +35,14 @@ proc dropShadow*(scene: Scene,
                  angle, distance, sigma: float;
                  quality: int) =
   ## Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
-  checkResult: tvg_scene_push_drop_shadow(scene.handle,
-    r.cint, g.cint, b.cint, a.cint,
-    angle.cdouble, distance.cdouble, sigma.cdouble,
-    quality.cint
-  )
+  when defined(thorvgSceneEffects):
+    checkResult: tvg_scene_push_drop_shadow(scene.handle,
+      r.cint, g.cint, b.cint, a.cint,
+      angle.cdouble, distance.cdouble, sigma.cdouble,
+      quality.cint
+    )
 
 proc resetEffects*(scene: Scene) =
   ## Clear all effects
-  checkResult: tvg_scene_reset_effects(scene.handle)
+  when defined(thorvgSceneEffects):
+    checkResult: tvg_scene_reset_effects(scene.handle)
