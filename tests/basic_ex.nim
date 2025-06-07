@@ -52,9 +52,6 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
   self.circle.scale(4.2)
   
   # # Test canvas operations
-  # canvas.push(rect)
-  # canvas.push(circle)
-  # canvas.push(gradShape)
   canvas.update()
 
 
@@ -84,7 +81,8 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
     stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)).asColor())
     strokeWidth(2.0)
 
-  self.circle.add(circle(vec2(50, 50), 20))
+  let circleWave = vec2(100 * sin(cnt.float * 0.01), 100 * cos(cnt.float * 0.01))
+  self.circle.add(circle(circleWave + start, 20))
     .fill(rgba(0, 255, 0, 128))
   
   # Test gradient
@@ -100,15 +98,9 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
     setGradient(self.grad)
   
   # Test transformations
-  self.circle.translate(vec2(200, 100))
-  self.circle.rotate(45)
-  self.circle.scale(4.2)
+  self.circle.translate(vec2(200, 200))
+  # self.circle.scale(4.2)
   
-  # # //Clear the previously applied effects
-  # scene1->push(tvg::SceneEffect::ClearAll);
-  # # //Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
-  # scene1->push(tvg::SceneEffect::DropShadow, 0, 0, 0, 125, 120.0, (double)(20.0f * progress), 3.0, 100);
-
   self.scene.resetEffects()
   self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * (cnt mod 100).float / 30, 3.0, 100)
 
