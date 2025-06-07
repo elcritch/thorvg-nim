@@ -60,9 +60,11 @@ echo "glcontext: ", glcontext.repr()
 let canvas = newGlCanvas()
 canvas.setTarget(glcontext, 0, screenWidth, screenHeight, ColorspaceABGR8888S)
 
-proc draw() =
+var self = BasicEx()
+
+proc draw(self: var BasicEx) =
   # testBasicFunctionality(canvas)
-  testScene(canvas)
+  testScene(canvas, self)
 
   canvas.draw(true)
   canvas.sync()
@@ -76,11 +78,11 @@ window.onResize = proc() =
   screenHeight = size.y
   glViewport(0, 0, size.x, size.y);  #// Note: OpenGL Y is flipped
 
-  draw()
+  draw(self)
 
 while true:
   windex.pollEvents()
 
-  draw()
+  draw(self)
 
   os.sleep(15)

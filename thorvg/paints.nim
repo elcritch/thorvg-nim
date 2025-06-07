@@ -3,6 +3,7 @@
 ## High-level Nim wrapper for ThorVG Paint functionality
 import std/math
 import chroma
+import vmath
 
 export chroma
 
@@ -83,6 +84,10 @@ proc rotate*(paint: Paint, degrees: float) =
 proc translate*(paint: Paint, x, y: float) =
   ## Translate the paint by x, y
   checkResult(tvgPaintTranslate(paint.handle, x.cfloat, y.cfloat))
+
+proc translate*(paint: Paint, v: Vec2) =
+  ## Translate the paint by x, y
+  checkResult(tvgPaintTranslate(paint.handle, v.x.cfloat, v.y.cfloat))
 
 proc setTransform*(paint: Paint, transform: Matrix) =
   ## Set the paint's transformation matrix

@@ -16,18 +16,19 @@ proc newScene*(): Scene =
   let handle = tvg_scene_new()
   if handle == nil:
     raise newException(ThorVGError, "Failed to create scene")
-  result = Scene(handle: handle)
+  result = Scene()
+  result.handle = handle
+  assert result.handle != nil
 
 proc push*(scene: Scene, paint: Paint) =
   ## Push the paint to the scene
   checkResult(tvg_scene_push(scene.handle, paint.handle))
 
-proc init*(scene: var Scene, canvas: Canvas) =
+proc init*(scene: var Scene, canvas: Canvas, reset: bool = true): bool {.discardable.} =
   if scene.handle == nil:
     scene = newScene()
     canvas.push(scene)
-  else:
-    scene.reset()
+    result = true
 
 proc dropShadow*(scene: Scene,
                  r, g, b, a: uint8;

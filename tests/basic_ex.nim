@@ -5,47 +5,49 @@ import std/with
 
 var cnt = 0
 
-var
-  rect: Shape
-  circle: Shape
-  gradShape: Shape
-  grad: Gradient
-  scene: Scene
-  bck: Shape
+type
+  BasicEx* = object
+    scene: Scene
+    rect: Shape
+    circle: Shape
+    gradShape: Shape
+    grad: Gradient
+    bck: Shape
+    start: Vec2
 
-proc testBasicFunctionality*(canvas: Canvas) =
+proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
   cnt.inc()
 
   # Test shape creation
-  rect.init(canvas)
+  self.rect.init(canvas)
 
-  rect.addRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
-  rect.setFillColor(rgb(255, 0, 0))
-  rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
-  rect.setStrokeWidth(2.0)
+  self.rect.addRect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40)
+  self.rect.setFillColor(rgb(255, 0, 0))
+  self.rect.setStrokeColor(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
+  self.rect.setStrokeWidth(2.0)
 
-  circle.init(canvas)
+  self.circle.init(canvas)
 
-  circle.addCircle(vec2(50, 50), 20)
-  circle.setFillColor(rgba(0, 255, 0, 128))
+  self.circle.addCircle(vec2(50, 50), 20)
+  self.circle.setFillColor(rgba(0, 255, 0, 128))
   
   # Test gradient
-  if grad.isNil:
-    grad = newLinearGradient(0, 0, 200, 200)
-    grad.stops(
+  if self.grad.isNil:
+    self.grad = newLinearGradient(0, 0, 200, 200)
+    self.grad.stops(
       colorStop(0.0, rgb(255, 0, 0)),
       colorStop(1.0, rgb(0, 0, 255))
     )
 
-  gradShape.init(canvas)
+  self.gradShape.init(canvas)
 
-  gradShape.addRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
-  gradShape.setGradient(grad)
+  self.gradShape.addRect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))
+  self.gradShape.setGradient(self.grad)
   
   # Test transformations
-  circle.translate(200, 100)
-  circle.rotate(45)
-  circle.scale(4.2)
+  self.circle.translate(self.start + vec2(200, 100))
+  self.circle.rotate(45)
+  self.circle.scale(4.2)
   
   # # Test canvas operations
   # canvas.push(rect)
@@ -54,55 +56,54 @@ proc testBasicFunctionality*(canvas: Canvas) =
   canvas.update()
 
 
-proc testScene*(canvas: Canvas) =
+proc testScene*(canvas: Canvas, self: var BasicEx) =
   cnt.inc()
 
-  bck.onInit(canvas):
-    bck.addRect(0, 0, canvas.width().float, canvas.height().float)
-    bck.setFillColor(rgb(255, 255, 255))
+  self.bck.onInit(canvas):
+    self.bck.addRect(0, 0, canvas.width().float, canvas.height().float)
+    self.bck.setFillColor(rgb(255, 255, 255))
 
-  scene.init(canvas)
+  self.scene.init(canvas)
+  doAssert self.scene.handle != nil
 
   # Test shape creation
-  rect.init(scene)
-  circle.init(scene)
-  gradShape.init(scene)
+  self.rect.init(self.scene)
+  self.circle.init(self.scene)
+  self.gradShape.init(self.scene)
 
-  with rect:
+  with self.rect:
     add(rect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40))
     fill(rgb(255, 0, 0))
-    stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)))
+    stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)).asColor())
     strokeWidth(2.0)
 
-  circle.add(circle(vec2(50, 50), 20))
+  self.circle.add(circle(vec2(50, 50), 20))
     .fill(rgba(0, 255, 0, 128))
   
   # Test gradient
-  if grad.isNil:
-    grad = newLinearGradient(0, 0, 200, 200)
-    grad.stops(
+  if self.grad.isNil:
+    self.grad = newLinearGradient(0, 0, 200, 200)
+    self.grad.stops(
       colorStop(0.0, rgb(255, 0, 0)),
       colorStop(1.0, rgb(0, 0, 255))
     )
 
-  with gradShape.add(rect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01))):
-    setGradient(grad)
+  with self.gradShape:
+    add(rect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01)))
+    setGradient(self.grad)
   
   # Test transformations
-  circle.translate(200, 100)
-  circle.rotate(45)
-  circle.scale(4.2)
+  self.circle.translate(self.start + vec2(200, 100))
+  self.circle.rotate(45)
+  self.circle.scale(4.2)
   
   # # //Clear the previously applied effects
   # scene1->push(tvg::SceneEffect::ClearAll);
   # # //Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
   # scene1->push(tvg::SceneEffect::DropShadow, 0, 0, 0, 125, 120.0, (double)(20.0f * progress), 3.0, 100);
 
-  scene.resetEffects()
-  # Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
-  scene.dropShadow(0, 0, 0, 125,
-                   120.0, 20.0 * cnt.float, 3.0,
-                    100)
+  self.scene.resetEffects()
+  self.scene.dropShadow(0, 0, 0, 125, 120.0, 20.0 * (cnt mod 100).float / 30, 3.0, 100)
 
   # # Test canvas operations
   canvas.update()
