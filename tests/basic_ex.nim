@@ -19,7 +19,7 @@ type
     stride*: int = 1
 
 proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
-  self.cnt.inc()
+  self.cnt.inc(self.stride)
 
   # Test shape creation
   self.rect.init(canvas)
@@ -48,11 +48,13 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
   self.gradShape.setGradient(self.grad)
   
   # Test transformations
-  self.circle.translate(self.start + vec2(200, 100))
+  let circleWave = vec2(100 * sin(self.cnt.float * 0.01), 100 * cos(self.cnt.float * 0.01))
+  self.circle.translate(self.start + circleWave + vec2(200, 100))
   self.circle.rotate(45)
   self.circle.scale(4.2)
   
   # # Test canvas operations
+
   canvas.update()
 
 

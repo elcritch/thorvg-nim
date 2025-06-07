@@ -70,7 +70,8 @@ for i in 0..<n:
 proc draw(self: var seq[BasicEx]) =
   # testBasicFunctionality(canvas)
   for basic in self.mitems():
-    testScene(canvas, basic)
+    # testScene(canvas, basic)
+    testBasicFunctionality(canvas, basic)
 
   # canvas.update()
 
