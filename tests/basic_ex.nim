@@ -64,9 +64,9 @@ proc testScene*(canvas: Canvas) =
   scene.init(canvas)
 
   # Test shape creation
-  rect.init(canvas)
-  circle.init(canvas)
-  gradShape.init(canvas)
+  rect.init(scene)
+  circle.init(scene)
+  gradShape.init(scene)
 
   with rect:
     add(rect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40))

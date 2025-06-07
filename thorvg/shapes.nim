@@ -7,7 +7,7 @@ import vmath, bumpy
 export vmath, bumpy
 
 import thorvg_capi
-import engine, paints, canvases
+import engine, paints, canvases, scenes
 export chroma, engine, paints, canvases
 
 type
@@ -30,7 +30,7 @@ proc reset*(shape: Shape) =
   ## Reset the shape path
   checkResult(tvg_shape_reset(shape.handle))
 
-proc init*(shape: var Shape, canvas: Canvas, reset: bool = true): bool {.discardable.} =
+proc init*(shape: var Shape, canvas: Canvas | Scene, reset: bool = true): bool {.discardable.} =
   if shape.handle == nil:
     shape = newShape()
     canvas.push(shape)
