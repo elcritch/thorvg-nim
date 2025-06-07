@@ -93,5 +93,10 @@ proc testScene*(canvas: Canvas) =
   circle.rotate(45)
   circle.scale(4.2)
   
+  # # //Clear the previously applied effects
+  # scene1->push(tvg::SceneEffect::ClearAll);
+  # # //Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
+  # scene1->push(tvg::SceneEffect::DropShadow, 0, 0, 0, 125, 120.0, (double)(20.0f * progress), 3.0, 100);
+
   # # Test canvas operations
   canvas.update()
