@@ -2,6 +2,8 @@ import std/math, std/times, std/monotimes
 import thorvg, thorvg/[canvases, paints, shapes, gradients, scenes]
 import chroma
 import std/with
+import vmath
+import bumpy
 
 var cnt = 0
 
@@ -58,6 +60,7 @@ proc testBasicFunctionality*(canvas: Canvas, self: var BasicEx) =
 
 proc testScene*(canvas: Canvas, self: var BasicEx) =
   cnt.inc()
+  let start = self.start
 
   self.bck.onInit(canvas):
     self.bck.addRect(0, 0, canvas.width().float, canvas.height().float)
@@ -71,8 +74,12 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   self.circle.init(self.scene)
   self.gradShape.init(self.scene)
 
+  var rect = rect(450 + 100 * sin(cnt.float * 0.01) + start.x,
+                        150 + 100 * cos(cnt.float * 0.01) + start.y,
+                        40, 40)
+
   with self.rect:
-    add(rect(450 + 100 * sin(cnt.float * 0.01), 150 + 100 * cos(cnt.float * 0.01), 40, 40))
+    add(rect)
     fill(rgb(255, 0, 0))
     stroke(rgb(255, 162, 0).asColor().spin(toFloat(cnt mod 100)).asColor())
     strokeWidth(2.0)
@@ -82,14 +89,14 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   
   # Test gradient
   if self.grad.isNil:
-    self.grad = newLinearGradient(0, 0, 200, 200)
+    self.grad = newLinearGradient(start.x, start.y, 200, 200)
     self.grad.stops(
       colorStop(0.0, rgb(255, 0, 0)),
       colorStop(1.0, rgb(0, 0, 255))
     )
 
   with self.gradShape:
-    add(rect(100, 20, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01)))
+    add(rect(100 + start.x, 20 + start.y, 200 + 50 * sin(cnt.float * 0.01), 200 + 50 * cos(cnt.float * 0.01)))
     setGradient(self.grad)
   
   # Test transformations
