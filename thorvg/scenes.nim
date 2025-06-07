@@ -28,3 +28,15 @@ proc init*(scene: var Scene, canvas: Canvas) =
     canvas.push(scene)
   else:
     scene.reset()
+
+proc dropShadow*(scene: Scene,
+                 r, g, b, a: uint8;
+                 angle, distance, sigma: cfloat;
+                 quality: uint8) =
+  ## Apply DropShadow post effect (r, g, b, a, angle, distance, sigma of blurness, quality)
+  checkResult: tvg_scene_push_effect(scene.handle,
+    Tvg_Scene_Effect.TVG_SCENE_EFFECT_DROP_SHADOW, r, g, b, a, angle, distance, sigma, quality)
+
+proc clearEffects*(scene: Scene) =
+  ## Clear all effects
+  checkResult: tvg_scene_push_effect(scene.handle, Tvg_Scene_Effect.TVG_SCENE_EFFECT_CLEAR_ALL)

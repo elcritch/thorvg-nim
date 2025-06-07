@@ -2118,7 +2118,7 @@ proc tvg_scene_remove*(scene: ptr Tvg_Paint; paint: ptr Tvg_Paint): Tvg_Result {
                               ##  @since 1.0
                               ##
 
-proc tvg_scene_push_effect*(scene: ptr Tvg_Paint; effect: Tvg_Scene_Effect, ...): Tvg_Result {.
+proc tvg_scene_push_effect*(scene: ptr Tvg_Paint; effect: Tvg_Scene_Effect): Tvg_Result {.
     varargs, importc: "tvg_scene_push_effect", dynlib: thorvgLibName.}
   ##
                               ##
