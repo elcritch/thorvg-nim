@@ -89,7 +89,7 @@ proc testScene*(canvas: Canvas, self: var BasicEx) =
   
   # Test gradient
   if self.grad.isNil:
-    self.grad = newLinearGradient(start.x, start.y, 200, 200)
+    self.grad = newLinearGradient(start.x, start.y, 200 + start.x, 200 + start.y)
     self.grad.stops(
       colorStop(0.0, rgb(255, 0, 0)),
       colorStop(1.0, rgb(0, 0, 255))
